@@ -9,9 +9,9 @@ import UIKit
 class OnboarbingViewController : UIViewController {
     
     private let onboardingData: [(backgroundImage: String, title: String, highlightedText: String)] = [
-        ("page1Image", "Recipes from\nall", "over the\nWorld"),
-        ("page2Image", "Recipes with\n", "each and every\ndetail"),
-        ("page3Image", "Cook it now or\n", "safe it later")
+        ("Constants.Images.onboardingFirstPage", "Recipes from\nall", "over the\nWorld"),
+        ("Constants.Images.onboardingSecondPage", "Recipes with\n", "each and every\ndetail"),
+        ("Constants.Images.onboardingLastPage", "Cook it now or\n", "safe it later")
     ]
     
     let numberOfPages = 3
