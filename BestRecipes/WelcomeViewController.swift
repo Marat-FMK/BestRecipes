@@ -47,7 +47,7 @@ class WelcomeViewController: UIViewController {
     
     let topStar : UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(named: "starIconImage")
+        image.image = UIImage(named: "star")
         image.contentMode = .scaleAspectFill
         return image
     }()

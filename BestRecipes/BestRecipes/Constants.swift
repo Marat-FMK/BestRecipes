@@ -5,7 +5,7 @@ struct Constants {
     
     struct Images {
         static let onboardingStartPage = "onboarding_start_page_image"
-        static let onboardingFirstPage = "onboarding_first_page_image"
+        static let onboardingFirstPage = "onboarding_first_page_image" 
         static let onboardingSecondPage = "onboarding_second_page_image"
         static let onboardingLastPage = "onboarding_last_page_image"
     }

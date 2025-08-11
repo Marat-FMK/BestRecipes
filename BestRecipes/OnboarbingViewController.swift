@@ -9,9 +9,9 @@ import UIKit
 class OnboarbingViewController : UIViewController {
     
     private let onboardingData: [(backgroundImage: String, title: String, highlightedText: String)] = [
-        ("Constants.Images.onboardingFirstPage", "Recipes from\nall", "over the\nWorld"),
-        ("Constants.Images.onboardingSecondPage", "Recipes with\n", "each and every\ndetail"),
-        ("Constants.Images.onboardingLastPage", "Cook it now or\n", "safe it later")
+        (Constants.Images.onboardingFirstPage, "Recipes from\nall", "over the\nWorld"),
+        (Constants.Images.onboardingSecondPage, "Recipes with\n", "each and every\ndetail"),
+        (Constants.Images.onboardingLastPage, "Cook it now or\n", "safe it later")
     ]
     
     let numberOfPages = 3
@@ -22,7 +22,7 @@ class OnboarbingViewController : UIViewController {
     
     let backgroundImageview : UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "page1Image")
+        view.image = UIImage(named: Constants.Images.onboardingFirstPage)
         return view
     }()
     
@@ -146,8 +146,8 @@ class OnboarbingViewController : UIViewController {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds
         gradientLayer.colors = [UIColor.primary20.cgColor, UIColor.secondary20.cgColor]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
         gradientLayer.cornerRadius = view.layer.cornerRadius
         gradientLayer.masksToBounds = true
         view.layer.insertSublayer(gradientLayer, at: 0)
