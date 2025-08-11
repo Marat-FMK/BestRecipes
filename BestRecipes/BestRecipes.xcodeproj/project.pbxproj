@@ -7,11 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BE911172E4A8D0200BD4502 /* Extension UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */; };
+		1BE911192E4A8D0500BD4502 /* OnboarbingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */; };
+		1BE9111B2E4A8D0700BD4502 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */; };
 		6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */; };
 		6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension UIButton.swift"; sourceTree = "<group>"; };
+		1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboarbingViewController.swift; sourceTree = "<group>"; };
+		1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		6C6F13B02E4A806400D6875D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
@@ -55,6 +61,9 @@
 				6C6F13362E4A708B00D6875D /* BestRecipes */,
 				6EDE8E6D2E4A714900BBA031 /* Fonts */,
 				6C6F13B02E4A806400D6875D /* BestRecipes.app */,
+				1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */,
+				1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */,
+				1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -143,6 +152,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE911192E4A8D0500BD4502 /* OnboarbingViewController.swift in Sources */,
+				1BE911172E4A8D0200BD4502 /* Extension UIButton.swift in Sources */,
+				1BE9111B2E4A8D0700BD4502 /* WelcomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -157,6 +169,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D3BJGB736B;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestRecipes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -184,6 +197,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D3BJGB736B;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestRecipes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
