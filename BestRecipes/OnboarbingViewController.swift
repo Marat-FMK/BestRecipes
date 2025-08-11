@@ -137,7 +137,9 @@ class OnboarbingViewController : UIViewController {
             currentPage += 1
             updateUI()
         } else {
-            // Завершение онбординга и переход к основному экрану
+            let vc = TabBar()
+            navigationController?.navigationBar.isHidden = true
+            navigationController?.pushViewController(vc, animated: true)
             print("Onboarding completed")
         }
     }
