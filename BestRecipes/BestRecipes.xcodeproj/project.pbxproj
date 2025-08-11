@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */; };
+		6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		6C6F13342E4A708B00D6875D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		6EDE8E702E4A720800BBA031 /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = BestRecipes.app; path = "/Users/aliaksandrzuyeu/Documents/BestRecipes/BestRecipes/build/Debug-iphoneos/BestRecipes.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -46,16 +53,17 @@
 			isa = PBXGroup;
 			children = (
 				6C6F13362E4A708B00D6875D /* BestRecipes */,
-				6C6F13352E4A708B00D6875D /* Products */,
+				6EDE8E6D2E4A714900BBA031 /* Fonts */,
 			);
 			sourceTree = "<group>";
 		};
-		6C6F13352E4A708B00D6875D /* Products */ = {
+		6EDE8E6D2E4A714900BBA031 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				6C6F13342E4A708B00D6875D /* BestRecipes.app */,
+				6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */,
+				6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */,
 			);
-			name = Products;
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -80,7 +88,7 @@
 			packageProductDependencies = (
 			);
 			productName = BestRecipes;
-			productReference = 6C6F13342E4A708B00D6875D /* BestRecipes.app */;
+			productReference = 6EDE8E702E4A720800BBA031 /* BestRecipes.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -108,7 +116,7 @@
 			mainGroup = 6C6F132B2E4A708B00D6875D;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 6C6F13352E4A708B00D6875D /* Products */;
+			productRefGroup = 6C6F132B2E4A708B00D6875D;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -122,6 +130,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */,
+				6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +160,6 @@
 				INFOPLIST_FILE = BestRecipes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -178,7 +187,6 @@
 				INFOPLIST_FILE = BestRecipes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
