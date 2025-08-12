@@ -7,11 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BE911172E4A8D0200BD4502 /* Extension UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */; };
+		1BE911192E4A8D0500BD4502 /* OnboarbingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */; };
+		1BE9111B2E4A8D0700BD4502 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */; };
+		1BE9113A2E4B2C6900BD4502 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911392E4B2C5F00BD4502 /* TabBarView.swift */; };
+		1BE911632E4B319A00BD4502 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911622E4B319600BD4502 /* TabBarViewController.swift */; };
 		6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */; };
 		6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension UIButton.swift"; sourceTree = "<group>"; };
+		1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboarbingViewController.swift; sourceTree = "<group>"; };
+		1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		1BE911392E4B2C5F00BD4502 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		1BE911622E4B319600BD4502 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		6C6F13B02E4A806400D6875D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		6EDE8E9A2E4B365300BBA031 /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = BestRecipes.app; path = "/Users/aliaksandrzuyeu/Documents/BestRecipes/BestRecipes/build/Debug-iphoneos/BestRecipes.app"; sourceTree = "<absolute>"; };
@@ -54,6 +65,13 @@
 			children = (
 				6C6F13362E4A708B00D6875D /* BestRecipes */,
 				6EDE8E6D2E4A714900BBA031 /* Fonts */,
+				6C6F13B02E4A806400D6875D /* BestRecipes.app */,
+				1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */,
+				1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */,
+				1BE911622E4B319600BD4502 /* TabBarViewController.swift */,
+				1BE911392E4B2C5F00BD4502 /* TabBarView.swift */,
+				1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */,
+
 			);
 			sourceTree = "<group>";
 		};
@@ -142,6 +160,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE911192E4A8D0500BD4502 /* OnboarbingViewController.swift in Sources */,
+				1BE911172E4A8D0200BD4502 /* Extension UIButton.swift in Sources */,
+				1BE911632E4B319A00BD4502 /* TabBarViewController.swift in Sources */,
+				1BE9113A2E4B2C6900BD4502 /* TabBarView.swift in Sources */,
+				1BE9111B2E4A8D0700BD4502 /* WelcomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,9 +176,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D3BJGB736B;
+				DEVELOPMENT_TEAM = W2TKN5Z766;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestRecipes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -168,8 +193,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Devrush.BestRecipes;
+				PRODUCT_BUNDLE_IDENTIFIER = Devrush.BestRecipes1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -181,9 +207,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D3BJGB736B;
+				DEVELOPMENT_TEAM = W2TKN5Z766;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestRecipes/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -196,8 +224,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Devrush.BestRecipes;
+				PRODUCT_BUNDLE_IDENTIFIER = Devrush.BestRecipes1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
