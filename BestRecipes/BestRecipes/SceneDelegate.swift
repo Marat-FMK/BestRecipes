@@ -9,11 +9,9 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
-    var window: UIWindow?
-    
+    var window: UIWindow?    
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        var window: UIWindow?
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let navController = UINavigationController(rootViewController: ViewController())
