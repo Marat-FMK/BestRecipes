@@ -18,15 +18,15 @@ class PopularRecepieCell: UICollectionViewCell {
     let roundImageView : UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "shawarma_image")
-        view.layer.cornerRadius = 12
-        view.contentMode = .scaleAspectFit
+        view.layer.cornerRadius = 55
+        view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         return view
     }()
     
     let titleLabel : UILabel = {
         let label = UILabel()
-        label.text = "Chicken and Vegetable wrap"
+        label.text = "Chicken and\nVegetable wrap"
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         label.textAlignment = .center
@@ -95,9 +95,8 @@ class PopularRecepieCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             roundImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
             roundImageView.topAnchor.constraint(equalTo: topAnchor),
-            roundImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 18),
-            roundImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18),
-            roundImageView.bottomAnchor.constraint(equalTo: topAnchor, constant: 110)
+            roundImageView.heightAnchor.constraint(equalToConstant: 110),
+            roundImageView.widthAnchor.constraint(equalToConstant: 110)
         ])
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -108,7 +107,7 @@ class PopularRecepieCell: UICollectionViewCell {
         
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            saveButton.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 32),
+            saveButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
             saveButton.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -12),
             saveButton.heightAnchor.constraint(equalToConstant: 32),
             saveButton.widthAnchor.constraint(equalToConstant: 32)
@@ -117,7 +116,7 @@ class PopularRecepieCell: UICollectionViewCell {
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             timeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            timeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16)
+            timeLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15)
         ])
         
         durationLabel.translatesAutoresizingMaskIntoConstraints = false

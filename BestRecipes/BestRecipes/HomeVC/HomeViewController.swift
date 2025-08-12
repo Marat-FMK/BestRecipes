@@ -139,6 +139,38 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         return view
     }()
     
+    let recentRecepieCollectionView : UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.showsHorizontalScrollIndicator = false
+        view.isScrollEnabled = true
+        return view
+    }()
+    
+    let popularCreatorsLabel : UILabel = {
+        let label = UILabel()
+        label.text = "Popular creators"
+        label.font = UIFont(name: "Poppins", size: 20)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    let popularCreatorSeeAll : SeeAllView = {
+        let view = SeeAllView()
+        return view
+    }()
+    
+    let popularCreatorCollectionView : UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.showsHorizontalScrollIndicator = false
+        view.isScrollEnabled = true
+        return view
+    }()
+    
     //MARK: - Action Func
     
     @objc private func categoryButtonTapped(_ sender: UIButton) {
@@ -177,6 +209,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         categoryScrollView.addSubview(categoryButtonsStackView)
         scrollView.addSubview(recentRecepieLabel)
         scrollView.addSubview(recentSeeAll)
+        scrollView.addSubview(recentRecepieCollectionView)
+        scrollView.addSubview(popularCreatorsLabel)
+        scrollView.addSubview(popularCreatorSeeAll)
+        scrollView.addSubview(popularCreatorCollectionView)
     }
     
     //MARK: - Set Delegates
@@ -190,6 +226,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         popularCategoryCollectionView.delegate = self
         popularCategoryCollectionView.dataSource = self
         popularCategoryCollectionView.register(PopularRecepieCell.self, forCellWithReuseIdentifier: "PopularCategoryCell")
+        recentRecepieCollectionView.delegate = self
+        recentRecepieCollectionView.dataSource = self
+        recentRecepieCollectionView.register(RecentRecepieCell.self, forCellWithReuseIdentifier: "RecentPecepieCell")
+        popularCreatorCollectionView.delegate = self
+        popularCreatorCollectionView.dataSource = self
+        popularCreatorCollectionView.register(CreatorCell.self, forCellWithReuseIdentifier: "CreatorCell")
     }
     
     //MARK: - setConstraints
@@ -250,7 +292,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             popularCategoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             popularCategoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             popularCategoryCollectionView.heightAnchor.constraint(equalToConstant: 231),
-            popularCategoryCollectionView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -100)
         ])
         
         categoryScrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -281,6 +322,35 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             recentSeeAll.centerYAnchor.constraint(equalTo: recentRecepieLabel.centerYAnchor),
             recentSeeAll.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
+        
+        recentRecepieCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            recentRecepieCollectionView.topAnchor.constraint(equalTo: recentSeeAll.bottomAnchor, constant: 16),
+            recentRecepieCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            recentRecepieCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            recentRecepieCollectionView.heightAnchor.constraint(equalToConstant: 190)
+        ])
+        
+        popularCreatorsLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            popularCreatorsLabel.topAnchor.constraint(equalTo: recentRecepieCollectionView.bottomAnchor, constant: 25),
+            popularCreatorsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
+        ])
+        
+        popularCreatorSeeAll.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            popularCreatorSeeAll.centerYAnchor.constraint(equalTo: popularCreatorsLabel.centerYAnchor),
+            popularCreatorSeeAll.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+        ])
+        
+        popularCreatorCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            popularCreatorCollectionView.topAnchor.constraint(equalTo: popularCreatorsLabel.bottomAnchor, constant: 16),
+            popularCreatorCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            popularCreatorCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            popularCreatorCollectionView.heightAnchor.constraint(equalToConstant: 136),
+            popularCreatorCollectionView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -100)
+        ])
     }
 }
 
@@ -288,7 +358,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
 
 extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        2
+        4
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -305,6 +375,14 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             let width = collectionView.frame.width - 224
             let height: CGFloat = collectionView.frame.height
             return CGSize(width: width, height: height)
+        case _ where collectionView == recentRecepieCollectionView:
+            let width = collectionView.frame.width - 251
+            let height: CGFloat = collectionView.frame.height
+            return CGSize(width: width, height: height)
+        case _ where collectionView == popularCreatorCollectionView:
+            let width = collectionView.frame.width - 300
+            let height: CGFloat = collectionView.frame.height
+            return CGSize(width: width, height: height)
         default:
             fatalError("Unknown collection view")
         }
@@ -317,6 +395,12 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             return cell
         case _ where collectionView == popularCategoryCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularCategoryCell", for: indexPath) as! PopularRecepieCell
+            return cell
+        case _ where collectionView == recentRecepieCollectionView:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecentPecepieCell", for: indexPath) as! RecentRecepieCell
+            return cell
+        case _ where collectionView == popularCreatorCollectionView:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CreatorCell", for: indexPath) as! CreatorCell
             return cell
         default:
             fatalError("Unknown collection view")
