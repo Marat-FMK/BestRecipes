@@ -15,8 +15,7 @@ import UIKit
 
 class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
-    
-    
+    var categoriesArray : [String] = ["Salad","Breakfast","Appetizer", "Noodle", "Soup"]
     
     //MARK: - Create UI
     
@@ -24,6 +23,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         let view = UIScrollView()
         view.isScrollEnabled = true
         view.showsVerticalScrollIndicator = false
+        view.alwaysBounceVertical = true
         return view
     }()
     
@@ -61,24 +61,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         return label
     }()
     
-    let seeAllButton : UIButton = {
-        let button = UIButton()
-        button.setTitle("See all", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Poppins", size: 14)
-        button.setTitleColor(UIColor.primary50, for: .normal)
-        return button
-    }()
-    
-    let arrowRightIcon : UIImageView = {
-        let view = UIImageView()
-        view.image = UIImage(named: Constants.Images.arrowRightImage)
+    let trendingSeeAll : SeeAllView = {
+        let view = SeeAllView()
         return view
     }()
     
     let trendingCollectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 150
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.showsHorizontalScrollIndicator = false
         return view
@@ -93,6 +83,76 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         return label
     }()
     
+    let popularCategoryCollectionView : UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.showsHorizontalScrollIndicator = false
+        return view
+    }()
+    
+    lazy var categoryButtonsStackView : UIStackView = {
+        let view = UIStackView()
+        for category in categoriesArray {
+            let button = UIButton()
+            button.setTitle(category, for: .normal)
+            button.clipsToBounds = true
+            button.imageView?.contentMode = .scaleAspectFill
+            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+            button.setTitleColor(UIColor.primary20, for: .normal)
+            button.setTitleColor(.white0, for: .selected)
+            button.setBackgroundImage(nil, for: .normal)
+            button.setBackgroundImage(UIImage(named: "buttonBackgroundImage"), for: .selected)
+            button.layer.cornerRadius = 12
+            button.titleLabel?.font = UIFont(name: "Poppins", size: 12)
+            button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+            view.addArrangedSubview(button)
+        }
+        if let firstButton = view.arrangedSubviews.first as? UIButton {
+            firstButton.isSelected = true
+        }
+        view.axis = .horizontal
+        view.spacing = 20
+        view.distribution = .fillProportionally
+        return view
+    }()
+    
+    let categoryScrollView : UIScrollView = {
+        let view = UIScrollView()
+        view.isScrollEnabled = true
+        view.showsHorizontalScrollIndicator = false
+        view.alwaysBounceHorizontal = true
+        return view
+    }()
+    
+    let recentRecepieLabel : UILabel = {
+        let label = UILabel()
+        label.text = "Recent recepie"
+        label.font = UIFont(name: "Poppins", size: 20)
+        label.textAlignment = .left
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    let recentSeeAll : SeeAllView = {
+        let view = SeeAllView()
+        return view
+    }()
+    
+    //MARK: - Action Func
+    
+    @objc private func categoryButtonTapped(_ sender: UIButton) {
+        sender.buttonTappedAnimate()
+        categoryButtonsStackView.arrangedSubviews.forEach { view in
+            if let button = view as? UIButton {
+                button.isSelected = false
+            }
+            sender.isSelected = true
+        }
+        sender.isSelected = true
+        let selectedCategory = categoriesArray[sender.tag]
+        print("Selected category: \(selectedCategory)")
+    }
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -105,13 +165,18 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     private func setupViews() {
         view.backgroundColor = .white0
         view.addSubview(scrollView)
+        view.addSubview(categoryScrollView)
         scrollView.addSubview(topLabel)
         scrollView.addSubview(searchTextField)
         scrollView.addSubview(trendingLabel)
-        scrollView.addSubview(seeAllButton)
-        scrollView.addSubview(arrowRightIcon)
+        scrollView.addSubview(trendingSeeAll)
         scrollView.addSubview(trendingCollectionView)
         scrollView.addSubview(popularLabel)
+        scrollView.addSubview(popularCategoryCollectionView)
+        scrollView.addSubview(categoryScrollView)
+        categoryScrollView.addSubview(categoryButtonsStackView)
+        scrollView.addSubview(recentRecepieLabel)
+        scrollView.addSubview(recentSeeAll)
     }
     
     //MARK: - Set Delegates
@@ -122,6 +187,9 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         trendingCollectionView.delegate = self
         trendingCollectionView.dataSource = self
         trendingCollectionView.register(TrendingCell.self, forCellWithReuseIdentifier: "TrendingCell")
+        popularCategoryCollectionView.delegate = self
+        popularCategoryCollectionView.dataSource = self
+        popularCategoryCollectionView.register(PopularRecepieCell.self, forCellWithReuseIdentifier: "PopularCategoryCell")
     }
     
     //MARK: - setConstraints
@@ -156,22 +224,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             trendingLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         ])
         
-        arrowRightIcon.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            arrowRightIcon.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 15),
-            arrowRightIcon.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            arrowRightIcon.widthAnchor.constraint(equalToConstant: 20),
-            arrowRightIcon.heightAnchor.constraint(equalToConstant: 20),
-            arrowRightIcon.centerXAnchor.constraint(equalTo: trendingLabel.centerXAnchor)
-        ])
-        
-        seeAllButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            seeAllButton.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 15),
-            seeAllButton.trailingAnchor.constraint(equalTo: arrowRightIcon.leadingAnchor, constant: -3),
-            seeAllButton.centerYAnchor.constraint(equalTo: arrowRightIcon.centerYAnchor)
-        ])
-        
         trendingCollectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             trendingCollectionView.topAnchor.constraint(equalTo: trendingLabel.bottomAnchor, constant: 16),
@@ -180,13 +232,59 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             trendingCollectionView.heightAnchor.constraint(equalToConstant: 254)
         ])
         
+        trendingSeeAll.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            trendingSeeAll.centerYAnchor.constraint(equalTo: trendingLabel.centerYAnchor),
+            trendingSeeAll.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+        ])
+        
         popularLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             popularLabel.topAnchor.constraint(equalTo: trendingCollectionView.bottomAnchor, constant: 24),
             popularLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         ])
+        
+        popularCategoryCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            popularCategoryCollectionView.topAnchor.constraint(equalTo: popularLabel.bottomAnchor, constant: 74),
+            popularCategoryCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            popularCategoryCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            popularCategoryCollectionView.heightAnchor.constraint(equalToConstant: 231),
+            popularCategoryCollectionView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -100)
+        ])
+        
+        categoryScrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            categoryScrollView.topAnchor.constraint(equalTo: popularLabel.bottomAnchor, constant: 20),
+            categoryScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            categoryScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            categoryScrollView.heightAnchor.constraint(equalToConstant: 34)
+        ])
+        
+        categoryButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            categoryButtonsStackView.topAnchor.constraint(equalTo: categoryScrollView.contentLayoutGuide.bottomAnchor),
+            categoryButtonsStackView.leadingAnchor.constraint(equalTo: categoryScrollView.contentLayoutGuide.leadingAnchor),
+            categoryButtonsStackView.trailingAnchor.constraint(equalTo: categoryScrollView.contentLayoutGuide.trailingAnchor, constant: -25),
+            categoryButtonsStackView.topAnchor.constraint(equalTo: categoryScrollView.contentLayoutGuide.topAnchor),
+            categoryButtonsStackView.heightAnchor.constraint(equalToConstant: 34)
+        ])
+        
+        recentRecepieLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            recentRecepieLabel.topAnchor.constraint(equalTo: popularCategoryCollectionView.bottomAnchor, constant: 20),
+            recentRecepieLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
+        ])
+        
+        recentSeeAll.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            recentSeeAll.centerYAnchor.constraint(equalTo: recentRecepieLabel.centerYAnchor),
+            recentSeeAll.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+        ])
     }
 }
+
+//MARK: -  Extension UICollectionView
 
 extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -198,17 +296,31 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width - 95
-        let height: CGFloat = collectionView.frame.height
-        return CGSize(width: width, height: height)
+        switch collectionView {
+        case _ where collectionView == trendingCollectionView:
+            let width = collectionView.frame.width - 95
+            let height: CGFloat = collectionView.frame.height
+            return CGSize(width: width, height: height)
+        case _ where collectionView == popularCategoryCollectionView:
+            let width = collectionView.frame.width - 224
+            let height: CGFloat = collectionView.frame.height
+            return CGSize(width: width, height: height)
+        default:
+            fatalError("Unknown collection view")
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as?
-                TrendingCell else {
-            return UICollectionViewCell()
+        switch collectionView {
+        case _ where collectionView == trendingCollectionView:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
+            return cell
+        case _ where collectionView == popularCategoryCollectionView:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularCategoryCell", for: indexPath) as! PopularRecepieCell
+            return cell
+        default:
+            fatalError("Unknown collection view")
         }
-        return cell
     }
 }
 
