@@ -18,6 +18,8 @@ struct Constants {
         static let profileButtonImageInactive = "profileInactive"
         static let profileButtonImageActive = "profileActive"
         static let backgroundBarImage = "backGroundBar"
+        static let arrowRightImage = "arrowRight"
+        static let starIconImage = "star"
     }
     
     struct Fonts {
