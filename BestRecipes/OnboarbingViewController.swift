@@ -137,7 +137,7 @@ class OnboarbingViewController : UIViewController {
             currentPage += 1
             updateUI()
         } else {
-            let vc = TabBar()
+            let vc = TabBarViewController()
             navigationController?.navigationBar.isHidden = true
             navigationController?.pushViewController(vc, animated: true)
             print("Onboarding completed")
