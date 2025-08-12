@@ -10,7 +10,8 @@
 		1BE911172E4A8D0200BD4502 /* Extension UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */; };
 		1BE911192E4A8D0500BD4502 /* OnboarbingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */; };
 		1BE9111B2E4A8D0700BD4502 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */; };
-		1BE911382E4AB5DC00BD4502 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911372E4AB5CC00BD4502 /* TabBar.swift */; };
+		1BE9113A2E4B2C6900BD4502 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911392E4B2C5F00BD4502 /* TabBarView.swift */; };
+		1BE911632E4B319A00BD4502 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE911622E4B319600BD4502 /* TabBarViewController.swift */; };
 		6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */; };
 		6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */; };
 /* End PBXBuildFile section */
@@ -19,7 +20,8 @@
 		1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension UIButton.swift"; sourceTree = "<group>"; };
 		1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboarbingViewController.swift; sourceTree = "<group>"; };
 		1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
-		1BE911372E4AB5CC00BD4502 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		1BE911392E4B2C5F00BD4502 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		1BE911622E4B319600BD4502 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		6C6F13B02E4A806400D6875D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
@@ -65,7 +67,8 @@
 				6C6F13B02E4A806400D6875D /* BestRecipes.app */,
 				1BE911162E4A8D0200BD4502 /* Extension UIButton.swift */,
 				1BE911182E4A8D0500BD4502 /* OnboarbingViewController.swift */,
-				1BE911372E4AB5CC00BD4502 /* TabBar.swift */,
+				1BE911622E4B319600BD4502 /* TabBarViewController.swift */,
+				1BE911392E4B2C5F00BD4502 /* TabBarView.swift */,
 				1BE9111A2E4A8D0700BD4502 /* WelcomeViewController.swift */,
 			);
 			sourceTree = "<group>";
@@ -157,7 +160,8 @@
 			files = (
 				1BE911192E4A8D0500BD4502 /* OnboarbingViewController.swift in Sources */,
 				1BE911172E4A8D0200BD4502 /* Extension UIButton.swift in Sources */,
-				1BE911382E4AB5DC00BD4502 /* TabBar.swift in Sources */,
+				1BE911632E4B319A00BD4502 /* TabBarViewController.swift in Sources */,
+				1BE9113A2E4B2C6900BD4502 /* TabBarView.swift in Sources */,
 				1BE9111B2E4A8D0700BD4502 /* WelcomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

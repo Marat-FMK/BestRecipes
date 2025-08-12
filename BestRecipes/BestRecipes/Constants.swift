@@ -8,6 +8,16 @@ struct Constants {
         static let onboardingFirstPage = "onboarding_first_page_image" 
         static let onboardingSecondPage = "onboarding_second_page_image"
         static let onboardingLastPage = "onboarding_last_page_image"
+        static let homeButtonImageInactive = "navIntactive"
+        static let homeButtonImageActive = "navActive"
+        static let bookmarkButtonImageInactive = "bookMarkInactive"
+        static let bookmarkButtonImageActive = "bookMarkActive"
+        static let createButtonImage = "create"
+        static let notificationButtonImageInactive = "notificationInactive"
+        static let notificationButtonImageActive = "notificationActive"
+        static let profileButtonImageInactive = "profileInactive"
+        static let profileButtonImageActive = "profileActive"
+        static let backgroundBarImage = "backGroundBar"
     }
     
     struct Fonts {

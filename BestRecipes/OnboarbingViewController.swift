@@ -120,11 +120,11 @@ class OnboarbingViewController : UIViewController {
     
     private func updatePageIndicators() {
         for (index, view) in indicatorStackView.arrangedSubviews.enumerated() {
+            view.layer.sublayers?.filter { $0 is CAGradientLayer }.forEach { $0.removeFromSuperlayer() }
             if index == currentPage {
                 makeGradient(view: view)
             } else {
-                view.layer.sublayers?.filter { $0 is CAGradientLayer }.forEach { $0.removeFromSuperlayer() }
-                view.backgroundColor = UIColor(named: "lightGrayColor")
+                view.backgroundColor = UIColor.neutral30
             }
         }
     }
