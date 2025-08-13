@@ -63,6 +63,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     let trendingSeeAll : SeeAllView = {
         let view = SeeAllView()
+        view.seeAllButton.addTarget(self, action: #selector(trendingSeeAllButtontapped), for: .touchUpInside)
         return view
     }()
     
@@ -136,6 +137,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     let recentSeeAll : SeeAllView = {
         let view = SeeAllView()
+        view.seeAllButton.addTarget(self, action: #selector(recentSeeAllButtonTapped), for: .touchUpInside)
         return view
     }()
     
@@ -159,6 +161,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     let popularCreatorSeeAll : SeeAllView = {
         let view = SeeAllView()
+        view.seeAllButton.addTarget(self, action: #selector(popularCreatorSeeAllButtonTapped), for: .touchUpInside)
         return view
     }()
     
@@ -181,9 +184,22 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             }
             sender.isSelected = true
         }
-        sender.isSelected = true
-        let selectedCategory = categoriesArray[sender.tag]
-        print("Selected category: \(selectedCategory)")
+        //МЕНЯЮТСЯ КАТЕГОРИИ ПОПУЛЯРНОГО
+    }
+    
+    @objc private func trendingSeeAllButtontapped(sender : UIButton) {
+        sender.buttonTappedAnimate()
+        //ПОСМОТРЕТЬ ВСЕ ТРЕНДЫ
+    }
+    
+    @objc private func recentSeeAllButtonTapped(sender : UIButton) {
+        sender.buttonTappedAnimate()
+        //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
+    }
+    
+    @objc private func popularCreatorSeeAllButtonTapped(sender : UIButton) {
+        sender.buttonTappedAnimate()
+        //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }
     //MARK: - Lifecycle
     

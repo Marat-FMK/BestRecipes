@@ -40,6 +40,7 @@ class PopularRecepieCell: UICollectionViewCell {
         button.backgroundColor = .white0
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -60,6 +61,13 @@ class PopularRecepieCell: UICollectionViewCell {
         label.textColor = .black
         return label
     }()
+    
+    //MARK: - Save Func
+    @objc func saveButtonTapped(sender : UIButton) {
+        sender.buttonTappedAnimate()
+    }
+    
+    //MARK: - Setup
     
     let identifier = "TrendingCell"
     
