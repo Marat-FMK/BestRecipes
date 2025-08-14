@@ -14,6 +14,25 @@ enum NetworkError: String, Error {
     case decode = "❌Error - JSON decoder error / response"
 }
 
+enum worldCuisines: String {
+    case american = "American"
+    case european = "European"
+    case greek = "Greek"
+    case japanese = "Japanese"
+    case mexican = "Mexican"
+    case african = "African"
+}
+
+enum MealType: String {
+    case dessert = "dessert"
+    case appetizer = "appetizer"
+    case salad = "salad"
+    case soup = "soup"
+    case snack = "snack"
+    case drink = "drink"
+}
+
+
 
 class NetworkManager {
     
@@ -22,18 +41,30 @@ class NetworkManager {
     private let pathComponent = "/recipes/complexSearch"
     private let apiKey = "793c4a9318a740b8af0b9f829165475d"
     
-    private let maxRecipeCount = "20"
+    private let maxRecipeCount = "30"
     
-    func fetchRecipes(searchedText: String, completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
+    func fetchRecipes(searchedText: String = "", cuisine: worldCuisines? = nil, mealType: MealType? = nil, completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
         urlComponents.host = host
         urlComponents.path = pathComponent
         
-        let queryItems = [URLQueryItem(name: "apiKey", value: apiKey),
+        
+        //add author 
+        var queryItems = [URLQueryItem(name: "apiKey", value: apiKey),
                           URLQueryItem(name: "query", value: searchedText),
-                          URLQueryItem(name: "number", value: maxRecipeCount)]
+                          URLQueryItem(name: "number", value: maxRecipeCount),
+                          URLQueryItem(name: "instructionsRequired", value: "true"),
+        URLQueryItem(name: "tags", value: "trend")]
+        
+        if cuisine != nil {
+            queryItems.append(URLQueryItem(name: "cuisine", value: cuisine?.rawValue))
+        }
+        
+        if cuisine != nil {
+            queryItems.append(URLQueryItem(name: "type", value: mealType?.rawValue))
+        }
         
         urlComponents.queryItems = queryItems
         

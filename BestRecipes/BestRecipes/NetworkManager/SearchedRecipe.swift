@@ -9,6 +9,7 @@ import Foundation
 
 struct SearchedData: Codable {
     let results: [SearchedRecipe]
+    let totalResults: Int?
 }
 
 struct SearchedRecipe: Codable {
