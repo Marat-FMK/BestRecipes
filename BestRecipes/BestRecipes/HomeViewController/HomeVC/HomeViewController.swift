@@ -201,6 +201,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         sender.buttonTappedAnimate()
         //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
