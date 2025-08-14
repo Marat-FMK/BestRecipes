@@ -30,6 +30,12 @@ enum MealType: String {
     case soup = "soup"
     case snack = "snack"
     case drink = "drink"
+    case sideDish = "side dish"
+    case bread = "bread"
+    case beverage = "beverage"
+    case sauce = "sauce"
+    case marinade = "marinade"
+    case fingerfood = "fingerfood"
 }
 
 
@@ -41,9 +47,8 @@ class NetworkManager {
     private let pathComponent = "/recipes/complexSearch"
     private let apiKey = "793c4a9318a740b8af0b9f829165475d"
     
-    private let maxRecipeCount = "30"
     
-    func fetchRecipes(searchedText: String = "", cuisine: worldCuisines? = nil, mealType: MealType? = nil, completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
+    func fetchRecipes(searchedText: String = "", cuisine: worldCuisines? = nil, mealType: MealType? = nil, maxRecipeCount: String = "5", completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
@@ -51,12 +56,12 @@ class NetworkManager {
         urlComponents.path = pathComponent
         
         
-        //add author 
+        //add author
         var queryItems = [URLQueryItem(name: "apiKey", value: apiKey),
                           URLQueryItem(name: "query", value: searchedText),
                           URLQueryItem(name: "number", value: maxRecipeCount),
                           URLQueryItem(name: "instructionsRequired", value: "true"),
-        URLQueryItem(name: "tags", value: "trend")]
+                          URLQueryItem(name: "tags", value: "trend")]
         
         if cuisine != nil {
             queryItems.append(URLQueryItem(name: "cuisine", value: cuisine?.rawValue))
@@ -82,7 +87,7 @@ class NetworkManager {
             do {
                 let recipes = try JSONDecoder().decode(SearchedData.self, from: data)
                 print("✅ SearchedRecipes --- >>", recipes.results)
-                completion(.success(recipes.results)) // array of searched recipes
+                completion(.success(recipes.results))
             } catch {
                 completion(.failure(.decode))
                 print("NetworkManager", NetworkError.decode)
@@ -90,14 +95,17 @@ class NetworkManager {
         }.resume()
     }
     
-    func fetchReceptDetails(id: Int, completion: @escaping(Result<RecipeDetail,NetworkError>) -> Void) {
+    
+    func fetchReceptsDetails(ids: [Int], completion: @escaping(Result<[RecipeDetail],NetworkError>) -> Void) {
+        let stringIDs = ids.map { String($0)}.joined(separator: ",")
         
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
         urlComponents.host = host
-        urlComponents.path = "/recipes/\(id)/information"
+        urlComponents.path = "/recipes/informationBulk"
         
-        urlComponents.queryItems = [URLQueryItem(name: "apiKey", value: apiKey)]
+        urlComponents.queryItems = [URLQueryItem(name: "apiKey", value: apiKey),
+                                    URLQueryItem(name: "ids", value: stringIDs)]
         
         guard let url = urlComponents.url else {completion(.failure(.badURL)); return}
         print("✅ Current URL recDetail -->", url.absoluteString)
@@ -111,13 +119,13 @@ class NetworkManager {
             guard error == nil else { completion(.failure(.sessionError)); return}
             guard let data = data else { completion(.failure(.data)); return}
             
-        do {
-            let recipe = try JSONDecoder().decode(RecipeDetail.self, from: data)
-            print("✅ ID: \(id), recipe detail -->>", recipe)
-            completion(.success(recipe))
-        } catch {
-            completion(.failure(.decode))
-        }
+            do {
+                let recipes = try JSONDecoder().decode([RecipeDetail].self, from: data)
+                print("✅ IDs: \(stringIDs), recipe detail -->>", recipes)
+                completion(.success(recipes))
+            } catch {
+                completion(.failure(.decode))
+            }
         }.resume()
     }
 }
