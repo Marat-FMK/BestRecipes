@@ -68,6 +68,7 @@ class OnboarbingViewController : UIViewController {
         button.setTitle("Skip", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 10, weight: .medium)
+        button.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -144,6 +145,13 @@ class OnboarbingViewController : UIViewController {
         }
     }
     
+    @objc func skipButtonTapped(sender : UIButton) {
+        sender.buttonTappedAnimate()
+        let vc = TabBarViewController()
+        navigationController?.navigationBar.isHidden = true
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func makeGradient(view : UIView) {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds
@@ -166,11 +174,9 @@ class OnboarbingViewController : UIViewController {
         UIView.transition(with: imageView, duration: 0.5, options: .transitionCrossDissolve, animations: {
             imageView.image = newImage
         })
-        
         UIView.transition(with: label, duration: 0.5, options: .transitionCrossDissolve, animations: {
             label.attributedText = newText
         })
-        
         UIView.transition(with: button, duration: 0.3, options: .transitionCrossDissolve, animations: {
             button.setTitle(newButtonTitle, for: .normal)
         })
