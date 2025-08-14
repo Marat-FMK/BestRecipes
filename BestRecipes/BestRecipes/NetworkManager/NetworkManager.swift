@@ -24,7 +24,7 @@ class NetworkManager {
     
     private let maxRecipeCount = "20"
     
-    func fetchSearchedRecipes(searchedText: String, completion: @escaping(Result<[String],NetworkError>) -> Void) {
+    func fetchSearchedRecipes(searchedText: String, completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
@@ -47,26 +47,19 @@ class NetworkManager {
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else { completion(.failure(.sessionError)); return}
             guard let data = data else { completion(.failure(.data)); return}
-            //            print(response)
-            print(data)
             
-            if let text = String(data: data, encoding: .utf8) {
-                print(text)
+            do {
+                let recipes = try JSONDecoder().decode(SearchedData.self, from: data)
+                print("✅ SearchedRecipes --- >>", recipes.results)
+                completion(.success(recipes.results)) // array of searched recipes
+            } catch {
+                completion(.failure(.decode))
+                print("NetworkManager", NetworkError.decode)
             }
-//            do {
-//                print (data)
-////                let questions = try JSONDecoder().decode(Questions.self, from: data)
-////                print("✅ \(difficulty) questions --- >>", questions.results)
-////                completion(.success(questions.results)) // array of questions
-//            } catch {
-//
-////                completion(.failure(.decode))
-//            }
-            
         }.resume()
     }
-    
 }
+
 
 // 793c4a9318a740b8af0b9f829165475d
 
