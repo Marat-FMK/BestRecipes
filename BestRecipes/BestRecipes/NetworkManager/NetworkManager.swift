@@ -66,6 +66,8 @@ class NetworkManager {
         urlComponents.host = host
         urlComponents.path = "/recipes/\(id)/information"
         
+        urlComponents.queryItems = [URLQueryItem(name: "apiKey", value: apiKey)]
+        
         guard let url = urlComponents.url else {completion(.failure(.badURL)); return}
         print("✅ Current URL recDetail -->", url.absoluteString)
         
@@ -73,6 +75,19 @@ class NetworkManager {
         request.allHTTPHeaderFields = [
             "Content-type" : "application/json"
         ]
+        
+        URLSession.shared.dataTask(with: request) { data,response, error in
+            guard error == nil else { completion(.failure(.sessionError)); return}
+            guard let data = data else { completion(.failure(.data)); return}
+            
+        do {
+            let recipe = try JSONDecoder().decode(RecipeDetail.self, from: data)
+            print("✅ ID: \(id), recipe detail -->>", recipe)
+            completion(.success(recipe))
+        } catch {
+            completion(.failure(.decode))
+        }
+        }.resume()
     }
 }
 
