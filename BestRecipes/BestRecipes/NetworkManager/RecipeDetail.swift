@@ -17,6 +17,7 @@ struct RecipeDetail: Codable {
     let cookingMinutes: Int?
     let readyInMinutes: Int
     let extendedIngredients: [ExtendedIngredient]
+    let sourceName: String
     let vegetarian: Bool
     let glutenFree: Bool
     let servings: Int
