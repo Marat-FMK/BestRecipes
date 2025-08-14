@@ -24,7 +24,7 @@ class NetworkManager {
     
     private let maxRecipeCount = "20"
     
-    func fetchSearchedRecipes(searchedText: String, completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
+    func fetchRecipes(searchedText: String, completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
@@ -42,7 +42,7 @@ class NetworkManager {
         
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = [
-            "Content-Type": "application/json"
+            "Content-Type" : "application/json"
         ]
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else { completion(.failure(.sessionError)); return}
@@ -58,13 +58,29 @@ class NetworkManager {
             }
         }.resume()
     }
+    
+    func fetchReceptDetails(id: Int, completion: @escaping(Result<RecipeDetail,NetworkError>) -> Void) {
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = scheme
+        urlComponents.host = host
+        urlComponents.path = "/recipes/\(id)/information"
+        
+        guard let url = urlComponents.url else {completion(.failure(.badURL)); return}
+        print("✅ Current URL recDetail -->", url.absoluteString)
+        
+        var request = URLRequest(url: url)
+        request.allHTTPHeaderFields = [
+            "Content-type" : "application/json"
+        ]
+    }
 }
 
 
 // 793c4a9318a740b8af0b9f829165475d
 
 //Structs >>
-// details : name / image url / rating / revies Count / unstructions / ingredients / weightIngredients / time
+// details : name / image url / rating / revies Count / instructions / ingredients / weightIngredients / time
 // creatorName / creatorImageURL
 
 // Fetch methods >>
