@@ -11,10 +11,10 @@ struct RecipeDetail: Codable {
     let id: Int
     let title: String
     let image: String
-    let spoonacularScore: String
+    let spoonacularScore: Double
     let instructions: String
-    let preparationMinutes: Int
-    let cookingMinutes: Int
+    let preparationMinutes: Int?
+    let cookingMinutes: Int?
     let readyInMinutes: Int
     let extendedIngredients: [ExtendedIngredient]
     let vegetarian: Bool
@@ -26,6 +26,6 @@ struct RecipeDetail: Codable {
 struct ExtendedIngredient: Codable {
     let name: String
     let consistency: String
-    let amount: String
+    let amount: Double
     let unit: String
 }
