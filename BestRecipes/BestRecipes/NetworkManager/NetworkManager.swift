@@ -22,8 +22,12 @@ class NetworkManager {
     private let pathComponent = "/recipes/complexSearch"
     private let apiKey = "793c4a9318a740b8af0b9f829165475d"
     
-    
-    func fetchRecipes(searchedText: String = "", cuisine: WorldCuisines? = nil, mealType: MealType? = nil, maxRecipeCount: String = "5", completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
+    func fetchRecipes(searchedText: String? = nil,
+                      tag: String? = nil,
+                      cuisine: WorldCuisines? = nil,
+                      mealType: MealType? = nil,
+                      maxRecipeCount: String = "2",
+                      completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
@@ -31,18 +35,19 @@ class NetworkManager {
         urlComponents.path = pathComponent
         
         
-        //add author
         var queryItems = [URLQueryItem(name: "apiKey", value: apiKey),
-                          URLQueryItem(name: "query", value: searchedText),
                           URLQueryItem(name: "number", value: maxRecipeCount),
-                          URLQueryItem(name: "instructionsRequired", value: "true"),
-                          URLQueryItem(name: "tags", value: "trend")]
+                          URLQueryItem(name: "instructionsRequired", value: "true")]
+        
+        if searchedText != nil {
+            queryItems.append(URLQueryItem(name: "query", value: searchedText))
+        }
         
         if cuisine != nil {
             queryItems.append(URLQueryItem(name: "cuisine", value: cuisine?.rawValue))
         }
         
-        if cuisine != nil {
+        if mealType != nil {
             queryItems.append(URLQueryItem(name: "type", value: mealType?.rawValue))
         }
         
@@ -106,7 +111,9 @@ class NetworkManager {
 }
 
 
+
 // 793c4a9318a740b8af0b9f829165475d
+// dc0d1f155087426ba1d59951334b02bf   -  hedge
 
 //Structs >>
 // details : name / image url / rating / revies Count / instructions / ingredients / weightIngredients / time
