@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 enum WorldCuisines: String, CaseIterable {
     case american = "American"
     case european = "European"
@@ -58,8 +59,8 @@ class StorageManager {
         return intermediateArray
     }
     
-    var categoryRecipesAll: [RecipeDetail] = []
-    var categoryRecipes: [RecipeDetail] {
+    var categoryRecipesAll: [RecipeDetail] = [] // для экрана seeAll
+    var categoryRecipes: [RecipeDetail] { // первые пять элементов массива для показа на главном экране
         var intermediateArray: [RecipeDetail] = []
         if !categoryRecipesAll.isEmpty {
             let recipesCount = categoryRecipesAll.count
@@ -98,25 +99,27 @@ class StorageManager {
     
     //MARK: - METHODS
     
+#warning("recipeCount")
     func setCategotyRecipes(category: MealType) {
         var recipesID: [Int] = []
-        
-        networkManager.fetchRecipes(mealType: category, maxRecipeCount: "10") { result in
+        networkManager.fetchRecipes(mealType: category, maxRecipeCount: "2") { result in
             switch result {
             case .success(let searchedRecipes):
                 for recipe in searchedRecipes {
                     recipesID.append(recipe.id)
                 }
+                print("✅ Category Recipes ids -->>", recipesID)
                 self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
                     switch result {
                     case .success(let recipes):
                         self.categoryRecipesAll = recipes
+                        print("✅ Category Recipes -->>", recipes)
                     case .failure(let error):
-                        print("❌ error storage categories")
+                        print("❌ error storage categories recipes detail", error)
                     }
                 }
             case .failure(let error):
-                print("alarm category")
+                print("❌ error storage category recipes ids array", error)
             }
         }
     }
@@ -142,7 +145,4 @@ class StorageManager {
             }
         }
     }
-    
-    
-    
 }
