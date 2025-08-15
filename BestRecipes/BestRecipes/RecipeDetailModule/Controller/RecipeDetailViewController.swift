@@ -1,0 +1,96 @@
+//
+//  ViewController.swift
+//  BestRecipes
+//
+//  Created by Marat Fakhrizhanov on 11.08.2025.
+//
+
+import UIKit
+
+class RecipeDetailViewController: UIViewController {
+    
+    //MARK: - UI Components
+    //MARK: Navigation Bar Items
+    
+    private let backButton: UIButton = {
+        let backButton = UIButton()
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        backButton.setImage(UIImage(named: Constants.Icons.arrowLeft), for: .normal)
+        return backButton
+    }()
+    
+    private let navigationBarTitle: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.font = UIFont(name: Constants.Fonts.poppinsBold, size: 24)
+        label.text = "Recipe Detail"
+        return label
+    }()
+    
+    //MARK: Main
+    private let recipeDetailTable: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(RecipeDetailAboutCell.self, forCellReuseIdentifier: RecipeDetailAboutCell.identifier)
+        tableView.register(RecipeDetailInstructionsCell.self, forCellReuseIdentifier: RecipeDetailInstructionsCell.identifier)
+        tableView.register(RecipeDetailTableViewCell.self, forCellReuseIdentifier: RecipeDetailTableViewCell.identifier)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 1000
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        return tableView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+        self.recipeDetailTable.delegate = self
+        self.recipeDetailTable.dataSource = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool)  {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    func setupUI() {
+        view.backgroundColor = Constants.Colors.Neutral.white0
+        
+        //MARK: NavigationBar UI
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.titleView = navigationBarTitle
+        
+        //MARK: UI
+            view.addSubview(recipeDetailTable)
+        NSLayoutConstraint.activate([
+            recipeDetailTable.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            recipeDetailTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -19),
+            recipeDetailTable.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 19),
+            recipeDetailTable.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+}
+
+extension RecipeDetailViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailAboutCell.identifier, for: indexPath) as! RecipeDetailAboutCell
+            cell.selectionStyle = .none
+            return cell
+        } else if indexPath.row == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailInstructionsCell.identifier, for: indexPath) as! RecipeDetailInstructionsCell
+            cell.selectionStyle = .none
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailTableViewCell.identifier, for: indexPath) as! RecipeDetailTableViewCell
+            cell.selectionStyle = .none
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+}
