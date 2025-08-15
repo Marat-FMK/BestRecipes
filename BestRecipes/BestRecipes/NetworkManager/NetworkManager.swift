@@ -20,10 +20,10 @@ class NetworkManager {
     private let scheme = "https"
     private let host = "api.spoonacular.com"
     private let pathComponent = "/recipes/complexSearch"
-    private let apiKey = "793c4a9318a740b8af0b9f829165475d"
+    private let apiKey = "dc0d1f155087426ba1d59951334b02bf"
     
     func fetchRecipes(searchedText: String? = nil,
-                      tag: String? = nil,
+                      trend: Bool = false,
                       cuisine: WorldCuisines? = nil,
                       mealType: MealType? = nil,
                       maxRecipeCount: String = "2",
@@ -41,6 +41,10 @@ class NetworkManager {
         
         if searchedText != nil {
             queryItems.append(URLQueryItem(name: "query", value: searchedText))
+        }
+        
+        if trend {
+            queryItems.append(URLQueryItem(name: "sort", value: "popularity"))
         }
         
         if cuisine != nil {
@@ -101,7 +105,7 @@ class NetworkManager {
             
             do {
                 let recipes = try JSONDecoder().decode([RecipeDetail].self, from: data)
-                print("✅ IDs: \(stringIDs), recipe detail -->>", recipes)
+//                print("✅ IDs: \(stringIDs), recipe detail -->>", recipes)
                 completion(.success(recipes))
             } catch {
                 completion(.failure(.decode))
