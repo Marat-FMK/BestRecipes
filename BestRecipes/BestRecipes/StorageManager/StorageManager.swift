@@ -80,9 +80,9 @@ class StorageManager {
     
     var searchedRecipes: [RecipeDetail] = []
     
-//    var recentRecipesID: [Int] = [] // собирает индесы и сохраняем что бы загрузить при старте
-    var recentRecipes: [RecipeDetail] = [] // сохраняет массив просмотренных
-    var favoriteRecipes: [RecipeDetail] = []
+//    var recentRecipesID: [Int] = [] // собирает индесы и сохраняем что бы загрузить при старте ?!?
+    var recentRecipes: [RecipeDetail] = [] // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
+    var favoriteRecipes: [RecipeDetail] = [] // массив избранных
     
     var recentRecipesIDs: [Int] {
         var intermediate: [Int] = []
@@ -100,9 +100,10 @@ class StorageManager {
     //MARK: - METHODS
     
 #warning("recipeCount")
+    //Ф-ия вызывается при каждом нажатии на кнопку выбора категории - собюирает массив categoryRecipesAll // После чего можно будет использовать геттер categoryRecipes который берет из этого массива только 5 элементов для показа на главном экране // А весь массив показывается только на Сии Олл экране
     func setCategotyRecipes(category: MealType) {
         var recipesID: [Int] = []
-        networkManager.fetchRecipes(mealType: category, maxRecipeCount: "2") { result in
+        networkManager.fetchRecipes(mealType: category, maxRecipeCount: "4") { result in
             switch result {
             case .success(let searchedRecipes):
                 for recipe in searchedRecipes {
@@ -123,6 +124,31 @@ class StorageManager {
             }
         }
     }
+    
+#warning("recipeCount")
+    // Логика такая же как и у предидущей ф-ии / можно разделить и написать красивее но пока что пусть работает ;)
+    func setTrendingRecipes() {
+        var recipesID: [Int] = []
+        networkManager.fetchRecipes(trend: true, maxRecipeCount: "4") { result in
+            switch result {
+            case .success(let searchedRecipes):
+                for recipe in searchedRecipes {
+                    recipesID.append(recipe.id)
+                }
+                print("✅ Trending Recipes ids -->>", recipesID)
+                self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
+                    switch result {
+                    case .success(let recipes):
+                        self.trendingRecipesAll = recipes
+                        print("✅ Trending Recipes -->>", recipes)
+                    case .failure(let error):
+                        print("❌ error storage trending recipes detail", error)
+                    }
+                }
+            case .failure(let error):
+                print("❌ error storage trending recipes ids array", error)
+            }
+        }    }
     
     
     //MARK: - Recent and Favorite
