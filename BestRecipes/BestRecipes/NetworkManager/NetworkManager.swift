@@ -14,14 +14,14 @@ enum NetworkError: String, Error {
     case decode = "❌Error - JSON decoder error / response"
 }
 
-
 class NetworkManager {
     
     private let scheme = "https"
     private let host = "api.spoonacular.com"
     private let pathComponent = "/recipes/complexSearch"
-    private let apiKey = "dc0d1f155087426ba1d59951334b02bf"
+    private let apiKey = "793c4a9318a740b8af0b9f829165475d"
     
+#warning("max recipe count / ApiKey")
     func fetchRecipes(searchedText: String? = nil,
                       trend: Bool = false,
                       cuisine: WorldCuisines? = nil,
@@ -39,26 +39,31 @@ class NetworkManager {
                           URLQueryItem(name: "number", value: maxRecipeCount),
                           URLQueryItem(name: "instructionsRequired", value: "true")]
         
+        var direction: Direction = .search
         if searchedText != nil {
+            direction = .search
             queryItems.append(URLQueryItem(name: "query", value: searchedText))
         }
         
         if trend {
+            direction = .trending
             queryItems.append(URLQueryItem(name: "sort", value: "popularity"))
         }
         
         if cuisine != nil {
+            direction = .cuisines
             queryItems.append(URLQueryItem(name: "cuisine", value: cuisine?.rawValue))
         }
         
         if mealType != nil {
+            direction = .category
             queryItems.append(URLQueryItem(name: "type", value: mealType?.rawValue))
         }
         
         urlComponents.queryItems = queryItems
         
         guard let url = urlComponents.url else { completion(.failure(.badURL)); return}
-        print("✅ Current URL -->", url.absoluteString)
+        print("✅ Current URL \(direction.rawValue) -- >", url.absoluteString)
         
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = [
@@ -70,7 +75,7 @@ class NetworkManager {
             
             do {
                 let recipes = try JSONDecoder().decode(SearchedData.self, from: data)
-                print("✅ SearchedRecipes --- >>", recipes.results)
+                print("✅ SearchedRecipes \(direction.rawValue) --- >>", recipes.results)
                 completion(.success(recipes.results))
             } catch {
                 completion(.failure(.decode))
@@ -92,7 +97,7 @@ class NetworkManager {
                                     URLQueryItem(name: "ids", value: stringIDs)]
         
         guard let url = urlComponents.url else {completion(.failure(.badURL)); return}
-        print("✅ Current URL recDetail -->", url.absoluteString)
+        print("✅ Current URL recipeDetail -->", url.absoluteString)
         
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = [
@@ -105,7 +110,7 @@ class NetworkManager {
             
             do {
                 let recipes = try JSONDecoder().decode([RecipeDetail].self, from: data)
-//                print("✅ IDs: \(stringIDs), recipe detail -->>", recipes)
+                //                print("✅ IDs: \(stringIDs), recipe detail -->>", recipes)
                 completion(.success(recipes))
             } catch {
                 completion(.failure(.decode))
@@ -114,10 +119,7 @@ class NetworkManager {
     }
 }
 
-
-
 // 793c4a9318a740b8af0b9f829165475d
-// dc0d1f155087426ba1d59951334b02bf   -  hedge
 
 //Structs >>
 // details : name / image url / rating / revies Count / instructions / ingredients / weightIngredients / time
