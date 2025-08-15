@@ -1,0 +1,120 @@
+//
+//  RecipeDetailTableViewCell.swift
+//  BestRecipes
+//
+//  Created by Aliaksandr Zuyeu on 12.08.25.
+//
+
+import UIKit
+
+class RecipeDetailTableViewCell: UITableViewCell {
+    
+    static let identifier = "RecipeDetailCell"
+    
+    private let cellView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 12
+        view.backgroundColor = Constants.Colors.Neutral.neutral10
+        return view
+    }()
+    
+    private let ingredientImage: UIImageView = {
+        let ingredientImage = UIImageView()
+        ingredientImage.image = UIImage(named: "cucumber")
+        ingredientImage.translatesAutoresizingMaskIntoConstraints = false
+        return ingredientImage
+    }()
+    
+    private let ingredientLabel: UILabel = {
+        let ingredientLabel = UILabel()
+        ingredientLabel.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 16)
+        ingredientLabel.text = "Cucumber"
+        ingredientLabel.translatesAutoresizingMaskIntoConstraints = false
+        return ingredientLabel
+    }()
+    
+    private let ingredientWeightLabel: UILabel = {
+        let ingredientWeightLabel = UILabel()
+        ingredientWeightLabel.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 14)
+        ingredientWeightLabel.textColor = Constants.Colors.Neutral.neutral50
+        ingredientWeightLabel.text = "200g"
+        ingredientWeightLabel.translatesAutoresizingMaskIntoConstraints = false
+        return ingredientWeightLabel
+    }()
+    
+    private let ingredientCheckBox: UIButton = {
+        let ingredientCheckBox = UIButton()
+        ingredientCheckBox.translatesAutoresizingMaskIntoConstraints = false
+        ingredientCheckBox.setImage(UIImage(named: Constants.Icons.tickCircleInactive), for: .normal)
+        ingredientCheckBox.addTarget(self, action: #selector(checkPressed) , for: .touchUpInside)
+        return ingredientCheckBox
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupUI() {
+        self.contentView.addSubview(cellView)
+        NSLayoutConstraint.activate([
+            cellView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 6.5),
+            cellView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
+            cellView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
+            cellView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -6.5)
+        ])
+        
+        cellView.addSubview(ingredientImage)
+        NSLayoutConstraint.activate([
+            ingredientImage.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 12),
+            ingredientImage.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 16),
+            ingredientImage.bottomAnchor.constraint(equalTo: cellView.bottomAnchor,constant: -12),
+            ingredientImage.widthAnchor.constraint(equalToConstant: 52)
+        ])
+        
+        cellView.addSubview(ingredientLabel)
+        NSLayoutConstraint.activate([
+            ingredientLabel.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 27),
+            ingredientLabel.leadingAnchor.constraint(equalTo: ingredientImage.trailingAnchor, constant: 24),
+            ingredientLabel.widthAnchor.constraint(equalToConstant: 124),
+            ingredientLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor, constant: -27)
+        ])
+        
+        cellView.addSubview(ingredientWeightLabel)
+        NSLayoutConstraint.activate([
+            ingredientWeightLabel.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 25),
+            ingredientWeightLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor, constant: -25)
+        ])
+        
+        cellView.addSubview(ingredientCheckBox)
+        NSLayoutConstraint.activate([
+            ingredientCheckBox.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 26),
+            ingredientCheckBox.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -19),
+            ingredientCheckBox.bottomAnchor.constraint(equalTo:cellView.bottomAnchor, constant: -26),
+            ingredientCheckBox.widthAnchor.constraint(equalToConstant: 23.5),
+            ingredientCheckBox.heightAnchor.constraint(equalToConstant: 23.5),
+            ingredientWeightLabel.trailingAnchor.constraint(equalTo: ingredientCheckBox.leadingAnchor, constant: -27),
+        ])
+    }
+    
+    @objc private func checkPressed(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        if sender.isSelected {
+            sender.setImage(UIImage(named: Constants.Icons.tickCircleActive), for: .normal)
+        } else {
+            sender.setImage(UIImage(named: Constants.Icons.tickCircleInactive), for: .normal)
+        }
+    }
+//    func configure(with ingredient: Ingredient) {
+//        ingredientImage.image = UIImage(named: ingredient.imageName)
+//        ingredientLabel.text = ingredient.name
+//        ingredientWeightLabel.text = ingredient.weight
+//        ingredientCheckBox.isSelected = ingredient.isChecked
+//    }
+}
+

@@ -1,7 +1,7 @@
 import UIKit
 
 struct Constants {
-    static let appName = "Best Recipes"
+    static let appName = "BestRecipes"
     
     struct Images {
         static let onboardingStartPage = "onboarding_start_page_image"
@@ -22,9 +22,48 @@ struct Constants {
         static let starIconImage = "star"
     }
     
+    struct Icons {
+        static let arrowLeft = "arrowLeft"
+        static let arrowRight = "arrowRight"
+        static let bookmark = "bookmark"
+        static let bookMarkActive = "bookMarkActive"
+        static let bookMarkInactive = "bookMarkInactive"
+        static let clock = "clock"
+        static let dotsHorizontal = "dotsHorizontal"
+        static let dotsVertical = "dotsVertical"
+        static let edit = "edit"
+        static let homeActive = "homeActive"
+        static let homeInactive = "homeInactive"
+        static let location = "location"
+        static let minusBorder = "minusBorder"
+        static let notificationActive = "notificationActive"
+        static let notificationInactive = "notificationInactive"
+        static let play = "play"
+        static let plusBorder = "plusBorder"
+        static let profile = "profile"
+        static let profileActive = "profileActive"
+        static let profileInactive = "profileInactive"
+        static let recipe = "recipe"
+        static let search = "search"
+        static let star = "star"
+        static let tickCircleInactive = "tickCircleInactive"
+        static let tickCircleActive = "tickCircleActive"
+        static let xMark = "xMark"
+    }
+    
+    struct NavbarIcons {
+        static let backGroundBar = "backGroundBar"
+        static let create = "create"
+        static let navActive = "navActive"
+        static let navIntactive = "navIntactive"
+
+    }
+    
     struct Fonts {
         static let poppinsBold = "Poppins-Bold"
+        static let poppinsSemiBold = "Poppins-SemiBold"
         static let poppinsRegular = "Poppins-Regular"
+        
     }
     
     struct Colors {
