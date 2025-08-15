@@ -196,7 +196,7 @@ class StorageManager {
     
     //MARK: - METHODS FOR RECENT AND FAVORITES ARRAYS
     
-    func saveToUD(recipes: [RecipeDetail], constantUD: String) {
+    private func saveToUD(recipes: [RecipeDetail], constantUD: String) {
         if let encoded = try? JSONEncoder().encode(recipes) {
             UserDefaults.standard.set(encoded, forKey: constantUD)
             print("💼✅ Encode complete, save -->>", recipes)
