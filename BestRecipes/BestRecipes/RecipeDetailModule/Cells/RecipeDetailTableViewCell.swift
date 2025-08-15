@@ -60,18 +60,13 @@ class RecipeDetailTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        cellView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 6.5, left: 0, bottom: 6.5, right: 0))
-    }
-    
     private func setupUI() {
         self.contentView.addSubview(cellView)
         NSLayoutConstraint.activate([
-            cellView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+            cellView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 6.5),
             cellView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             cellView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
-            cellView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            cellView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -6.5)
         ])
         
         cellView.addSubview(ingredientImage)

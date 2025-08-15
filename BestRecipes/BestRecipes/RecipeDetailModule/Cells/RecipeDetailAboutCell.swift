@@ -72,17 +72,12 @@ class RecipeDetailAboutCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 6.5, left: 0, bottom: 6.5, right: 0))
-    }
-    
     private func setupUI() {
         
         //MARK: TopHeader UI
         self.contentView.addSubview(topHeader)
         NSLayoutConstraint.activate([
-            topHeader.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+            topHeader.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant:  6.5),
             topHeader.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             topHeader.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor)
         ])
@@ -92,7 +87,7 @@ class RecipeDetailAboutCell: UITableViewCell {
         NSLayoutConstraint.activate([
             dishImage.topAnchor.constraint(equalTo: topHeader.bottomAnchor, constant: 13),
             dishImage.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
-            dishImage.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -16),
+            dishImage.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
             dishImage.heightAnchor.constraint(equalToConstant: 200)
         ])
         dishImage.backgroundColor = .red
@@ -103,17 +98,15 @@ class RecipeDetailAboutCell: UITableViewCell {
             reviewsStack.topAnchor.constraint(equalTo: dishImage.bottomAnchor, constant: 13),
             reviewsStack.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             reviewsStack.heightAnchor.constraint(equalToConstant: 20),
-            reviewsStack.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            reviewsStack.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant:  -6.5)
         ])
         reviewsStack.addArrangedSubview(reviewsImage)
         reviewsStack.addArrangedSubview(recipeRating)
         reviewsStack.addArrangedSubview(countOfReviews)
     }
     
-    //    func configure(with ingredient: Ingredient) {
-    //        ingredientImage.image = UIImage(named: ingredient.imageName)
-    //        ingredientLabel.text = ingredient.name
-    //        ingredientWeightLabel.text = ingredient.weight
-    //        ingredientCheckBox.isSelected = ingredient.isChecked
-    //    }
+        func configure(with recipe: RecipeDetail) {
+            self.topHeader.text = recipe.title
+//            self.dishImage.image = UIIm
+        }
 }

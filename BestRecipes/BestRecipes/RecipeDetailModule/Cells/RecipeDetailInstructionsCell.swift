@@ -32,13 +32,13 @@ class RecipeDetailInstructionsCell: UITableViewCell {
         4. Stir in mayonnaise, green onion, and mustard. Season with paprika, salt, and pepper.
         5. Stir and serve on your favorite bread or crackers.
         """
-        textView.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 16)
+        let instrFont = UIFont(name: Constants.Fonts.poppinsRegular, size: 16)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
         paragraphStyle.firstLineHeadIndent = 0
         paragraphStyle.headIndent = 14
         paragraphStyle.alignment = .left
-        textView.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        textView.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: instrFont!])
         textView.isSelectable = false
         textView.isEditable = false
         textView.isScrollEnabled = false
@@ -79,16 +79,11 @@ class RecipeDetailInstructionsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 6.5, left: 0, bottom: 6.5, right: 0))
-    }
-    
     private func setupUI() {
         
         self.contentView.addSubview(instuctionsHeader)
         NSLayoutConstraint.activate([
-            instuctionsHeader.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+            instuctionsHeader.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 6.5),
             instuctionsHeader.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             instuctionsHeader.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor)
         ])
@@ -107,7 +102,7 @@ class RecipeDetailInstructionsCell: UITableViewCell {
             ingredientsHeaderView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor),
             ingredientsHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             ingredientsHeaderView.heightAnchor.constraint(equalToConstant: 28),
-            ingredientsHeaderView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor)
+            ingredientsHeaderView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -6.5)
         ])
         
         ingredientsHeaderView.addSubview(ingredientsLabel)
@@ -125,15 +120,25 @@ class RecipeDetailInstructionsCell: UITableViewCell {
         ])
     }
     
-//    func configure(with recipe: Recipe) {
-//        
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        paragraphStyle.lineSpacing = 4
-//        paragraphStyle.firstLineHeadIndent = 0
-//        paragraphStyle.headIndent = 14
-//        paragraphStyle.alignment = .left
-//        instructionsText.attributedText = NSMutableAttributedString(string: recipe.instructions, attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle])
-//        
-//        countOfItems.text = "\(recipe)"
-//    }
+    func configure(with recipe: RecipeDetail) {
+
+        let instrFont = UIFont(name: Constants.Fonts.poppinsRegular, size: 16)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 4
+        paragraphStyle.firstLineHeadIndent = 0
+        paragraphStyle.headIndent = 14
+        paragraphStyle.alignment = .left
+        
+        var text = "You can find following instructions at the link: \(recipe.sourceUrl)"
+        
+        if recipe.instructions.isEmpty {
+            
+            self.instructionsText.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: instrFont!])
+        } else {
+            self.instructionsText.attributedText = NSMutableAttributedString(string: recipe.instructions, attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: instrFont!])
+        }
+        
+        self.countOfItems.text = "\(recipe.extendedIngredients.count) items"
+        
+    }
 }
