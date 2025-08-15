@@ -47,7 +47,7 @@ class StorageManager {
     let categories = MealType.allCases.map{ String($0.rawValue) } // массив категорий для главного экрана
     
     var currentCategory: MealType {
-        let uDCategory = UserDefaults.standard.string(forKey: Constants.UDConstants.currentCategory) // сюда сохраняем выбранную на HomeView категорию в UD
+        let uDCategory = UserDefaults.standard.string(forKey: Constants.UDConstants.currentCategory) ?? "dessert" // сюда сохраняем выбранную на HomeView категорию в UD
         
         switch uDCategory {
         case "dessert": return .dessert
