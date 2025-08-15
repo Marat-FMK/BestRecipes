@@ -22,6 +22,14 @@ struct RecipeDetail: Codable {
     let vegetarian: Bool
     let glutenFree: Bool
     let servings: Int
+    var isFavorite: Bool = false
+    
+    enum CodingKeys: String, CodingKey {
+            case id, title, image, spoonacularScore, instructions,
+                 preparationMinutes, cookingMinutes, readyInMinutes,
+                 extendedIngredients, sourceName, sourceUrl, vegetarian,
+                 glutenFree, servings
+        }
 }
 
 struct ExtendedIngredient: Codable {
