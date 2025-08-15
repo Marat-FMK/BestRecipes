@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class RecipeDetailAboutCell: UITableViewCell {
     
@@ -27,6 +28,8 @@ class RecipeDetailAboutCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 8
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
@@ -90,7 +93,13 @@ class RecipeDetailAboutCell: UITableViewCell {
             dishImage.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
             dishImage.heightAnchor.constraint(equalToConstant: 200)
         ])
-        dishImage.backgroundColor = .red
+//        dishImage.backgroundColor = .red
+        dishImage.sd_setImage(
+            with: URL(string: "https://img.spoonacular.com/recipes/716429-556x370.jpg"),
+            placeholderImage: UIImage(named: "placeholder"),
+            options: [.progressiveLoad, .highPriority]
+        )
+        
         
         //MARK: Rating Section UI
         self.contentView.addSubview(reviewsStack)
@@ -107,6 +116,10 @@ class RecipeDetailAboutCell: UITableViewCell {
     
         func configure(with recipe: RecipeDetail) {
             self.topHeader.text = recipe.title
-//            self.dishImage.image = UIIm
+            dishImage.sd_setImage(
+                with: URL(string: recipe.image),
+                placeholderImage: UIImage(named: "placeholder"),
+                options: [.progressiveLoad, .highPriority]
+            )
         }
 }
