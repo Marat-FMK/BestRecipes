@@ -8,6 +8,13 @@
 import Foundation
 
 
+enum Direction: String {
+    case trending = "trending"
+    case category = "category"
+    case search = "search"
+    case cuisines = "cuisines"
+}
+
 enum WorldCuisines: String, CaseIterable {
     case american = "American"
     case european = "European"
@@ -34,63 +41,53 @@ enum MealType: String, CaseIterable {
 
 
 class StorageManager {
-    let networkManager = NetworkManager()
+    private let networkManager = NetworkManager()
     
     let cuisineNames = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
     let categories = MealType.allCases.map{ String($0.rawValue) } // массив категорий для главного экрана
     
-    var currentCategory = MealType.appetizer // текущая/выбранная категория для ЮД
-    var currentCuisine = WorldCuisines.american // текущая страна
-    var searchText = ""
+    var currentCategory: MealType {
+        let uDCategory = UserDefaults.standard.string(forKey: Constants.UDConstants.currentCategory) // сюда сохраняем выбранную на HomeView категорию в UD
+        
+        switch uDCategory {
+        case "dessert": return .dessert
+        case "appetizer": return .appetizer
+        case "salad": return .salad
+        case "soup": return .soup
+        case "snack": return .snack
+        case "drink": return .drink
+        case "sideDish": return .sideDish
+        case "bread": return .bread
+        case "beverage": return .beverage
+        case "sauce": return .sauce
+        case "marinade": return .marinade
+        case "fingerfood": return .fingerfood
+        default: return .bread
+        }
+    }
     
-    var searchedRecipes: [RecipeDetail] = [] // массив наполняется после вызова ф-ии соответствующей
+    var searchText = "" // при изменении искомого слова - передаем его в этот паараметр и вызываем ф-ию setSearchRecipes
     
-    var currentCuisineRecipes: [RecipeDetail] = []
+    var searchedRecipes: [RecipeDetail] = [] // массив наполняется после вызова ф-ии setSearchRecipes
+    
+    var choosedCuisine = WorldCuisines.american // выбранная страна
+    var currentCuisineRecipes: [RecipeDetail] = [] // массив наполняется после вызова ф-ии setCurrentCuisineRecipes
     
     var favoriteRecipes: [RecipeDetail] = [] // массив избранных
     var favoriteRecipesIDs: [Int] = []
     
-    var trendingRecipesAll: [RecipeDetail] = []
-    var trendingRecipes: [RecipeDetail] {
-        var intermediateArray: [RecipeDetail] = []
-        if !trendingRecipesAll.isEmpty {
-            let recipesCount = trendingRecipesAll.count
-            if recipesCount > 5 {
-                for index in 0..<5 {
-                    intermediateArray.append(trendingRecipesAll[index])
-                }
-            } else {
-                for index in 0..<recipesCount {
-                    intermediateArray.append(trendingRecipesAll[index])
-                }
-            }
-        }
-        return intermediateArray
+    var trendingRecipesAll: [RecipeDetail] = [] // все рецепты которые загружаются при старте
+    var trendingRecipes: [RecipeDetail] { // отдает только 5 рецептов для показа на Home view
+        setArrayForHomeView(allRecipes: trendingRecipesAll)
     }
     
-    var categoryRecipesAll: [RecipeDetail] = [] // для экрана seeAll
-    var categoryRecipes: [RecipeDetail] { // первые пять элементов массива для показа на главном экране
-        var intermediateArray: [RecipeDetail] = []
-        if !categoryRecipesAll.isEmpty {
-            let recipesCount = categoryRecipesAll.count
-            if recipesCount > 5 {
-                for index in 0..<5 {
-                    intermediateArray.append(categoryRecipesAll[index])
-                }
-            } else {
-                for index in 0..<recipesCount {
-                    intermediateArray.append(categoryRecipesAll[index])
-                }
-            }
-        }
-        return intermediateArray
+    var categoryRecipesAll: [RecipeDetail] = [] // все рецепты которые загружаются при выборе очередной категории
+    var categoryRecipes: [RecipeDetail] { // отдает только 5 рецептов для показа на Home view
+        setArrayForHomeView(allRecipes: categoryRecipesAll)
     }
     
-    
-//    var recentRecipesID: [Int] = [] // собирает индесы и сохраняем что бы загрузить при старте ?!?
     var recentRecipes: [RecipeDetail] = [] // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
-    
-    var recentRecipesIDs: [Int] {
+    var recentRecipesIDs: [Int] { // нужен для проверки перед добавлением нового просмотренного что бы не дублироваться
         var intermediate: [Int] = []
         if !recentRecipes.isEmpty {
             for recipe in recentRecipes {
@@ -100,135 +97,94 @@ class StorageManager {
         return intermediate
     }
     
-    
-    
-    //MARK: - METHODS
-    
-    
-#warning(" max recipeCount")
-//Ф-ия вызывается при каждом нажатии на кнопку выбора категории - собюирает массив categoryRecipesAll // После чего можно будет использовать геттер categoryRecipes который берет из этого массива только 5 элементов для показа на главном экране // А весь массив показывается только на Сии Олл экране
-    func setCategotyRecipes() {
-        var recipesID: [Int] = []
-        networkManager.fetchRecipes(mealType: currentCategory, maxRecipeCount: "4") { result in
-            switch result {
-            case .success(let searchedRecipes):
-                for recipe in searchedRecipes {
-                    recipesID.append(recipe.id)
+    // Метод собирает массив из 5 или менее элементов для HomeView
+    private func setArrayForHomeView(allRecipes: [RecipeDetail]) -> [RecipeDetail] {
+        var intermediateArray: [RecipeDetail] = []
+        if !allRecipes.isEmpty {
+            let recipesCount = allRecipes.count
+            if recipesCount > 5 {
+                for index in 0..<5 {
+                    intermediateArray.append(allRecipes[index])
                 }
-                print("✅ Category Recipes ids -->>", recipesID)
-                self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
-                    switch result {
-                    case .success(let recipes):
-                        self.categoryRecipesAll = recipes
-                        print("✅ Category Recipes -->>", recipes)
-                    case .failure(let error):
-                        print("❌ error storage categories recipes detail", error)
-                    }
+            } else {
+                for index in 0..<recipesCount {
+                    intermediateArray.append(allRecipes[index])
                 }
-            case .failure(let error):
-                print("❌ error storage category recipes ids array", error)
             }
         }
+        return intermediateArray
     }
     
-
-// Логика такая же как и у предидущей ф-ии / можно разделить и написать красивее но пока что пусть работает ;)
-    func setTrendingRecipes() {
+    //MARK: - METHODS FOR CREATING ARRAYS OF RECIPE DETAILS WITH API
+    //Cобирает результат выполнения поиска и извлекает ID нужных рецептов, потом бежит в сеть собирает все детальные рецепты // Раскидывает все по нужным массивам
+    private func setArrayOfRecipeDetails(direction: Direction, result: Result<[SearchedRecipe],NetworkError>) {
         var recipesID: [Int] = []
-        networkManager.fetchRecipes(trend: true, maxRecipeCount: "4") { result in
-            switch result {
-            case .success(let searchedRecipes):
-                for recipe in searchedRecipes {
-                    recipesID.append(recipe.id)
-                }
-                print("✅ Trending Recipes ids -->>", recipesID)
-                self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
-                    switch result {
-                    case .success(let recipes):
+        switch result {
+        case .success(let searchedRecipes):
+            for recipe in searchedRecipes {
+                recipesID.append(recipe.id)
+            }
+            print("✅ \(direction.rawValue) Recipes ids -->>", recipesID)
+            self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
+                
+                switch result {
+                case .success(let recipes):
+                    switch direction {
+                    case .trending:
                         self.trendingRecipesAll = recipes
-                        print("✅ Trending Recipes -->>", recipes)
-                    case .failure(let error):
-                        print("❌ error storage trending recipes detail", error)
+                    case .category:
+                        self.categoryRecipesAll = recipes
+                    case .search:
+                        self.searchedRecipes = recipes
+                    case .cuisines:
+                        self.currentCuisineRecipes = recipes
                     }
+                    
+                    print("✅ \(direction.rawValue) Recipes -->>", recipes)
+                case .failure(let error):
+                    print("❌ error storage \(direction.rawValue) recipes detail", error)
                 }
-            case .failure(let error):
-                print("❌ error storage trending recipes ids array", error)
             }
+        case .failure(let error):
+            print("❌ error storage \(direction.rawValue) recipes ids array", error)
         }
     }
     
-//    func searchRecipeOfSearchText() {
-//        networkManager.fetchRecipes(searchedText: searchText) { result in
-//            switch result {
-//            case .success(let recipes):
-//                self.searchedRecipes = recipes
-//                print("✅ Searched recipes -->>", recipes)
-//            case .failure(let error):
-//                print("❌ search network error", error)
-//            }
-//        }
-//    }
     
-    func searchRecipeOfSearchText() {
-        var recipesID: [Int] = []
-        networkManager.fetchRecipes(cuisine: currentCuisine, maxRecipeCount: "4") { result in
-            switch result {
-            case .success(let searchedRecipes):
-                for recipe in searchedRecipes {
-                    recipesID.append(recipe.id)
-                }
-                print("✅ Searchtext Recipes ids -->>", recipesID)
-                self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
-                    switch result {
-                    case .success(let recipes):
-                        self.searchedRecipes = recipes
-                        print("✅ Search Recipes -->>", recipes)
-                    case .failure(let error):
-                        print("❌ error storage searchtext recipes detail", error)
-                    }
-                }
-            case .failure(let error):
-                print("❌ error storage searchtext recipes ids array", error)
-            }
+    //Ф-ия вызывается при каждом нажатии на кнопку выбора категории - собирает массив categoryRecipesAll // После чего можно будет использовать геттер categoryRecipes который берет из этого массива только 5 элементов для показа на главном экране // А весь массив показывается только на See All экране
+    func setCategotyRecipes() {
+        networkManager.fetchRecipes(mealType: currentCategory) { result in
+            self.setArrayOfRecipeDetails(direction: .category, result: result)
+        }
+    }
+    
+    func setTrendingRecipes() {
+        networkManager.fetchRecipes(trend: true) { result in
+            self.setArrayOfRecipeDetails(direction: .trending, result: result)
+        }
+    }
+    
+    func setSearchRecipes() {
+        networkManager.fetchRecipes(searchedText: searchText) { result in // добавить параметр максимального кол-ва рецептов в ф-ию при необходимости
+            self.setArrayOfRecipeDetails(direction: .search, result: result)
         }
     }
     
     func setCurrentCuisineRecipes() {
-        var recipesID: [Int] = []
-        networkManager.fetchRecipes(cuisine: currentCuisine, maxRecipeCount: "4") { result in
-            switch result {
-            case .success(let searchedRecipes):
-                for recipe in searchedRecipes {
-                    recipesID.append(recipe.id)
-                }
-                print("✅ Current Cuisine Recipes ids -->>", recipesID)
-                self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
-                    switch result {
-                    case .success(let recipes):
-                        self.currentCuisineRecipes = recipes
-                        print("✅ Current Cuisine Recipes -->>", recipes)
-                    case .failure(let error):
-                        print("❌ error storage currentCuisine recipes detail", error)
-                    }
-                }
-            case .failure(let error):
-                print("❌ error storage currentCuisine recipes ids array", error)
-            }
+        networkManager.fetchRecipes(cuisine: choosedCuisine) { result in
+            self.setArrayOfRecipeDetails(direction: .cuisines, result: result)
         }
     }
     
     
-    
-    
-    
-    //MARK: - Recent and Favorite
-    func saveRecentRecepie(recipe: RecipeDetail) { // при каждом открытии окна детального просмотра
+    //MARK: - METHODS FOR RECENT AND FAVORITES ARRAYS
+    func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
         if !recentRecipesIDs.contains(recipe.id){
             recentRecipes.insert(recipe, at: 0)
         }
     }
     
-    func saveFavoriteRecipe(recipe: RecipeDetail) { // при нажатии кнопки сохраниения в избранное
+    func saveFavoriteRecipe(recipe: RecipeDetail) { // при нажатии кнопки сохраниения в избранное // подумать как изменить структуру и параметр isFavorite
         if !favoriteRecipesIDs.contains(recipe.id) {
             favoriteRecipes.append(recipe)
             favoriteRecipesIDs.append(recipe.id)
