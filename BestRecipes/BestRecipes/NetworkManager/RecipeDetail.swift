@@ -22,7 +22,7 @@ struct RecipeDetail: Codable {
     let vegetarian: Bool
     let glutenFree: Bool
     let servings: Int
-    
+    var isFavorite: Bool = false
 }
 
 struct ExtendedIngredient: Codable {
