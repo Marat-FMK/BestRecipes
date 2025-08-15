@@ -14,31 +14,6 @@ enum NetworkError: String, Error {
     case decode = "❌Error - JSON decoder error / response"
 }
 
-enum worldCuisines: String {
-    case american = "American"
-    case european = "European"
-    case greek = "Greek"
-    case japanese = "Japanese"
-    case mexican = "Mexican"
-    case african = "African"
-}
-
-enum MealType: String {
-    case dessert = "dessert"
-    case appetizer = "appetizer"
-    case salad = "salad"
-    case soup = "soup"
-    case snack = "snack"
-    case drink = "drink"
-    case sideDish = "side dish"
-    case bread = "bread"
-    case beverage = "beverage"
-    case sauce = "sauce"
-    case marinade = "marinade"
-    case fingerfood = "fingerfood"
-}
-
-
 
 class NetworkManager {
     
@@ -48,7 +23,7 @@ class NetworkManager {
     private let apiKey = "793c4a9318a740b8af0b9f829165475d"
     
     
-    func fetchRecipes(searchedText: String = "", cuisine: worldCuisines? = nil, mealType: MealType? = nil, maxRecipeCount: String = "5", completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
+    func fetchRecipes(searchedText: String = "", cuisine: WorldCuisines? = nil, mealType: MealType? = nil, maxRecipeCount: String = "5", completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
