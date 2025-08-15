@@ -39,7 +39,16 @@ class StorageManager {
     let cuisineNames = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
     let categories = MealType.allCases.map{ String($0.rawValue) } // массив категорий для главного экрана
     
-    let currentCategory = MealType.appetizer // текущая/выбранная категория для ЮД
+    var currentCategory = MealType.appetizer // текущая/выбранная категория для ЮД
+    var currentCuisine = WorldCuisines.american // текущая страна
+    var searchText = ""
+    
+    var searchedRecipes: [RecipeDetail] = [] // массив наполняется после вызова ф-ии соответствующей
+    
+    var currentCuisineRecipes: [RecipeDetail] = []
+    
+    var favoriteRecipes: [RecipeDetail] = [] // массив избранных
+    var favoriteRecipesIDs: [Int] = []
     
     var trendingRecipesAll: [RecipeDetail] = []
     var trendingRecipes: [RecipeDetail] {
@@ -78,11 +87,8 @@ class StorageManager {
     }
     
     
-    var searchedRecipes: [SearchedRecipe] = []
-    
 //    var recentRecipesID: [Int] = [] // собирает индесы и сохраняем что бы загрузить при старте ?!?
     var recentRecipes: [RecipeDetail] = [] // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
-    var favoriteRecipes: [RecipeDetail] = [] // массив избранных
     
     var recentRecipesIDs: [Int] {
         var intermediate: [Int] = []
@@ -94,16 +100,16 @@ class StorageManager {
         return intermediate
     }
     
-    var favoriteRecipesIDs: [Int] = []
     
     
     //MARK: - METHODS
     
-#warning("recipeCount")
-    //Ф-ия вызывается при каждом нажатии на кнопку выбора категории - собюирает массив categoryRecipesAll // После чего можно будет использовать геттер categoryRecipes который берет из этого массива только 5 элементов для показа на главном экране // А весь массив показывается только на Сии Олл экране
-    func setCategotyRecipes(category: MealType) {
+    
+#warning(" max recipeCount")
+//Ф-ия вызывается при каждом нажатии на кнопку выбора категории - собюирает массив categoryRecipesAll // После чего можно будет использовать геттер categoryRecipes который берет из этого массива только 5 элементов для показа на главном экране // А весь массив показывается только на Сии Олл экране
+    func setCategotyRecipes() {
         var recipesID: [Int] = []
-        networkManager.fetchRecipes(mealType: category, maxRecipeCount: "4") { result in
+        networkManager.fetchRecipes(mealType: currentCategory, maxRecipeCount: "4") { result in
             switch result {
             case .success(let searchedRecipes):
                 for recipe in searchedRecipes {
@@ -125,8 +131,8 @@ class StorageManager {
         }
     }
     
-#warning("recipeCount")
-    // Логика такая же как и у предидущей ф-ии / можно разделить и написать красивее но пока что пусть работает ;)
+
+// Логика такая же как и у предидущей ф-ии / можно разделить и написать красивее но пока что пусть работает ;)
     func setTrendingRecipes() {
         var recipesID: [Int] = []
         networkManager.fetchRecipes(trend: true, maxRecipeCount: "4") { result in
@@ -151,14 +157,62 @@ class StorageManager {
         }
     }
     
-    func searchRecipeOfSearchText(searchText: String) {
-        networkManager.fetchRecipes(searchedText: searchText) { result in
+//    func searchRecipeOfSearchText() {
+//        networkManager.fetchRecipes(searchedText: searchText) { result in
+//            switch result {
+//            case .success(let recipes):
+//                self.searchedRecipes = recipes
+//                print("✅ Searched recipes -->>", recipes)
+//            case .failure(let error):
+//                print("❌ search network error", error)
+//            }
+//        }
+//    }
+    
+    func searchRecipeOfSearchText() {
+        var recipesID: [Int] = []
+        networkManager.fetchRecipes(cuisine: currentCuisine, maxRecipeCount: "4") { result in
             switch result {
-            case .success(let recipes):
-                self.searchedRecipes = recipes
-                print("✅ Searched recipes -->>", recipes)
+            case .success(let searchedRecipes):
+                for recipe in searchedRecipes {
+                    recipesID.append(recipe.id)
+                }
+                print("✅ Searchtext Recipes ids -->>", recipesID)
+                self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
+                    switch result {
+                    case .success(let recipes):
+                        self.searchedRecipes = recipes
+                        print("✅ Search Recipes -->>", recipes)
+                    case .failure(let error):
+                        print("❌ error storage searchtext recipes detail", error)
+                    }
+                }
             case .failure(let error):
-                print("❌ search network error", error)
+                print("❌ error storage searchtext recipes ids array", error)
+            }
+        }
+    }
+    
+    func setCurrentCuisineRecipes() {
+        var recipesID: [Int] = []
+        networkManager.fetchRecipes(cuisine: currentCuisine, maxRecipeCount: "4") { result in
+            switch result {
+            case .success(let searchedRecipes):
+                for recipe in searchedRecipes {
+                    recipesID.append(recipe.id)
+                }
+                print("✅ Current Cuisine Recipes ids -->>", recipesID)
+                self.networkManager.fetchReceptsDetails(ids: recipesID) { result in
+                    switch result {
+                    case .success(let recipes):
+                        self.currentCuisineRecipes = recipes
+                        print("✅ Current Cuisine Recipes -->>", recipes)
+                    case .failure(let error):
+                        print("❌ error storage currentCuisine recipes detail", error)
+                    }
+                }
+            case .failure(let error):
+                print("❌ error storage currentCuisine recipes ids array", error)
             }
         }
     }
@@ -169,7 +223,9 @@ class StorageManager {
     
     //MARK: - Recent and Favorite
     func saveRecentRecepie(recipe: RecipeDetail) { // при каждом открытии окна детального просмотра
-        recentRecipes.insert(recipe, at: 0)
+        if !recentRecipesIDs.contains(recipe.id){
+            recentRecipes.insert(recipe, at: 0)
+        }
     }
     
     func saveFavoriteRecipe(recipe: RecipeDetail) { // при нажатии кнопки сохраниения в избранное
