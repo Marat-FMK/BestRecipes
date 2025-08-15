@@ -9,12 +9,16 @@
 /* Begin PBXBuildFile section */
 		6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */; };
 		6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */; };
+		6EDE8EA12E4BD59F00BBA031 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8EA02E4BD59F00BBA031 /* Poppins-SemiBold.ttf */; };
+		6EDE8F102E4EF85800BBA031 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6EDE8F0F2E4EF85800BBA031 /* SDWebImage */; };
+		6EDE8F122E4EF85800BBA031 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6EDE8F112E4EF85800BBA031 /* SDWebImageMapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6C6F13B02E4A806400D6875D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		6EDE8EA02E4BD59F00BBA031 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -53,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EDE8F122E4EF85800BBA031 /* SDWebImageMapKit in Frameworks */,
+				6EDE8F102E4EF85800BBA031 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +81,7 @@
 			children = (
 				6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */,
 				6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */,
+				6EDE8EA02E4BD59F00BBA031 /* Poppins-SemiBold.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -101,6 +108,8 @@
 			);
 			name = BestRecipes;
 			packageProductDependencies = (
+				6EDE8F0F2E4EF85800BBA031 /* SDWebImage */,
+				6EDE8F112E4EF85800BBA031 /* SDWebImageMapKit */,
 			);
 			productName = BestRecipes;
 			productReference = 6C6F13B02E4A806400D6875D /* BestRecipes.app */;
@@ -130,6 +139,9 @@
 			);
 			mainGroup = 6C6F132B2E4A708B00D6875D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6EDE8F0E2E4EF85700BBA031 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6C6F132B2E4A708B00D6875D;
 			projectDirPath = "";
@@ -145,6 +157,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6EDE8EA12E4BD59F00BBA031 /* Poppins-SemiBold.ttf in Resources */,
 				6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */,
 				6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */,
 			);
@@ -368,6 +381,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6EDE8F0E2E4EF85700BBA031 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.21.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6EDE8F0F2E4EF85800BBA031 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6EDE8F0E2E4EF85700BBA031 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+		6EDE8F112E4EF85800BBA031 /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6EDE8F0E2E4EF85700BBA031 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImageMapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6C6F132C2E4A708B00D6875D /* Project object */;
 }
