@@ -39,7 +39,7 @@ class StorageManager {
     let cuisineNames = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
     let categories = MealType.allCases.map{ String($0.rawValue) } // массив категорий для главного экрана
     
-    let currentCategory = MealType.appetizer // текущая/выбранная категория
+    let currentCategory = MealType.appetizer // текущая/выбранная категория для ЮД
     
     var trendingRecipesAll: [RecipeDetail] = []
     var trendingRecipes: [RecipeDetail] {
@@ -78,7 +78,7 @@ class StorageManager {
     }
     
     
-    var searchedRecipes: [RecipeDetail] = []
+    var searchedRecipes: [SearchedRecipe] = []
     
 //    var recentRecipesID: [Int] = [] // собирает индесы и сохраняем что бы загрузить при старте ?!?
     var recentRecipes: [RecipeDetail] = [] // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
@@ -148,7 +148,23 @@ class StorageManager {
             case .failure(let error):
                 print("❌ error storage trending recipes ids array", error)
             }
-        }    }
+        }
+    }
+    
+    func searchRecipeOfSearchText(searchText: String) {
+        networkManager.fetchRecipes(searchedText: searchText) { result in
+            switch result {
+            case .success(let recipes):
+                self.searchedRecipes = recipes
+                print("✅ Searched recipes -->>", recipes)
+            case .failure(let error):
+                print("❌ search network error", error)
+            }
+        }
+    }
+    
+    
+    
     
     
     //MARK: - Recent and Favorite
