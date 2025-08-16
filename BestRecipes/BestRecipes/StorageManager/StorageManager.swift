@@ -133,8 +133,6 @@ class StorageManager {
     }
     
     
-    
-    
     // Метод собирает массив из 5 или менее элементов для HomeView
     private func setArrayForHomeView(allRecipes: [RecipeDetail]) -> [RecipeDetail] {
         var intermediateArray: [RecipeDetail] = []
