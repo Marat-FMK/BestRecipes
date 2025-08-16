@@ -167,5 +167,7 @@ struct Constants {
     
     struct UDConstants {
         static let currentCategory = "currentCategory"
+        static let savedRecentRecipes = "savedRecentRecipes"
+        static let savedFavoriteRecipes = "savedFavoriteRecipes"
     }
 }

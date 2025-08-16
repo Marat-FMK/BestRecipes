@@ -94,8 +94,22 @@ class StorageManager {
     var choosedCuisine = WorldCuisines.american // выбранная страна
     var currentCuisineRecipes: [RecipeDetail] = [] // массив наполняется после вызова ф-ии setCurrentCuisineRecipes
     
-    var favoriteRecipes: [RecipeDetail] = [] // массив избранных
-    var favoriteRecipesIDs: [Int] = []
+    var favoriteRecipes: [RecipeDetail] {
+        if let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedFavoriteRecipes) {
+            if let recipes = try? JSONDecoder().decode([RecipeDetail].self, from: data) {
+                return recipes
+            }
+        }
+        return []
+    }
+    
+    var favoriteRecipesIDs: [Int] {
+        var favoriteRecipeIDs: [Int] = []
+        for recipe in favoriteRecipes{
+            favoriteRecipeIDs.append(recipe.id)
+        }
+        return favoriteRecipeIDs
+    }
     
     var trendingRecipesAll: [RecipeDetail] = [] // все рецепты которые загружаются при старте
     var trendingRecipes: [RecipeDetail] { // отдает только 5 рецептов для показа на Home view
@@ -117,6 +131,9 @@ class StorageManager {
         }
         return intermediate
     }
+    
+    
+    
     
     // Метод собирает массив из 5 или менее элементов для HomeView
     private func setArrayForHomeView(allRecipes: [RecipeDetail]) -> [RecipeDetail] {
@@ -199,25 +216,34 @@ class StorageManager {
     
     
     //MARK: - METHODS FOR RECENT AND FAVORITES ARRAYS
+    
+    private func saveToUD(recipes: [RecipeDetail], constantUD: String) {
+        if let encoded = try? JSONEncoder().encode(recipes) {
+            UserDefaults.standard.set(encoded, forKey: constantUD)
+            print("💼✅ Encode complete, save -->>", recipes)
+        }
+    }
     func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
         if !recentRecipesIDs.contains(recipe.id){
             recentRecipes.insert(recipe, at: 0)
+            saveToUD(recipes: recentRecipes, constantUD: Constants.UDConstants.savedRecentRecipes)
         }
     }
     
-    func saveFavoriteRecipe(recipe: RecipeDetail) { // при нажатии кнопки сохраниения в избранное // подумать как изменить структуру и параметр isFavorite
-        if !favoriteRecipesIDs.contains(recipe.id) {
-            favoriteRecipes.append(recipe)
-            favoriteRecipesIDs.append(recipe.id)
-        }
+    func saveFavoriteRecipe(recipe: RecipeDetail) {
+        var favorites = favoriteRecipes
+        favorites.append(recipe)
+        saveToUD(recipes: favorites, constantUD: Constants.UDConstants.savedFavoriteRecipes)
     }
     
     func deleteFavoriteRecipe(recipe: RecipeDetail) {
-        if favoriteRecipesIDs.contains(recipe.id) {
-            if let index = favoriteRecipesIDs.firstIndex(of: recipe.id){
-                favoriteRecipes.remove(at: index)
-                favoriteRecipesIDs.remove(at: index)
-            }
+        var favorites = favoriteRecipes
+        
+        if let index = favorites.firstIndex(where: { $0.id == recipe.id} ) {
+            favorites.remove(at: index)
         }
+        saveToUD(recipes: favorites, constantUD: Constants.UDConstants.savedFavoriteRecipes)
     }
+    
+    
 }
