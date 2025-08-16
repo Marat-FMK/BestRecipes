@@ -17,7 +17,7 @@ class RatingView : UIView {
     let ratingLabel : UILabel = {
         let label = UILabel()
         label.text = "4,5"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
         label.textAlignment = .left
         label.textColor = .white
         return label
@@ -73,6 +73,24 @@ class RatingView : UIView {
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: 5)
         ])
+    }
+    
+    //Marat
+    func setRating(rating: Double) {
+        var modifiedRating = rating
+        switch rating {
+        case 0...10: modifiedRating = 0.5
+        case 10...20: modifiedRating = 1.0
+        case 20...30: modifiedRating = 1.5
+        case 30...40: modifiedRating = 2.0
+        case 40...50: modifiedRating = 2.5
+        case 50...60: modifiedRating = 3.5
+        case 60...70: modifiedRating = 4.0
+        case 70...80: modifiedRating = 4.5
+        case 80...100: modifiedRating = 5.0
+        default: modifiedRating = 0.0
+        }
+        ratingLabel.text = String(modifiedRating)
     }
     
 }
