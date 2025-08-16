@@ -8,6 +8,7 @@ import UIKit
 
 class TrendingCell: UICollectionViewCell {
     
+    
     let backgroundImageView : UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "shawarma_image")
@@ -131,6 +132,36 @@ class TrendingCell: UICollectionViewCell {
         
         
     }
+    
+    
+    
+    // Marat
+    func configure(with recipe: RecipeDetail) {
+            titleLabel.text = recipe.title
+            creatorLabel.text = "By \(recipe.sourceName)"
+            
+            if let url = URL(string: recipe.image) {
+                DispatchQueue.global().async {
+                    if let data = try? Data(contentsOf: url),
+                       let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            self.backgroundImageView.image = image
+                        }
+                    }
+                }
+            } else {
+                backgroundImageView.image = UIImage(named: "placeholder")
+            }
+            
+            ratingView.setRating(rating: recipe.spoonacularScore)
+            
+            let imageName = recipe.isFavorite ? Constants.Images.bookmarkButtonImageActive : Constants.Images.bookmarkButtonImageInactive
+            saveButton.setImage(UIImage(named: imageName), for: .normal)
+        }
+    
+
+
+    
 }
 
 
