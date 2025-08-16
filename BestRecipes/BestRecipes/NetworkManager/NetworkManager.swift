@@ -14,63 +14,20 @@ enum NetworkError: String, Error {
     case decode = "❌Error - JSON decoder error / response"
 }
 
-enum worldCuisines: String {
-    case african = "African"
-    case asian = "Asian"
-    case american = "American"
-    case british = "British"
-    case cajun = "Cajun"
-    case caribbean = "Caribbean"
-    case chinese = "Chinese"
-    case easternEuropean = "Eastern European"
-    case european = "European"
-    case french = "French"
-    case german = "German"
-    case greek = "Greek"
-    case indian = "Indian"
-    case irish = "Irish"
-    case italian = "Italian"
-    case japanese = "Japanese"
-    case jewish = "Jewish"
-    case korean = "Korean"
-    case latinAmerican = "Latin American"
-    case mediterranean = "Mediterranean"
-    case mexican = "Mexican"
-    case middleEastern = "Middle Eastern"
-    case nordic = "Nordic"
-    case southern = "Southern"
-    case spanish = "Spanish"
-    case thai = "Thai"
-    case vietnamese = "Vietnamese"
-}
-
-enum MealType: String {
-    case dessert = "dessert"
-    case appetizer = "appetizer"
-    case salad = "salad"
-    case soup = "soup"
-    case snack = "snack"
-    case drink = "drink"
-    case sideDish = "side dish"
-    case bread = "bread"
-    case beverage = "beverage"
-    case sauce = "sauce"
-    case marinade = "marinade"
-    case fingerfood = "fingerfood"
-}
-
-
-
 class NetworkManager {
     
     private let scheme = "https"
     private let host = "api.spoonacular.com"
     private let pathComponent = "/recipes/complexSearch"
     private let apiKey = "793c4a9318a740b8af0b9f829165475d"
-    private let apiKey2 = "4742fe5019454277854f055d94dda929"
     
-    
-    func fetchRecipes(searchedText: String = "", cuisine: worldCuisines? = nil, mealType: MealType? = nil, maxRecipeCount: String = "5", completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
+#warning("max recipe count / ApiKey")
+    func fetchRecipes(searchedText: String? = nil,
+                      trend: Bool = false,
+                      cuisine: WorldCuisines? = nil,
+                      mealType: MealType? = nil,
+                      maxRecipeCount: String = "2",
+                      completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
@@ -78,25 +35,35 @@ class NetworkManager {
         urlComponents.path = pathComponent
         
         
-        //add author
-        var queryItems = [URLQueryItem(name: "apiKey", value: apiKey2),
-                          URLQueryItem(name: "query", value: searchedText),
+        var queryItems = [URLQueryItem(name: "apiKey", value: apiKey),
                           URLQueryItem(name: "number", value: maxRecipeCount),
-                          URLQueryItem(name: "instructionsRequired", value: "true"),
-                          URLQueryItem(name: "tags", value: "trend")]
+                          URLQueryItem(name: "instructionsRequired", value: "true")]
         
-        if cuisine != nil {
-            queryItems.append(URLQueryItem(name: "cuisine", value: cuisine?.rawValue))
+        var direction: Direction = .search
+        if searchedText != nil {
+            direction = .search
+            queryItems.append(URLQueryItem(name: "query", value: searchedText))
+        }
+        
+        if trend {
+            direction = .trending
+            queryItems.append(URLQueryItem(name: "sort", value: "popularity"))
         }
         
         if cuisine != nil {
+            direction = .cuisines
+            queryItems.append(URLQueryItem(name: "cuisine", value: cuisine?.rawValue))
+        }
+        
+        if mealType != nil {
+            direction = .category
             queryItems.append(URLQueryItem(name: "type", value: mealType?.rawValue))
         }
         
         urlComponents.queryItems = queryItems
         
         guard let url = urlComponents.url else { completion(.failure(.badURL)); return}
-        print("✅ Current URL -->", url.absoluteString)
+        print("✅ Current URL \(direction.rawValue) -- >", url.absoluteString)
         
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = [
@@ -108,7 +75,7 @@ class NetworkManager {
             
             do {
                 let recipes = try JSONDecoder().decode(SearchedData.self, from: data)
-                print("✅ SearchedRecipes --- >>", recipes.results)
+                print("✅ SearchedRecipes \(direction.rawValue) --- >>", recipes.results)
                 completion(.success(recipes.results))
             } catch {
                 completion(.failure(.decode))
@@ -130,7 +97,7 @@ class NetworkManager {
                                     URLQueryItem(name: "ids", value: stringIDs)]
         
         guard let url = urlComponents.url else {completion(.failure(.badURL)); return}
-        print("✅ Current URL recDetail -->", url.absoluteString)
+        print("✅ Current URL recipeDetail -->", url.absoluteString)
         
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = [
@@ -143,7 +110,7 @@ class NetworkManager {
             
             do {
                 let recipes = try JSONDecoder().decode([RecipeDetail].self, from: data)
-                print("✅ IDs: \(stringIDs), recipe detail -->>", recipes)
+                //                print("✅ IDs: \(stringIDs), recipe detail -->>", recipes)
                 completion(.success(recipes))
             } catch {
                 completion(.failure(.decode))
@@ -151,7 +118,6 @@ class NetworkManager {
         }.resume()
     }
 }
-
 
 // 793c4a9318a740b8af0b9f829165475d
 

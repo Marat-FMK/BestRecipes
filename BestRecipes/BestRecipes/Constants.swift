@@ -134,4 +134,8 @@ struct Constants {
         ]
         return NSAttributedString(string: text, attributes: attributes)
     }
+    
+    struct UDConstants {
+        static let currentCategory = "currentCategory"
+    }
 }
