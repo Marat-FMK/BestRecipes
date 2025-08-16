@@ -22,6 +22,36 @@ struct Constants {
         static let starIconImage = "star"
     }
     
+    static var Cuisines : [String] {[
+        "african",
+        "asian",
+        "american",
+        "british",
+        "cajun",
+        "caribbean",
+        "chinese",
+        "easternEuropean",
+        "european",
+        "french",
+        "german",
+        "greek",
+        "indian",
+        "irish",
+        "italian",
+        "japanese",
+        "jewish",
+        "korean",
+        "latinAmerican",
+        "mediterranean",
+        "mexican",
+        "middleEastern",
+        "nordic",
+        "southern",
+        "spanish",
+        "thai",
+        "vietnamese"
+    ]}
+    
     struct Icons {
         static let arrowLeft = "arrowLeft"
         static let arrowRight = "arrowRight"

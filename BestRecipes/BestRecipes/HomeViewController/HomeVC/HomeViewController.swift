@@ -15,7 +15,13 @@ import UIKit
 
 class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
-    var categoriesArray : [String] = ["Salad","Breakfast","Appetizer", "Noodle", "Soup"]
+    var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
+    
+    var networkManager = NetworkManager()
+    var storageManager = StorageManager()
+    
+    var trendingRecipes: [SearchedRecipe] = []
+
     
     //MARK: - Create UI
     
@@ -94,7 +100,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     lazy var categoryButtonsStackView : UIStackView = {
         let view = UIStackView()
-        for category in categoriesArray {
+        for category in storageManager.categories {
             let button = UIButton()
             button.setTitle(category, for: .normal)
             button.clipsToBounds = true
@@ -201,6 +207,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         sender.buttonTappedAnimate()
         //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -374,7 +381,11 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
 
 extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        4
+        if collectionView == popularCreatorCollectionView {
+            return storageManager.cuisineNames.count
+        } else {
+            return 4
+        }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -417,6 +428,8 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             return cell
         case _ where collectionView == popularCreatorCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CreatorCell", for: indexPath) as! CreatorCell
+            cell.creatorLabel.text = storageManager.cuisineNames[indexPath.item]
+            cell.backgroundImageView.image = UIImage(named: Constants.Cuisines[indexPath.item])
             return cell
         default:
             fatalError("Unknown collection view")
