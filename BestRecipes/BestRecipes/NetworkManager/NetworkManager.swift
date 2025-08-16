@@ -15,12 +15,33 @@ enum NetworkError: String, Error {
 }
 
 enum worldCuisines: String {
-    case american = "American"
-    case european = "European"
-    case greek = "Greek"
-    case japanese = "Japanese"
-    case mexican = "Mexican"
     case african = "African"
+    case asian = "Asian"
+    case american = "American"
+    case british = "British"
+    case cajun = "Cajun"
+    case caribbean = "Caribbean"
+    case chinese = "Chinese"
+    case easternEuropean = "Eastern European"
+    case european = "European"
+    case french = "French"
+    case german = "German"
+    case greek = "Greek"
+    case indian = "Indian"
+    case irish = "Irish"
+    case italian = "Italian"
+    case japanese = "Japanese"
+    case jewish = "Jewish"
+    case korean = "Korean"
+    case latinAmerican = "Latin American"
+    case mediterranean = "Mediterranean"
+    case mexican = "Mexican"
+    case middleEastern = "Middle Eastern"
+    case nordic = "Nordic"
+    case southern = "Southern"
+    case spanish = "Spanish"
+    case thai = "Thai"
+    case vietnamese = "Vietnamese"
 }
 
 enum MealType: String {
@@ -46,6 +67,7 @@ class NetworkManager {
     private let host = "api.spoonacular.com"
     private let pathComponent = "/recipes/complexSearch"
     private let apiKey = "793c4a9318a740b8af0b9f829165475d"
+    private let apiKey2 = "4742fe5019454277854f055d94dda929"
     
     
     func fetchRecipes(searchedText: String = "", cuisine: worldCuisines? = nil, mealType: MealType? = nil, maxRecipeCount: String = "5", completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
@@ -57,7 +79,7 @@ class NetworkManager {
         
         
         //add author
-        var queryItems = [URLQueryItem(name: "apiKey", value: apiKey),
+        var queryItems = [URLQueryItem(name: "apiKey", value: apiKey2),
                           URLQueryItem(name: "query", value: searchedText),
                           URLQueryItem(name: "number", value: maxRecipeCount),
                           URLQueryItem(name: "instructionsRequired", value: "true"),

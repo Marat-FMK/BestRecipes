@@ -15,7 +15,12 @@ import UIKit
 
 class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
     
-    var categoriesArray : [String] = ["Salad","Breakfast","Appetizer", "Noodle", "Soup"]
+    var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
+    
+    var networkManager = NetworkManager()
+    
+    var trendingRecipes: [SearchedRecipe] = []
+
     
     //MARK: - Create UI
     

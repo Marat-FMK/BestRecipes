@@ -113,7 +113,8 @@ class TrendingCell: UICollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 12),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
         
         creatorImageView.translatesAutoresizingMaskIntoConstraints = false
