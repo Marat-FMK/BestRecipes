@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class RecipeDetailTableViewCell: UITableViewCell {
     
@@ -110,11 +111,18 @@ class RecipeDetailTableViewCell: UITableViewCell {
             sender.setImage(UIImage(named: Constants.Icons.tickCircleInactive), for: .normal)
         }
     }
-//    func configure(with ingredient: Ingredient) {
-//        ingredientImage.image = UIImage(named: ingredient.imageName)
-//        ingredientLabel.text = ingredient.name
-//        ingredientWeightLabel.text = ingredient.weight
-//        ingredientCheckBox.isSelected = ingredient.isChecked
-//    }
+    func configure(with recipe: RecipeDetail, counter: Int) {
+        
+        let baseLink = "https://img.spoonacular.com/ingredients_100x100/" + recipe.extendedIngredients[counter].image
+        
+        ingredientImage.sd_setImage(
+            with: URL(string: baseLink),
+            placeholderImage: UIImage(named: "placeholderIngredient"),
+            options: [.progressiveLoad, .highPriority]
+        )
+        
+        ingredientLabel.text = recipe.extendedIngredients[counter].name
+        ingredientWeightLabel.text = String(recipe.extendedIngredients[counter].amount) + ("g")
+    }
 }
 

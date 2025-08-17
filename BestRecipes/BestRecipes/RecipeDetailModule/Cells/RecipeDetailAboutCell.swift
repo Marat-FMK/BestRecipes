@@ -118,7 +118,7 @@ class RecipeDetailAboutCell: UITableViewCell {
             self.topHeader.text = recipe.title
             dishImage.sd_setImage(
                 with: URL(string: recipe.image),
-                placeholderImage: UIImage(named: "placeholder"),
+                placeholderImage: UIImage(named: "placeholderDish"),
                 options: [.progressiveLoad, .highPriority]
             )
         }

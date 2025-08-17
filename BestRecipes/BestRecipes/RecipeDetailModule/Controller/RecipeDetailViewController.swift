@@ -9,6 +9,8 @@ import UIKit
 
 class RecipeDetailViewController: UIViewController {
     
+    var recipe: RecipeDetail?
+    
     //MARK: - UI Components
     //MARK: Navigation Bar Items
     
@@ -77,6 +79,7 @@ extension RecipeDetailViewController: UITableViewDataSource, UITableViewDelegate
         
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailAboutCell.identifier, for: indexPath) as! RecipeDetailAboutCell
+            cell.configure(with: recipe!)
             cell.selectionStyle = .none
             return cell
         } else if indexPath.row == 1 {
@@ -86,11 +89,15 @@ extension RecipeDetailViewController: UITableViewDataSource, UITableViewDelegate
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailTableViewCell.identifier, for: indexPath) as! RecipeDetailTableViewCell
             cell.selectionStyle = .none
+            if let recipe = self.recipe {
+                cell.configure(with: recipe, counter: indexPath.row - 2)
+            }
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        guard let counter = recipe?.extendedIngredients.count else { return 2 }
+        return 2 + counter
     }
 }

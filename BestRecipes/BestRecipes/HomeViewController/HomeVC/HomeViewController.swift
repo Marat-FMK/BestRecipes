@@ -215,6 +215,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         setupViews()
         setConstraints()
         setDelegates()
+        setupSearchField()
     }
     
     private func setupViews() {
@@ -255,6 +256,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         popularCreatorCollectionView.delegate = self
         popularCreatorCollectionView.dataSource = self
         popularCreatorCollectionView.register(CreatorCell.self, forCellWithReuseIdentifier: "CreatorCell")
+        searchTextField.delegate = self
+
     }
     
     //MARK: - setConstraints
@@ -433,6 +436,34 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             return cell
         default:
             fatalError("Unknown collection view")
+        }
+    }
+    
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let detailVC = RecipeDetailViewController()
+//        detailVC.recipe = self.networkManager.fetchReceptsDetails(ids: [716429], completion: { <result, error> in
+//            
+//        })  // передаём данные
+//        navigationController?.pushViewController(detailVC, animated: true)
+//    }
+}
+//MARK: setup SearchField
+extension HomeViewController {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        openSearch()
+        return false
+    }
+    
+    private func setupSearchField() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(openSearch))
+        searchTextField.addGestureRecognizer(tap)
+    }
+    
+    @objc private func openSearch() {
+        let searchVC = SearchViewController()
+        navigationController?.pushViewController(searchVC, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            searchVC.activateSearch()
         }
     }
 }
