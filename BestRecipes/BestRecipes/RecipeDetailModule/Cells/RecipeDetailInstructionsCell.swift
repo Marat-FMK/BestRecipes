@@ -129,7 +129,7 @@ class RecipeDetailInstructionsCell: UITableViewCell {
         paragraphStyle.headIndent = 14
         paragraphStyle.alignment = .left
         
-        var text = "You can find following instructions at the link: \(recipe.sourceUrl)"
+        let text = "You can find following instructions at the link: \(recipe.sourceUrl)"
         
         if recipe.instructions.isEmpty {
             

@@ -14,7 +14,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6C6F13B02E4A806400D6875D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C6F13B02E4A806400D6875D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = BestRecipes.app; path = "/Users/aliaksandrzuyeu/Documents/BestRecipes/BestRecipes/build/Debug-iphoneos/BestRecipes.app"; sourceTree = "<absolute>"; };
 		6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -68,7 +68,6 @@
 			children = (
 				6C6F13362E4A708B00D6875D /* BestRecipes */,
 				6EDE8E6D2E4A714900BBA031 /* Fonts */,
-				6C6F13B02E4A806400D6875D /* BestRecipes.app */,
 				1BE9123F2E4B658100BD4502 /* Extensions */,
 				1BE912402E4B658E00BD4502 /* TabBar */,
 			);

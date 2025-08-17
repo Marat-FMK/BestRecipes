@@ -435,5 +435,13 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             fatalError("Unknown collection view")
         }
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let detailVC = RecipeDetailViewController()
+//        detailVC.recipe = self.networkManager.fetchReceptsDetails(ids: [716429], completion: { <result, error> in
+//            
+//        })  // передаём данные
+//        navigationController?.pushViewController(detailVC, animated: true)
+//    }
 }
 

@@ -34,7 +34,10 @@ struct RecipeDetail: Codable {
 
 struct ExtendedIngredient: Codable {
     let name: String
-    let consistency: String
     let amount: Double
     let unit: String
+    let consistency: String
+    let image: String
+    
+    
 }
