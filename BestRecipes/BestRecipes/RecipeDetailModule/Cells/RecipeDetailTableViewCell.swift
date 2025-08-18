@@ -30,7 +30,7 @@ class RecipeDetailTableViewCell: UITableViewCell {
     private let ingredientLabel: UILabel = {
         let ingredientLabel = UILabel()
         ingredientLabel.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 16)
-        ingredientLabel.text = "Cucumber"
+        ingredientLabel.text = "Cucumberjnojn onjjo ojnojnon onoj"
         ingredientLabel.translatesAutoresizingMaskIntoConstraints = false
         return ingredientLabel
     }()
@@ -41,6 +41,7 @@ class RecipeDetailTableViewCell: UITableViewCell {
         ingredientWeightLabel.textColor = Constants.Colors.Neutral.neutral50
         ingredientWeightLabel.text = "200g"
         ingredientWeightLabel.translatesAutoresizingMaskIntoConstraints = false
+        ingredientWeightLabel.numberOfLines = 2
         return ingredientWeightLabel
     }()
     
@@ -83,7 +84,7 @@ class RecipeDetailTableViewCell: UITableViewCell {
             ingredientLabel.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 27),
             ingredientLabel.leadingAnchor.constraint(equalTo: ingredientImage.trailingAnchor, constant: 24),
             ingredientLabel.widthAnchor.constraint(equalToConstant: 124),
-            ingredientLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor, constant: -27)
+            ingredientLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor/*, constant: -27*/)
         ])
         
         cellView.addSubview(ingredientWeightLabel)
@@ -122,7 +123,7 @@ class RecipeDetailTableViewCell: UITableViewCell {
         )
         
         ingredientLabel.text = recipe.extendedIngredients[counter].name
-        ingredientWeightLabel.text = String(recipe.extendedIngredients[counter].amount) + ("g")
+        ingredientWeightLabel.text = String(recipe.extendedIngredients[counter].amount) + " " +  String(recipe.extendedIngredients[counter].unit)
     }
 }
 
