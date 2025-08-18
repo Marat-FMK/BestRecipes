@@ -215,6 +215,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         setupViews()
         setConstraints()
         setDelegates()
+        setupSearchField()
     }
     
     private func setupViews() {
@@ -255,6 +256,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         popularCreatorCollectionView.delegate = self
         popularCreatorCollectionView.dataSource = self
         popularCreatorCollectionView.register(CreatorCell.self, forCellWithReuseIdentifier: "CreatorCell")
+        searchTextField.delegate = self
+
     }
     
     //MARK: - setConstraints
@@ -443,5 +446,25 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
 //        })  // передаём данные
 //        navigationController?.pushViewController(detailVC, animated: true)
 //    }
+}
+//MARK: setup SearchField
+extension HomeViewController {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        openSearch()
+        return false
+    }
+    
+    private func setupSearchField() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(openSearch))
+        searchTextField.addGestureRecognizer(tap)
+    }
+    
+    @objc private func openSearch() {
+        let searchVC = SearchViewController()
+        navigationController?.pushViewController(searchVC, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            searchVC.activateSearch()
+        }
+    }
 }
 

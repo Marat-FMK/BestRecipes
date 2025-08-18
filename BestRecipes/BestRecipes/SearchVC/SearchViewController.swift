@@ -21,7 +21,6 @@ class SearchViewController: UIViewController {
     ]
     private var filteredRecipes: [Recipe] = []
     
-    
     private let searchController = UISearchController(searchResultsController: nil)
     
     private let tableView: UITableView = {
@@ -33,7 +32,7 @@ class SearchViewController: UIViewController {
     }()
     
     // MARK: - Setup
-    private func setupSearchBar() {
+    private func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
@@ -41,8 +40,6 @@ class SearchViewController: UIViewController {
         let searchBar = searchController.searchBar
         searchBar.placeholder = "How to make"
         searchBar.showsCancelButton = false
-        searchBar.backgroundImage = UIImage()
-        searchBar.backgroundColor = .clear
         
         let textField = searchBar.searchTextField
         textField.textColor = .black
@@ -63,8 +60,19 @@ class SearchViewController: UIViewController {
             clearButton.tintColor = .black
         }
         
-        tableView.tableHeaderView = searchBar
+        let toolbar = UIToolbar()
+           toolbar.sizeToFit()
+           let doneButton = UIBarButtonItem(title: "Close", style: .done, target: self, action: #selector(dismissKeyboard))
+           let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+           toolbar.items = [flexSpace, doneButton]
+           
+           searchBar.searchTextField.inputAccessoryView = toolbar
+        
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.hidesBackButton = true
     }
+    
     
     private func setupTableView() {
         view.addSubview(tableView)
@@ -91,18 +99,31 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        definesPresentationContext = true // <- важно для активации поиска
         
         navigationController?.setNavigationBarHidden(false, animated: true)
         title = "Search recipes"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-             barButtonSystemItem: .close,
-             target: self,
-             action: #selector(closeButtonTapped)
-         )
+            barButtonSystemItem: .close,
+            target: self,
+            action: #selector(closeButtonTapped)
+        )
         
         setupTableView()
-        setupSearchBar()
+        setupSearchController()
         setupUI()
+        setupKeyboardDismiss()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        activateSearch()
+    }
+    
+    func activateSearch() {
+        DispatchQueue.main.async {
+            self.searchController.searchBar.becomeFirstResponder()
+        }
     }
 }
 
@@ -138,5 +159,18 @@ extension SearchViewController: UISearchResultsUpdating {
         }
         
         tableView.reloadData()
+    }
+}
+
+//MARK: - keyBoard
+extension SearchViewController {
+    func setupKeyboardDismiss() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc private func dismissKeyboard() {
+        searchController.searchBar.resignFirstResponder()
     }
 }
