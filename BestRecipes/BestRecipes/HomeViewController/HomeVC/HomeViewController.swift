@@ -17,10 +17,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
     
-    var networkManager = NetworkManager()
-    var storageManager = StorageManager()
+//    var networkManager = NetworkManager() // Marat
+    let storageManager = StorageManager() // Marat
     
-    var trendingRecipes: [SearchedRecipe] = []
+    var trendingRecipes: [RecipeDetail] = [] // Marat - array type
 
     
     //MARK: - Create UI
@@ -215,7 +215,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         setupViews()
         setConstraints()
         setDelegates()
-        setupSearchField()
+        
+        storageManager.setTrendingRecipes()
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            self.trendingRecipes = self.storageManager.trendingRecipes // Marat
+            self.trendingCollectionView.reloadData()
+        }
     }
     
     private func setupViews() {
@@ -384,10 +389,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
 
 extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == popularCreatorCollectionView {
+        if collectionView == trendingCollectionView {
+            return trendingRecipes.count
+        } else if collectionView == popularCreatorCollectionView {
             return storageManager.cuisineNames.count
         } else {
-            return 4
+            return 0
         }
     }
     
@@ -420,9 +427,16 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
-        case _ where collectionView == trendingCollectionView:
+            
+        case _ where collectionView == trendingCollectionView: // Marat
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
+            let recipe = trendingRecipes[indexPath.item]
+            cell.configure(with: recipe)
             return cell
+            
+//        case _ where collectionView == trendingCollectionView:
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
+//            return cell
         case _ where collectionView == popularCategoryCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularCategoryCell", for: indexPath) as! PopularRecepieCell
             return cell
