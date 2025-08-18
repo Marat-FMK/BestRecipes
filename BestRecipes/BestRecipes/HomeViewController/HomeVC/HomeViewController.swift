@@ -462,9 +462,6 @@ extension HomeViewController {
     @objc private func openSearch() {
         let searchVC = SearchViewController()
         navigationController?.pushViewController(searchVC, animated: true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            searchVC.activateSearch()
-        }
     }
 }
 
