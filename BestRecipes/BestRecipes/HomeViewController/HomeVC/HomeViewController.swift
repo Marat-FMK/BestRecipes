@@ -17,7 +17,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
     
-    var networkManager = NetworkManager()
+//    var networkManager = NetworkManager()
     var storageManager = StorageManager()
     
     var trendingRecipes: [SearchedRecipe] = []
@@ -115,9 +115,24 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
             view.addArrangedSubview(button)
         }
-        if let firstButton = view.arrangedSubviews.first as? UIButton {
-            firstButton.isSelected = true
-        }
+//        if let firstButton = view.arrangedSubviews.first as? UIButton {
+//            firstButton.isSelected = true
+//        } // закоментил
+        
+        let savedCategory = UserDefaults.standard.string(forKey: Constants.UDConstants.currentCategory)
+            if let savedCategory = savedCategory {
+                if let buttonToSelect = view.arrangedSubviews.first(where: {
+                    ($0 as? UIButton)?.titleLabel?.text == savedCategory
+                }) as? UIButton {
+                    buttonToSelect.isSelected = true
+                }
+            } else if let firstButton = view.arrangedSubviews.first as? UIButton {
+                // если в UD ещё ничего нет, выделяем первую
+                firstButton.isSelected = true
+            } // добавил
+        
+        
+        
         view.axis = .horizontal
         view.spacing = 20
         view.distribution = .fillProportionally
@@ -189,6 +204,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
                 button.isSelected = false
             }
             sender.isSelected = true
+            UserDefaults.standard.set(sender.titleLabel?.text, forKey: Constants.UDConstants.currentCategory) // MARAT
+            
         }
         //МЕНЯЮТСЯ КАТЕГОРИИ ПОПУЛЯРНОГО
     }
