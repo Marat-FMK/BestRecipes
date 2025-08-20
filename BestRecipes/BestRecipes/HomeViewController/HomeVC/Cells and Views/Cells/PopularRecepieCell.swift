@@ -69,7 +69,7 @@ class PopularRecepieCell: UICollectionViewCell {
     
     //MARK: - Setup
     
-    let identifier = "TrendingCell"
+    let identifier = "PopularCategoryCell" //"TrendingCell"
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -134,6 +134,25 @@ class PopularRecepieCell: UICollectionViewCell {
         ])
         
     }
+    
+    func configure(with recipe: RecipeDetail) {
+        titleLabel.text = recipe.title
+        timeLabel.text = "Time"
+        durationLabel.text = String(recipe.readyInMinutes)
+        
+        roundImageView.image = UIImage(named: "placeholder")
+        
+        guard let imageURL = URL(string: recipe.image) else { return }
+        
+        URLSession.shared.dataTask(with: imageURL) { [weak self] data, _, _ in
+            if let data = data, let img = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self?.roundImageView.image = img
+                }
+            }
+        }.resume()
+    }
+    
 }
 
 
