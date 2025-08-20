@@ -115,9 +115,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
             view.addArrangedSubview(button)
         }
-//        if let firstButton = view.arrangedSubviews.first as? UIButton {
-//            firstButton.isSelected = true
-//        } // закоментил
         
         let savedCategory = UserDefaults.standard.string(forKey: Constants.UDConstants.currentCategory)
             if let savedCategory = savedCategory {
@@ -127,9 +124,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
                     buttonToSelect.isSelected = true
                 }
             } else if let firstButton = view.arrangedSubviews.first as? UIButton {
-                // если в UD ещё ничего нет, выделяем первую
                 firstButton.isSelected = true
-            } // добавил
+            }
         
         
         
@@ -204,9 +200,16 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
                 button.isSelected = false
             }
             sender.isSelected = true
-            UserDefaults.standard.set(sender.titleLabel?.text, forKey: Constants.UDConstants.currentCategory) // MARAT
-            
         }
+        // MArat --->>>
+        UserDefaults.standard.set(sender.titleLabel?.text, forKey: Constants.UDConstants.currentCategory) // MARAT
+        storageManager.categoryRecipesAll = []
+        storageManager.setCategotyRecipes {
+            DispatchQueue.main.async {
+                self.popularCategoryCollectionView.reloadData()
+            }
+        }
+        
         //МЕНЯЮТСЯ КАТЕГОРИИ ПОПУЛЯРНОГО
     }
     
@@ -401,11 +404,20 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
 
 extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == popularCreatorCollectionView {
-            return storageManager.cuisineNames.count
-        } else {
-            return 4
-        }
+        
+        switch collectionView {
+           case popularCategoryCollectionView:
+               return storageManager.categoryRecipes.count
+           case trendingCollectionView:
+               return storageManager.trendingRecipes.count
+           case recentRecepieCollectionView:
+               return storageManager.recentRecipes.count
+           case popularCreatorCollectionView:
+               return storageManager.cuisineNames.count
+           default:
+               return 0
+           }
+        
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -440,9 +452,13 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         case _ where collectionView == trendingCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
             return cell
+            
         case _ where collectionView == popularCategoryCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularCategoryCell", for: indexPath) as! PopularRecepieCell
-            return cell
+                    let recipe = storageManager.categoryRecipes[indexPath.item]
+                    cell.configure(with: recipe)
+                    return cell
+            
         case _ where collectionView == recentRecepieCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecentPecepieCell", for: indexPath) as! RecentRecepieCell
             return cell
@@ -456,13 +472,6 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         }
     }
     
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let detailVC = RecipeDetailViewController()
-//        detailVC.recipe = self.networkManager.fetchReceptsDetails(ids: [716429], completion: { <result, error> in
-//            
-//        })  // передаём данные
-//        navigationController?.pushViewController(detailVC, animated: true)
-//    }
 }
 //MARK: setup SearchField
 extension HomeViewController {
