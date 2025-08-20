@@ -155,7 +155,9 @@ class StorageManager {
     
     //MARK: - METHODS FOR CREATING ARRAYS OF RECIPE DETAILS WITH API
     //Cобирает результат выполнения поиска и извлекает ID нужных рецептов, потом бежит в сеть собирает все детальные рецепты // Раскидывает все по нужным массивам
-    private func setArrayOfRecipeDetails(direction: Direction, result: Result<[SearchedRecipe],NetworkError>) {
+    private func setArrayOfRecipeDetails(direction: Direction,
+                                         result: Result<[SearchedRecipe],NetworkError>,
+                                         completion: @escaping ( () -> Void )) {
         var recipesID: [Int] = []
         switch result {
         case .success(let searchedRecipes):
@@ -170,12 +172,16 @@ class StorageManager {
                     switch direction {
                     case .trending:
                         self.trendingRecipesAll = recipes
+                        completion()
                     case .category:
                         self.categoryRecipesAll = recipes
+                        completion()
                     case .search:
                         self.searchedRecipes = recipes
+                        completion()
                     case .cuisines:
                         self.currentCuisineRecipes = recipes
+                        completion()
                     }
                     
                     print("✅ \(direction.rawValue) Recipes -->>", recipes)
@@ -190,27 +196,41 @@ class StorageManager {
     
     
     //Ф-ия вызывается при каждом нажатии на кнопку выбора категории - собирает массив categoryRecipesAll // После чего можно будет использовать геттер categoryRecipes который берет из этого массива только 5 элементов для показа на главном экране // А весь массив показывается только на See All экране
-    func setCategotyRecipes() {
+//    func setCategotyRecipes() {
+//        networkManager.fetchRecipes(mealType: currentCategory) { result in
+//            self.setArrayOfRecipeDetails(direction: .category, result: result)
+//        }
+//    }
+    func setCategotyRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(mealType: currentCategory) { result in
-            self.setArrayOfRecipeDetails(direction: .category, result: result)
+            self.setArrayOfRecipeDetails(direction: .category, result: result) {
+                completion()
+            }
+            
         }
     }
     
-    func setTrendingRecipes() {
+    func setTrendingRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(trend: true) { result in
-            self.setArrayOfRecipeDetails(direction: .trending, result: result)
+            self.setArrayOfRecipeDetails(direction: .trending, result: result){
+                completion()
+            }
         }
     }
     
-    func setSearchRecipes() {
+    func setSearchRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(searchedText: searchText) { result in // добавить параметр максимального кол-ва рецептов в ф-ию при необходимости
-            self.setArrayOfRecipeDetails(direction: .search, result: result)
+            self.setArrayOfRecipeDetails(direction: .search, result: result){
+                completion()
+            }
         }
     }
     
-    func setCurrentCuisineRecipes() {
+    func setCurrentCuisineRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(cuisine: choosedCuisine) { result in
-            self.setArrayOfRecipeDetails(direction: .cuisines, result: result)
+            self.setArrayOfRecipeDetails(direction: .cuisines, result: result){
+                completion()
+            }
         }
     }
     
