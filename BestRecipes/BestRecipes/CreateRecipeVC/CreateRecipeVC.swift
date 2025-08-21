@@ -9,13 +9,15 @@ import UIKit
 
 
 class CreateRecipeViewController: UIViewController, UINavigationControllerDelegate,
-                                    UIImagePickerControllerDelegate {
+                                  UIImagePickerControllerDelegate {
     
     private var infoArray =  [
         InfoModel(title: "Serves", iconImage: "person.2.fill", value: "03"),
         InfoModel(title: "Cook time", iconImage: "timer.circle.fill", value: "20 min")
     ]
     var ingredients: [Ingredient] = []
+    
+    private var ingredientsTableHeightConstraint: NSLayoutConstraint!
     
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
@@ -55,7 +57,7 @@ class CreateRecipeViewController: UIViewController, UINavigationControllerDelega
         bt.layer.cornerRadius = 16
         bt.backgroundColor = .white
         bt.tintColor = .black
-                
+        
         return bt
     }()
     
@@ -122,12 +124,17 @@ class CreateRecipeViewController: UIViewController, UINavigationControllerDelega
         tableViewIngredients.allowsSelection = false
         
         addImageButton.addTarget(self, action: #selector(addImage), for: .touchUpInside)
-
+        
         setupLayout()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateIngredientsTableHeight()
+    }
+    
     private func setupLayout() {
-
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(imageView)
@@ -136,6 +143,9 @@ class CreateRecipeViewController: UIViewController, UINavigationControllerDelega
         contentView.addArrangedSubview(tableViewInfoRecipes)
         contentView.addArrangedSubview(tableViewIngredients)
         view.addSubview(createButton)
+        
+        ingredientsTableHeightConstraint = tableViewIngredients.heightAnchor.constraint(equalToConstant: 1)
+        ingredientsTableHeightConstraint.isActive = true
         
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -148,7 +158,7 @@ class CreateRecipeViewController: UIViewController, UINavigationControllerDelega
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -16),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -32),
-        
+            
             imageView.heightAnchor.constraint(equalToConstant: 200),
             addImageButton.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 8),
             addImageButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -8),
@@ -160,15 +170,8 @@ class CreateRecipeViewController: UIViewController, UINavigationControllerDelega
             createButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            
         ])
-        
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        tableViewInfoRecipes.heightAnchor.constraint(equalToConstant: tableViewInfoRecipes.contentSize.height).isActive = true
-        tableViewIngredients.heightAnchor.constraint(equalToConstant: tableViewIngredients.contentSize.height).isActive = true
     }
 }
 
@@ -295,9 +298,7 @@ extension CreateRecipeViewController: UITableViewDelegate, UITableViewDataSource
     
     private func updateIngredientsTableHeight() {
         tableViewIngredients.layoutIfNeeded()
-        if let heightConstraint = tableViewIngredients.constraints.first(where: { $0.firstAttribute == .height }) {
-            heightConstraint.constant = tableViewIngredients.contentSize.height
-        }
+        ingredientsTableHeightConstraint.constant = tableViewIngredients.contentSize.height
     }
     
     @objc private func addImage() {

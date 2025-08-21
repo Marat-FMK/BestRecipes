@@ -102,10 +102,21 @@ class RecipeCell: UITableViewCell {
     
     // MARK: - Configure
     func configure(with recipe: RecipeDetail) {
-        recipeImageView.image = UIImage(named: recipe.image)
+        if let url = URL(string: recipe.image) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url),
+                   let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.recipeImageView.image = image
+                    }
+                }
+            }
+        } else {
+            recipeImageView.image = UIImage(named: "placeholder")
+        }
         titleLabel.text = recipe.title
         subtitleLabel.text = "\(recipe.extendedIngredients.count) ingredients | \(recipe.readyInMinutes) min"
-//        ratingView.setRating(recipe.servings)
+//        ratingView.setRating(recipe.spoonacularScore)
     }
     
     
