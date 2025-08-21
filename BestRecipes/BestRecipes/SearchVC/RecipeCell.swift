@@ -101,10 +101,11 @@ class RecipeCell: UITableViewCell {
     }
     
     // MARK: - Configure
-    func configure(with recipe: Recipe) {
-        recipeImageView.image = UIImage(named: recipe.imageName)
+    func configure(with recipe: RecipeDetail) {
+        recipeImageView.image = UIImage(named: recipe.image)
         titleLabel.text = recipe.title
-        subtitleLabel.text = "\(recipe.ingredients) | \(recipe.time)"
+        subtitleLabel.text = "\(recipe.extendedIngredients.count) ingredients | \(recipe.readyInMinutes) min"
+//        ratingView.setRating(recipe.servings)
     }
     
     

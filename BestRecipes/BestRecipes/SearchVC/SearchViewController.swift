@@ -9,18 +9,10 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    private var recipes: [Recipe] = [
-        Recipe(title: "How to make yam & vegetable sauce at home", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        Recipe(title: "Spaghetti Bolognese", ingredients: "8 Ingredients", time: "30 min", imageName: "shawarma_image", rating: "4.8"),
-        Recipe(title: "Chicken Curry", ingredients: "12 Ingredients", time: "45 min", imageName: "shawarma_image", rating: "4.9"),
-        Recipe(title: "Pancakes", ingredients: "5 Ingredients", time: "15 min", imageName: "shawarma_image", rating: "4.7"),
-        Recipe(title: "Fruit Salad", ingredients: "6 Ingredients", time: "10 min", imageName: "shawarma_image", rating: "4.6"),
-        Recipe(title: "Test", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        Recipe(title: "Low", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        Recipe(title: "Lower", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-    ]
-    private var filteredRecipes: [Recipe] = []
+    let storageManager = StorageManager()
     
+    var recipes: [RecipeDetail] = []
+        
     private let searchController = UISearchController(searchResultsController: nil)
     
     private let tableView: UITableView = {
@@ -82,8 +74,6 @@ class SearchViewController: UIViewController {
     }
     
     private func setupUI() {
-        filteredRecipes = recipes
-        
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -131,14 +121,14 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredRecipes.count
+        return recipes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeCell.identifier, for: indexPath) as? RecipeCell else {
             return UITableViewCell()
         }
-        cell.configure(with: filteredRecipes[indexPath.row])
+        cell.configure(with: recipes[indexPath.row])
         return cell
     }
     
@@ -151,12 +141,8 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchText = searchController.searchBar.text?.lowercased() ?? ""
-        
-        if searchText.isEmpty {
-            filteredRecipes = recipes
-        } else {
-            filteredRecipes = recipes.filter { $0.title.lowercased().contains(searchText) }
-        }
+        storageManager.searchText = searchText
+//        recipes = storageManager.setSearchRecipes()
         
         tableView.reloadData()
     }
