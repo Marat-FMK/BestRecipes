@@ -9,17 +9,17 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    private var recipes: [Recipe] = [
-        Recipe(title: "How to make yam & vegetable sauce at home", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        Recipe(title: "Spaghetti Bolognese", ingredients: "8 Ingredients", time: "30 min", imageName: "shawarma_image", rating: "4.8"),
-        Recipe(title: "Chicken Curry", ingredients: "12 Ingredients", time: "45 min", imageName: "shawarma_image", rating: "4.9"),
-        Recipe(title: "Pancakes", ingredients: "5 Ingredients", time: "15 min", imageName: "shawarma_image", rating: "4.7"),
-        Recipe(title: "Fruit Salad", ingredients: "6 Ingredients", time: "10 min", imageName: "shawarma_image", rating: "4.6"),
-        Recipe(title: "Test", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        Recipe(title: "Low", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        Recipe(title: "Lower", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
+    private var recipes: [RecipeDis] = [
+        RecipeDis(title: "How to make yam & vegetable sauce at home", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
+        RecipeDis(title: "Spaghetti Bolognese", ingredients: "8 Ingredients", time: "30 min", imageName: "shawarma_image", rating: "4.8"),
+        RecipeDis(title: "Chicken Curry", ingredients: "12 Ingredients", time: "45 min", imageName: "shawarma_image", rating: "4.9"),
+        RecipeDis(title: "Pancakes", ingredients: "5 Ingredients", time: "15 min", imageName: "shawarma_image", rating: "4.7"),
+        RecipeDis(title: "Fruit Salad", ingredients: "6 Ingredients", time: "10 min", imageName: "shawarma_image", rating: "4.6"),
+        RecipeDis(title: "Test", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
+        RecipeDis(title: "Low", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
+        RecipeDis(title: "Lower", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
     ]
-    private var filteredRecipes: [Recipe] = []
+    private var filteredRecipes: [RecipeDis] = []
     
     private let searchController = UISearchController(searchResultsController: nil)
     
