@@ -121,7 +121,31 @@ class StorageManager {
         setArrayForHomeView(allRecipes: categoryRecipesAll)
     }
     
-    var recentRecipes: [RecipeDetail] = [] // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
+//    var recentRecipes: [RecipeDetail] { // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
+//        let decoder = JSONDecoder()
+//        let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedRecentRecipes)
+//        do {
+//            let reciepes = try decoder.decode([RecipeDetail].self, from: data!)
+//        } catch {
+//            print("Recent recipes error")
+//        }
+//    }
+    
+    var recentRecipes: [RecipeDetail] {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedRecentRecipes) else {
+                return []
+            }
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode([RecipeDetail].self, from: data)
+            } catch {
+                print("Recent recipes error: \(error)")
+                return []
+            }
+        }
+    }
+    
     var recentRecipesIDs: [Int] { // нужен для проверки перед добавлением нового просмотренного что бы не дублироваться
         var intermediate: [Int] = []
         if !recentRecipes.isEmpty {
@@ -241,10 +265,24 @@ class StorageManager {
             print("💼✅ Encode complete, save -->>", recipes)
         }
     }
-    func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
-        if !recentRecipesIDs.contains(recipe.id){
-            recentRecipes.insert(recipe, at: 0)
-            saveToUD(recipes: recentRecipes, constantUD: Constants.UDConstants.savedRecentRecipes)
+    
+//    func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
+//        if !recentRecipesIDs.contains(recipe.id){
+//            recentRecipes.insert(recipe, at: 0)
+//            saveToUD(recipes: recentRecipes, constantUD: Constants.UDConstants.savedRecentRecipes)
+//        }
+//    }
+    
+    func saveRecentRecepie(recipe: RecipeDetail) {
+        var recipes = recentRecipes
+        recipes.insert(recipe, at: 0)
+        
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(recipes)
+            UserDefaults.standard.set(data, forKey: Constants.UDConstants.savedRecentRecipes)
+        } catch {
+            print("Save error: \(error)")
         }
     }
     

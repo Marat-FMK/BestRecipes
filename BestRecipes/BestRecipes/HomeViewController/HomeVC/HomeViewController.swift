@@ -224,16 +224,34 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     }
     
     func trendsDownload() {
+        let loader = UIActivityIndicatorView(style: .large)
+        loader.startAnimating()
+        trendingCollectionView.addSubview(loader)
+        loader.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        loader.leadingAnchor.constraint(equalTo: trendingCollectionView.leadingAnchor, constant: 25),
+        loader.topAnchor.constraint(equalTo: trendingCollectionView.topAnchor, constant: 10),
+        ])
         storageManager.setTrendingRecipes {
             DispatchQueue.main.async {
+                loader.removeFromSuperview()
                 self.trendingCollectionView.reloadData()
             }
         }
     }
     
     func categoryDownload() {
+        let loader = UIActivityIndicatorView(style: .large)
+        loader.startAnimating()
+        popularCreatorCollectionView.addSubview(loader)
+        loader.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        loader.leadingAnchor.constraint(equalTo: trendingCollectionView.leadingAnchor, constant: 25),
+        loader.topAnchor.constraint(equalTo: trendingCollectionView.topAnchor, constant: 10),
+        ])
             storageManager.setCategotyRecipes {
                 DispatchQueue.main.async {
+                    loader.removeFromSuperview()
                     self.popularCategoryCollectionView.reloadData()
                 }
             }
@@ -267,6 +285,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         setupSearchField()
         trendsDownload()
         categoryDownload()
+        recentRecepieCollectionView.reloadData()
     }
     
     private func setupViews() {
@@ -494,6 +513,8 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             
         case _ where collectionView == recentRecepieCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecentPecepieCell", for: indexPath) as! RecentRecepieCell
+            let recepie = storageManager.recentRecipes[indexPath.item]
+            cell.configure(with: recepie)
             return cell
         case _ where collectionView == popularCreatorCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CreatorCell", for: indexPath) as! CreatorCell
@@ -505,7 +526,22 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == trendingCollectionView {
+            let vc = RecipeDetailViewController()
+            storageManager.saveRecentRecepie(recipe: storageManager.trendingRecipes[indexPath.item])
+            vc.recipe = storageManager.trendingRecipes[indexPath.item]
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            let vc = RecipeDetailViewController()
+            storageManager.saveRecentRecepie(recipe: storageManager.categoryRecipes[indexPath.item])
+            vc.recipe = storageManager.categoryRecipes[indexPath.item]
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }
+
+
 //MARK: setup SearchField
 extension HomeViewController {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {

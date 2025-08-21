@@ -18,6 +18,7 @@ class RecipeDetailViewController: UIViewController {
         let backButton = UIButton()
         backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.setImage(UIImage(named: Constants.Icons.arrowLeft), for: .normal)
+        backButton.addTarget(RecipeDetailViewController.self, action: #selector(backButtonTapped), for: .touchUpInside)
         return backButton
     }()
     
@@ -29,6 +30,16 @@ class RecipeDetailViewController: UIViewController {
         label.text = "Recipe Detail"
         return label
     }()
+    
+    //MARK: - BackButton Func
+    
+    @objc func backButtonTapped(sender: UIButton) {
+        sender.buttonTappedAnimate()
+        print("srabotalo")
+        let vc = HomeViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     
     //MARK: Main
     private let recipeDetailTable: UITableView = {

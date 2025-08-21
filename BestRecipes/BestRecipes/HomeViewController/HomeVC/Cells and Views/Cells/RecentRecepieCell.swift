@@ -54,6 +54,23 @@ class RecentRecepieCell: UICollectionViewCell {
         contentView.addSubview(creatorLabel)
     }
     
+    func configure(with recipe: RecipeDetail) {
+        if let url = URL(string: recipe.image) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url),
+                   let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.backgroundImageView.image = image
+                    }
+                }
+            }
+        } else {
+            backgroundImageView.image = UIImage(named: "placeholder")
+        }
+        titleLabel.text = recipe.title
+        creatorLabel.text = recipe.sourceName
+    }
+    
     private func setConstraints() {
         backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
