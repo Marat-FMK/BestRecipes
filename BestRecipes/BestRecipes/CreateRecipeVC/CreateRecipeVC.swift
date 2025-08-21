@@ -90,6 +90,16 @@ class CreateRecipeViewController: UIViewController, UINavigationControllerDelega
         tv.rowHeight = 61
         tv.isScrollEnabled = false
         tv.translatesAutoresizingMaskIntoConstraints = false
+        
+        let headerLabel = UILabel()
+        headerLabel.text = "Ingredients"
+        headerLabel.font = UIFont(name: "Poppins-Bold", size: 20)
+        headerLabel.frame = CGRect(x: 0, y: 0, width: tv.frame.width, height: 30)
+
+        headerLabel.textAlignment = .left
+
+        tv.tableHeaderView = headerLabel
+        
         return tv
     }()
     
@@ -302,7 +312,6 @@ extension CreateRecipeViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     @objc private func addImage() {
-        print("5")
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
