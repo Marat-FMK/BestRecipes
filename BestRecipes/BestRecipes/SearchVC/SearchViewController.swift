@@ -78,7 +78,7 @@ class SearchViewController: UIViewController {
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(RecipeCell.self, forCellReuseIdentifier: RecipeCell.identifier)
+        tableView.register(RecipeDiscover.self, forCellReuseIdentifier: "1")
     }
     
     private func setupUI() {
@@ -135,7 +135,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeCell.identifier, for: indexPath) as? RecipeCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "1", for: indexPath) as? RecipeDiscover else {
             return UITableViewCell()
         }
         cell.configure(with: filteredRecipes[indexPath.row])

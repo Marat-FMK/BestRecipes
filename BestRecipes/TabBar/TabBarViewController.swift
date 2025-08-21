@@ -40,9 +40,10 @@ class TabBarViewController : UITabBarController {
     
     private func setupViewControllers() {
         let homeVC = HomeViewController()
-        let bookmarksVC = UIViewController()
+        let bookmarksVC = DiscoverViewController()
         let notificationsVC = UIViewController()
         let profileVC = UIViewController()
+
         
         viewControllers = [
             UINavigationController(rootViewController: homeVC),
