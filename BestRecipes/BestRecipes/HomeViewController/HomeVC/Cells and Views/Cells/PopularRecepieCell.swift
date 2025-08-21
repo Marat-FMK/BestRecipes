@@ -110,6 +110,7 @@ class PopularRecepieCell: UICollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: roundImageView.bottomAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -12),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
         

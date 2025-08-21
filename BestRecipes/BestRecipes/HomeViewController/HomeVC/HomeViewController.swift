@@ -20,7 +20,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
 //    var networkManager = NetworkManager()
     var storageManager = StorageManager()
     
-    var trendingRecipes: [SearchedRecipe] = []
+    var trendingRecipes: [RecipeDetail] = []
 
     
     //MARK: - Create UI
@@ -126,9 +126,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             } else if let firstButton = view.arrangedSubviews.first as? UIButton {
                 firstButton.isSelected = true
             }
-        
-        
-        
         view.axis = .horizontal
         view.spacing = 20
         view.distribution = .fillProportionally
@@ -209,8 +206,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
                 self.popularCategoryCollectionView.reloadData()
             }
         }
-        
-        //МЕНЯЮТСЯ КАТЕГОРИИ ПОПУЛЯРНОГО
     }
     
     @objc private func trendingSeeAllButtontapped(sender : UIButton) {
@@ -228,6 +223,40 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }
     
+    func trendsDownload() {
+        storageManager.setTrendingRecipes {
+            DispatchQueue.main.async {
+                self.trendingCollectionView.reloadData()
+            }
+        }
+    }
+    
+    func categoryDownload() {
+            storageManager.setCategotyRecipes {
+                DispatchQueue.main.async {
+                    self.popularCategoryCollectionView.reloadData()
+                }
+            }
+        }
+        
+//        func categoriesDownload() {
+//            storageManager.setCategotyRecipes()
+//            let loader = UIActivityIndicatorView(style: .large)
+//            loader.startAnimating()
+//            popularCategoryCollectionView.addSubview(loader)
+//            loader.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                loader.leadingAnchor.constraint(equalTo: popularCategoryCollectionView.leadingAnchor, constant: 25),
+//                loader.topAnchor.constraint(equalTo: popularCategoryCollectionView.topAnchor, constant: 10),
+//               ])
+//            popularCategoryCollectionView.addSubview(loader)
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+//                self.categoryRecepies = self.storageManager.categoryRecipes
+//                self.popularCategoryCollectionView.reloadData()
+//                loader.removeFromSuperview()
+//            }
+//        }
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -236,6 +265,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         setConstraints()
         setDelegates()
         setupSearchField()
+        trendsDownload()
+        categoryDownload()
     }
     
     private func setupViews() {
@@ -451,6 +482,8 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         switch collectionView {
         case _ where collectionView == trendingCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
+            let recepie = storageManager.trendingRecipes[indexPath.item]
+            cell.configure(with: recepie)
             return cell
             
         case _ where collectionView == popularCategoryCollectionView:
