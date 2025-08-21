@@ -99,7 +99,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        definesPresentationContext = true // <- важно для активации поиска
+        definesPresentationContext = true
         
         navigationController?.setNavigationBarHidden(false, animated: true)
         title = "Search recipes"
