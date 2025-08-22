@@ -79,6 +79,9 @@ class TabBarViewController : UITabBarController {
     
     @objc private func createButtonTapped(sender : UIButton) {
         sender.buttonTappedAnimate()
+        let createRecipe = CreateRecipeViewController()
+        navigationController?.pushViewController(createRecipe, animated: true)
+
     }
     
     private func updateButtonSelection() {
