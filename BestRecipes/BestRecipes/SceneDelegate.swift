@@ -14,15 +14,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        let mainVC = WelcomeViewController()
-        let navController = UINavigationController(rootViewController: mainVC)
         
         window = UIWindow(windowScene: windowScene)
-        window?.windowScene = windowScene
+        
+        // Проверяем, показывался ли онбординг
+        let hasSeenOnboarding = UserDefaults.standard.bool(forKey: Constants.UDConstants.onboardingViewed)
+        
+        if hasSeenOnboarding {
+            // Если онбординг уже был — открываем главный экран
+            let mainVC = TabBarViewController()
+            let navController = UINavigationController(rootViewController: mainVC)
+            navController.setNavigationBarHidden(true, animated: false)
+            window?.rootViewController = navController
+        } else {
+            // Если онбординг ещё не был — показываем его
+            let onboardingVC = WelcomeViewController()
+            let navController = UINavigationController(rootViewController: onboardingVC)
+            navController.setNavigationBarHidden(true, animated: false)
+            window?.rootViewController = navController
+        }
+        
         window?.makeKeyAndVisible()
-        window?.rootViewController = navController
-        navController.setNavigationBarHidden(true, animated: false)
     }
+    
+    // -->> no UD version
+    //    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    //        
+    //        guard let windowScene = (scene as? UIWindowScene) else { return }
+    //        let mainVC = WelcomeViewController()
+    //        let navController = UINavigationController(rootViewController: mainVC)
+    //        
+    //        window = UIWindow(windowScene: windowScene)
+    //        window?.windowScene = windowScene
+    //        window?.makeKeyAndVisible()
+    //        window?.rootViewController = navController
+    //        navController.setNavigationBarHidden(true, animated: false)
+    //    }
     
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
