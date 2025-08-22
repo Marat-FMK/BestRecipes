@@ -31,6 +31,8 @@ class RecipeDetailTableViewCell: UITableViewCell {
         let ingredientLabel = UILabel()
         ingredientLabel.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 16)
         ingredientLabel.text = "Cucumberjnojn onjjo ojnojnon onoj"
+        ingredientLabel.numberOfLines = 0
+        ingredientLabel.lineBreakMode = .byWordWrapping
         ingredientLabel.translatesAutoresizingMaskIntoConstraints = false
         return ingredientLabel
     }()
@@ -40,8 +42,10 @@ class RecipeDetailTableViewCell: UITableViewCell {
         ingredientWeightLabel.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 14)
         ingredientWeightLabel.textColor = Constants.Colors.Neutral.neutral50
         ingredientWeightLabel.text = "200g"
+        ingredientWeightLabel.textAlignment = .center
+        ingredientWeightLabel.lineBreakMode = .byWordWrapping
         ingredientWeightLabel.translatesAutoresizingMaskIntoConstraints = false
-        ingredientWeightLabel.numberOfLines = 2
+        ingredientWeightLabel.numberOfLines = 0
         return ingredientWeightLabel
     }()
     
@@ -49,7 +53,6 @@ class RecipeDetailTableViewCell: UITableViewCell {
         let ingredientCheckBox = UIButton()
         ingredientCheckBox.translatesAutoresizingMaskIntoConstraints = false
         ingredientCheckBox.setImage(UIImage(named: Constants.Icons.tickCircleInactive), for: .normal)
-        ingredientCheckBox.addTarget(self, action: #selector(checkPressed) , for: .touchUpInside)
         return ingredientCheckBox
     }()
     
@@ -81,16 +84,17 @@ class RecipeDetailTableViewCell: UITableViewCell {
         
         cellView.addSubview(ingredientLabel)
         NSLayoutConstraint.activate([
-            ingredientLabel.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 27),
+            ingredientLabel.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 12),
             ingredientLabel.leadingAnchor.constraint(equalTo: ingredientImage.trailingAnchor, constant: 24),
             ingredientLabel.widthAnchor.constraint(equalToConstant: 124),
-            ingredientLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor/*, constant: -27*/)
+            ingredientLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor, constant: -12)
         ])
         
         cellView.addSubview(ingredientWeightLabel)
         NSLayoutConstraint.activate([
-            ingredientWeightLabel.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 25),
-            ingredientWeightLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor, constant: -25)
+            ingredientWeightLabel.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 12),
+            ingredientWeightLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor, constant: -12),
+            ingredientWeightLabel.leadingAnchor.constraint(equalTo: ingredientLabel.trailingAnchor)
         ])
         
         cellView.addSubview(ingredientCheckBox)
@@ -102,6 +106,7 @@ class RecipeDetailTableViewCell: UITableViewCell {
             ingredientCheckBox.heightAnchor.constraint(equalToConstant: 23.5),
             ingredientWeightLabel.trailingAnchor.constraint(equalTo: ingredientCheckBox.leadingAnchor, constant: -27),
         ])
+        ingredientCheckBox.addTarget(self, action: #selector(checkPressed) , for: .touchUpInside)
     }
     
     @objc private func checkPressed(_ sender: UIButton) {
@@ -123,7 +128,7 @@ class RecipeDetailTableViewCell: UITableViewCell {
         )
         
         ingredientLabel.text = recipe.extendedIngredients[counter].name
-        ingredientWeightLabel.text = String(recipe.extendedIngredients[counter].amount) + " " +  String(recipe.extendedIngredients[counter].unit)
+        ingredientWeightLabel.text = String(format: "%.2f", recipe.extendedIngredients[counter].amount) + " " +  String(recipe.extendedIngredients[counter].unit)
     }
 }
 

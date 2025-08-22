@@ -18,7 +18,6 @@ class RecipeDetailViewController: UIViewController {
         let backButton = UIButton()
         backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.setImage(UIImage(named: Constants.Icons.arrowLeft), for: .normal)
-        backButton.addTarget(RecipeDetailViewController.self, action: #selector(backButtonTapped), for: .touchUpInside)
         return backButton
     }()
     
@@ -30,16 +29,6 @@ class RecipeDetailViewController: UIViewController {
         label.text = "Recipe Detail"
         return label
     }()
-    
-    //MARK: - BackButton Func
-    
-    @objc func backButtonTapped(sender: UIButton) {
-        sender.buttonTappedAnimate()
-        print("srabotalo")
-        let vc = HomeViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
     
     //MARK: Main
     private let recipeDetailTable: UITableView = {
@@ -57,6 +46,7 @@ class RecipeDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tabBarController?.tabBar.isHidden = true
         setupUI()
         self.recipeDetailTable.delegate = self
         self.recipeDetailTable.dataSource = self
@@ -73,7 +63,7 @@ class RecipeDetailViewController: UIViewController {
         //MARK: NavigationBar UI
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.titleView = navigationBarTitle
-        
+        backButton.addTarget(self, action: #selector(backButtonTapped(sender:)), for: .touchUpInside)
         //MARK: UI
             view.addSubview(recipeDetailTable)
         NSLayoutConstraint.activate([
@@ -83,6 +73,13 @@ class RecipeDetailViewController: UIViewController {
             recipeDetailTable.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+//MARK: - BackButton Func
+    @objc func backButtonTapped(sender: UIButton) {
+        sender.buttonTappedAnimate()
+        print("pressed")
+        navigationController?.popViewController(animated: true)
+    }
 }
 
 extension RecipeDetailViewController: UITableViewDataSource, UITableViewDelegate {
@@ -90,11 +87,16 @@ extension RecipeDetailViewController: UITableViewDataSource, UITableViewDelegate
         
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailAboutCell.identifier, for: indexPath) as! RecipeDetailAboutCell
-            cell.configure(with: recipe!)
+            if let recipe = self.recipe {
+                cell.configure(with: recipe)
+            }
             cell.selectionStyle = .none
             return cell
         } else if indexPath.row == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDetailInstructionsCell.identifier, for: indexPath) as! RecipeDetailInstructionsCell
+            if let recipe = self.recipe {
+                cell.configure(with: recipe)
+            }
             cell.selectionStyle = .none
             return cell
         } else {
