@@ -16,48 +16,48 @@ enum Direction: String {
 }
 
 enum WorldCuisines: String, CaseIterable {
-        case african = "African"
-        case asian = "Asian"
-        case american = "American"
-        case british = "British"
-        case cajun = "Cajun"
-        case caribbean = "Caribbean"
-        case chinese = "Chinese"
-        case easternEuropean = "Eastern European"
-        case european = "European"
-        case french = "French"
-        case german = "German"
-        case greek = "Greek"
-        case indian = "Indian"
-        case irish = "Irish"
-        case italian = "Italian"
-        case japanese = "Japanese"
-        case jewish = "Jewish"
-        case korean = "Korean"
-        case latinAmerican = "Latin American"
-        case mediterranean = "Mediterranean"
-        case mexican = "Mexican"
-        case middleEastern = "Middle Eastern"
-        case nordic = "Nordic"
-        case southern = "Southern"
-        case spanish = "Spanish"
-        case thai = "Thai"
-        case vietnamese = "Vietnamese"
+    case african = "African"
+    case asian = "Asian"
+    case american = "American"
+    case british = "British"
+    case cajun = "Cajun"
+    case caribbean = "Caribbean"
+    case chinese = "Chinese"
+    case easternEuropean = "Eastern European"
+    case european = "European"
+    case french = "French"
+    case german = "German"
+    case greek = "Greek"
+    case indian = "Indian"
+    case irish = "Irish"
+    case italian = "Italian"
+    case japanese = "Japanese"
+    case jewish = "Jewish"
+    case korean = "Korean"
+    case latinAmerican = "Latin American"
+    case mediterranean = "Mediterranean"
+    case mexican = "Mexican"
+    case middleEastern = "Middle Eastern"
+    case nordic = "Nordic"
+    case southern = "Southern"
+    case spanish = "Spanish"
+    case thai = "Thai"
+    case vietnamese = "Vietnamese"
 }
 
 enum MealType: String, CaseIterable {
     case dessert = "dessert"
-//    case appetizer = "appetizer"
+    //    case appetizer = "appetizer"
     case salad = "salad"
     case soup = "soup"
-//    case snack = "snack"
+    //    case snack = "snack"
     case drink = "drink"
-//    case sideDish = "side dish"
+    //    case sideDish = "side dish"
     case bread = "bread"
-//    case beverage = "beverage"
+    //    case beverage = "beverage"
     case sauce = "sauce"
     case marinade = "marinade"
-//    case fingerfood = "fingerfood"
+    //    case fingerfood = "fingerfood"
 }
 
 
@@ -72,17 +72,17 @@ class StorageManager {
         
         switch uDCategory {
         case "dessert": return .dessert
-//        case "appetizer": return .appetizer
+            //        case "appetizer": return .appetizer
         case "salad": return .salad
         case "soup": return .soup
-//        case "snack": return .snack
+            //        case "snack": return .snack
         case "drink": return .drink
-//        case "sideDish": return .sideDish
+            //        case "sideDish": return .sideDish
         case "bread": return .bread
-//        case "beverage": return .beverage
+            //        case "beverage": return .beverage
         case "sauce": return .sauce
         case "marinade": return .marinade
-//        case "fingerfood": return .fingerfood
+            //        case "fingerfood": return .fingerfood
         default: return .bread
         }
     }
@@ -121,15 +121,15 @@ class StorageManager {
         setArrayForHomeView(allRecipes: categoryRecipesAll)
     }
     
-//    var recentRecipes: [RecipeDetail] { // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
-//        let decoder = JSONDecoder()
-//        let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedRecentRecipes)
-//        do {
-//            let reciepes = try decoder.decode([RecipeDetail].self, from: data!)
-//        } catch {
-//            print("Recent recipes error")
-//        }
-//    }
+    //    var recentRecipes: [RecipeDetail] { // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
+    //        let decoder = JSONDecoder()
+    //        let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedRecentRecipes)
+    //        do {
+    //            let reciepes = try decoder.decode([RecipeDetail].self, from: data!)
+    //        } catch {
+    //            print("Recent recipes error")
+    //        }
+    //    }
     
     var recentRecipes: [RecipeDetail] {
         get {
@@ -218,11 +218,11 @@ class StorageManager {
     
     
     //Ф-ия вызывается при каждом нажатии на кнопку выбора категории - собирает массив categoryRecipesAll // После чего можно будет использовать геттер categoryRecipes который берет из этого массива только 5 элементов для показа на главном экране // А весь массив показывается только на See All экране
-//    func setCategotyRecipes() {
-//        networkManager.fetchRecipes(mealType: currentCategory) { result in
-//            self.setArrayOfRecipeDetails(direction: .category, result: result)
-//        }
-//    }
+    //    func setCategotyRecipes() {
+    //        networkManager.fetchRecipes(mealType: currentCategory) { result in
+    //            self.setArrayOfRecipeDetails(direction: .category, result: result)
+    //        }
+    //    }
     func setCategotyRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(mealType: currentCategory) { result in
             self.setArrayOfRecipeDetails(direction: .category, result: result) {
@@ -266,12 +266,12 @@ class StorageManager {
         }
     }
     
-//    func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
-//        if !recentRecipesIDs.contains(recipe.id){
-//            recentRecipes.insert(recipe, at: 0)
-//            saveToUD(recipes: recentRecipes, constantUD: Constants.UDConstants.savedRecentRecipes)
-//        }
-//    }
+    //    func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
+    //        if !recentRecipesIDs.contains(recipe.id){
+    //            recentRecipes.insert(recipe, at: 0)
+    //            saveToUD(recipes: recentRecipes, constantUD: Constants.UDConstants.savedRecentRecipes)
+    //        }
+    //    }
     
     func saveRecentRecepie(recipe: RecipeDetail) {
         var recipes = recentRecipes
@@ -300,6 +300,5 @@ class StorageManager {
         }
         saveToUD(recipes: favorites, constantUD: Constants.UDConstants.savedFavoriteRecipes)
     }
-    
     
 }
