@@ -17,10 +17,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
     
-    var networkManager = NetworkManager()
+//    var networkManager = NetworkManager()
     var storageManager = StorageManager()
     
-    var trendingRecipes: [SearchedRecipe] = []
+    var trendingRecipes: [RecipeDetail] = []
 
     
     //MARK: - Create UI
@@ -115,9 +115,17 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
             view.addArrangedSubview(button)
         }
-        if let firstButton = view.arrangedSubviews.first as? UIButton {
-            firstButton.isSelected = true
-        }
+        
+        let savedCategory = UserDefaults.standard.string(forKey: Constants.UDConstants.currentCategory)
+            if let savedCategory = savedCategory {
+                if let buttonToSelect = view.arrangedSubviews.first(where: {
+                    ($0 as? UIButton)?.titleLabel?.text == savedCategory
+                }) as? UIButton {
+                    buttonToSelect.isSelected = true
+                }
+            } else if let firstButton = view.arrangedSubviews.first as? UIButton {
+                firstButton.isSelected = true
+            }
         view.axis = .horizontal
         view.spacing = 20
         view.distribution = .fillProportionally
@@ -190,7 +198,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             }
             sender.isSelected = true
         }
-        //МЕНЯЮТСЯ КАТЕГОРИИ ПОПУЛЯРНОГО
+        // MArat --->>>
+        UserDefaults.standard.set(sender.titleLabel?.text, forKey: Constants.UDConstants.currentCategory) // MARAT
+        storageManager.categoryRecipesAll = []
+        storageManager.setCategotyRecipes {
+            DispatchQueue.main.async {
+                self.popularCategoryCollectionView.reloadData()
+            }
+        }
     }
     
     @objc private func trendingSeeAllButtontapped(sender : UIButton) {
@@ -208,6 +223,58 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }
     
+    func trendsDownload() {
+        let loader = UIActivityIndicatorView(style: .large)
+        loader.startAnimating()
+        trendingCollectionView.addSubview(loader)
+        loader.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        loader.leadingAnchor.constraint(equalTo: trendingCollectionView.leadingAnchor, constant: 25),
+        loader.topAnchor.constraint(equalTo: trendingCollectionView.topAnchor, constant: 10),
+        ])
+        storageManager.setTrendingRecipes {
+            DispatchQueue.main.async {
+                loader.removeFromSuperview()
+                self.trendingCollectionView.reloadData()
+            }
+        }
+    }
+    
+    func categoryDownload() {
+        let loader = UIActivityIndicatorView(style: .large)
+        loader.startAnimating()
+        popularCreatorCollectionView.addSubview(loader)
+        loader.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        loader.leadingAnchor.constraint(equalTo: trendingCollectionView.leadingAnchor, constant: 25),
+        loader.topAnchor.constraint(equalTo: trendingCollectionView.topAnchor, constant: 10),
+        ])
+            storageManager.setCategotyRecipes {
+                DispatchQueue.main.async {
+                    loader.removeFromSuperview()
+                    self.popularCategoryCollectionView.reloadData()
+                }
+            }
+        }
+        
+//        func categoriesDownload() {
+//            storageManager.setCategotyRecipes()
+//            let loader = UIActivityIndicatorView(style: .large)
+//            loader.startAnimating()
+//            popularCategoryCollectionView.addSubview(loader)
+//            loader.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                loader.leadingAnchor.constraint(equalTo: popularCategoryCollectionView.leadingAnchor, constant: 25),
+//                loader.topAnchor.constraint(equalTo: popularCategoryCollectionView.topAnchor, constant: 10),
+//               ])
+//            popularCategoryCollectionView.addSubview(loader)
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+//                self.categoryRecepies = self.storageManager.categoryRecipes
+//                self.popularCategoryCollectionView.reloadData()
+//                loader.removeFromSuperview()
+//            }
+//        }
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -216,6 +283,9 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         setConstraints()
         setDelegates()
         setupSearchField()
+        trendsDownload()
+        categoryDownload()
+        recentRecepieCollectionView.reloadData()
     }
     
     private func setupViews() {
@@ -384,11 +454,20 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
 
 extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == popularCreatorCollectionView {
-            return storageManager.cuisineNames.count
-        } else {
-            return 4
-        }
+        
+        switch collectionView {
+           case popularCategoryCollectionView:
+               return storageManager.categoryRecipes.count
+           case trendingCollectionView:
+               return storageManager.trendingRecipes.count
+           case recentRecepieCollectionView:
+               return storageManager.recentRecipes.count
+           case popularCreatorCollectionView:
+               return storageManager.cuisineNames.count
+           default:
+               return 0
+           }
+        
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -422,12 +501,20 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         switch collectionView {
         case _ where collectionView == trendingCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
+            let recepie = storageManager.trendingRecipes[indexPath.item]
+            cell.configure(with: recepie)
             return cell
+            
         case _ where collectionView == popularCategoryCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularCategoryCell", for: indexPath) as! PopularRecepieCell
-            return cell
+                    let recipe = storageManager.categoryRecipes[indexPath.item]
+                    cell.configure(with: recipe)
+                    return cell
+            
         case _ where collectionView == recentRecepieCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecentPecepieCell", for: indexPath) as! RecentRecepieCell
+            let recepie = storageManager.recentRecipes[indexPath.item]
+            cell.configure(with: recepie)
             return cell
         case _ where collectionView == popularCreatorCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CreatorCell", for: indexPath) as! CreatorCell
@@ -439,14 +526,22 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         }
     }
     
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let detailVC = RecipeDetailViewController()
-//        detailVC.recipe = self.networkManager.fetchReceptsDetails(ids: [716429], completion: { <result, error> in
-//            
-//        })  // передаём данные
-//        navigationController?.pushViewController(detailVC, animated: true)
-//    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == trendingCollectionView {
+            let vc = RecipeDetailViewController()
+            storageManager.saveRecentRecepie(recipe: storageManager.trendingRecipes[indexPath.item])
+            vc.recipe = storageManager.trendingRecipes[indexPath.item]
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            let vc = RecipeDetailViewController()
+            storageManager.saveRecentRecepie(recipe: storageManager.categoryRecipes[indexPath.item])
+            vc.recipe = storageManager.categoryRecipes[indexPath.item]
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }
+
+
 //MARK: setup SearchField
 extension HomeViewController {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {

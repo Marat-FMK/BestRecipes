@@ -8,7 +8,7 @@
 import UIKit
 
 
-class RecipeCell: UITableViewCell {
+class RecipeDiscover: UITableViewCell {
     
     static let identifier = "RecipeCell"
     
@@ -101,7 +101,7 @@ class RecipeCell: UITableViewCell {
     }
     
     // MARK: - Configure
-    func configure(with recipe: Recipe) {
+    func configure(with recipe: RecipeDis) {
         recipeImageView.image = UIImage(named: recipe.imageName)
         titleLabel.text = recipe.title
         subtitleLabel.text = "\(recipe.ingredients) | \(recipe.time)"

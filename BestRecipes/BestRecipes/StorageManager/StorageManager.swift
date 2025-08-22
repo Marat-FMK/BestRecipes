@@ -121,7 +121,31 @@ class StorageManager {
         setArrayForHomeView(allRecipes: categoryRecipesAll)
     }
     
-    var recentRecipes: [RecipeDetail] = [] // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
+//    var recentRecipes: [RecipeDetail] { // сохраняет массив просмотренных исупользую ф-ию saveRecentRecepie
+//        let decoder = JSONDecoder()
+//        let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedRecentRecipes)
+//        do {
+//            let reciepes = try decoder.decode([RecipeDetail].self, from: data!)
+//        } catch {
+//            print("Recent recipes error")
+//        }
+//    }
+    
+    var recentRecipes: [RecipeDetail] {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedRecentRecipes) else {
+                return []
+            }
+            do {
+                let decoder = JSONDecoder()
+                return try decoder.decode([RecipeDetail].self, from: data)
+            } catch {
+                print("Recent recipes error: \(error)")
+                return []
+            }
+        }
+    }
+    
     var recentRecipesIDs: [Int] { // нужен для проверки перед добавлением нового просмотренного что бы не дублироваться
         var intermediate: [Int] = []
         if !recentRecipes.isEmpty {
@@ -131,8 +155,6 @@ class StorageManager {
         }
         return intermediate
     }
-    
-    
     
     
     // Метод собирает массив из 5 или менее элементов для HomeView
@@ -155,7 +177,9 @@ class StorageManager {
     
     //MARK: - METHODS FOR CREATING ARRAYS OF RECIPE DETAILS WITH API
     //Cобирает результат выполнения поиска и извлекает ID нужных рецептов, потом бежит в сеть собирает все детальные рецепты // Раскидывает все по нужным массивам
-    private func setArrayOfRecipeDetails(direction: Direction, result: Result<[SearchedRecipe],NetworkError>) {
+    private func setArrayOfRecipeDetails(direction: Direction,
+                                         result: Result<[SearchedRecipe],NetworkError>,
+                                         completion: @escaping ( () -> Void )) {
         var recipesID: [Int] = []
         switch result {
         case .success(let searchedRecipes):
@@ -170,12 +194,16 @@ class StorageManager {
                     switch direction {
                     case .trending:
                         self.trendingRecipesAll = recipes
+                        completion()
                     case .category:
                         self.categoryRecipesAll = recipes
+                        completion()
                     case .search:
                         self.searchedRecipes = recipes
+                        completion()
                     case .cuisines:
                         self.currentCuisineRecipes = recipes
+                        completion()
                     }
                     
                     print("✅ \(direction.rawValue) Recipes -->>", recipes)
@@ -190,27 +218,41 @@ class StorageManager {
     
     
     //Ф-ия вызывается при каждом нажатии на кнопку выбора категории - собирает массив categoryRecipesAll // После чего можно будет использовать геттер categoryRecipes который берет из этого массива только 5 элементов для показа на главном экране // А весь массив показывается только на See All экране
-    func setCategotyRecipes() {
+//    func setCategotyRecipes() {
+//        networkManager.fetchRecipes(mealType: currentCategory) { result in
+//            self.setArrayOfRecipeDetails(direction: .category, result: result)
+//        }
+//    }
+    func setCategotyRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(mealType: currentCategory) { result in
-            self.setArrayOfRecipeDetails(direction: .category, result: result)
+            self.setArrayOfRecipeDetails(direction: .category, result: result) {
+                completion()
+            }
+            
         }
     }
     
-    func setTrendingRecipes() {
+    func setTrendingRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(trend: true) { result in
-            self.setArrayOfRecipeDetails(direction: .trending, result: result)
+            self.setArrayOfRecipeDetails(direction: .trending, result: result){
+                completion()
+            }
         }
     }
     
-    func setSearchRecipes() {
+    func setSearchRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(searchedText: searchText) { result in // добавить параметр максимального кол-ва рецептов в ф-ию при необходимости
-            self.setArrayOfRecipeDetails(direction: .search, result: result)
+            self.setArrayOfRecipeDetails(direction: .search, result: result){
+                completion()
+            }
         }
     }
     
-    func setCurrentCuisineRecipes() {
+    func setCurrentCuisineRecipes(completion: @escaping ( () -> Void )) {
         networkManager.fetchRecipes(cuisine: choosedCuisine) { result in
-            self.setArrayOfRecipeDetails(direction: .cuisines, result: result)
+            self.setArrayOfRecipeDetails(direction: .cuisines, result: result){
+                completion()
+            }
         }
     }
     
@@ -223,10 +265,24 @@ class StorageManager {
             print("💼✅ Encode complete, save -->>", recipes)
         }
     }
-    func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
-        if !recentRecipesIDs.contains(recipe.id){
-            recentRecipes.insert(recipe, at: 0)
-            saveToUD(recipes: recentRecipes, constantUD: Constants.UDConstants.savedRecentRecipes)
+    
+//    func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
+//        if !recentRecipesIDs.contains(recipe.id){
+//            recentRecipes.insert(recipe, at: 0)
+//            saveToUD(recipes: recentRecipes, constantUD: Constants.UDConstants.savedRecentRecipes)
+//        }
+//    }
+    
+    func saveRecentRecepie(recipe: RecipeDetail) {
+        var recipes = recentRecipes
+        recipes.insert(recipe, at: 0)
+        
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(recipes)
+            UserDefaults.standard.set(data, forKey: Constants.UDConstants.savedRecentRecipes)
+        } catch {
+            print("Save error: \(error)")
         }
     }
     

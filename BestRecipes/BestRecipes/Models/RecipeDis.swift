@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct Recipe {
+struct RecipeDis {
     let title: String
     let ingredients: String
     let time: String
