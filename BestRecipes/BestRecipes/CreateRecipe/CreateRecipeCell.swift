@@ -344,6 +344,7 @@ extension CreateRecipeViewController: UITableViewDelegate, UITableViewDataSource
                                          vegetarian: false,
                                          glutenFree: false,
                                          servings: servings)
+            StorageManager.shared.saveMyRecipe(recipe: newRecipe)
             print(newRecipe)
         }
     }
