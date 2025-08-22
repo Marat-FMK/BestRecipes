@@ -47,17 +47,17 @@ enum WorldCuisines: String, CaseIterable {
 
 enum MealType: String, CaseIterable {
     case dessert = "dessert"
-    case appetizer = "appetizer"
+//    case appetizer = "appetizer"
     case salad = "salad"
     case soup = "soup"
-    case snack = "snack"
+//    case snack = "snack"
     case drink = "drink"
-    case sideDish = "side dish"
+//    case sideDish = "side dish"
     case bread = "bread"
-    case beverage = "beverage"
+//    case beverage = "beverage"
     case sauce = "sauce"
     case marinade = "marinade"
-    case fingerfood = "fingerfood"
+//    case fingerfood = "fingerfood"
 }
 
 
@@ -72,17 +72,17 @@ class StorageManager {
         
         switch uDCategory {
         case "dessert": return .dessert
-        case "appetizer": return .appetizer
+//        case "appetizer": return .appetizer
         case "salad": return .salad
         case "soup": return .soup
-        case "snack": return .snack
+//        case "snack": return .snack
         case "drink": return .drink
-        case "sideDish": return .sideDish
+//        case "sideDish": return .sideDish
         case "bread": return .bread
-        case "beverage": return .beverage
+//        case "beverage": return .beverage
         case "sauce": return .sauce
         case "marinade": return .marinade
-        case "fingerfood": return .fingerfood
+//        case "fingerfood": return .fingerfood
         default: return .bread
         }
     }
