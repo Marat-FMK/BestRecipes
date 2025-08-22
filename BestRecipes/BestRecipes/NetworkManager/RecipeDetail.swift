@@ -38,6 +38,4 @@ struct ExtendedIngredient: Codable {
     let unit: String
     let consistency: String
     let image: String
-    
-    
 }

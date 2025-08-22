@@ -53,6 +53,7 @@ struct Constants {
     ]}
     
     struct Icons {
+        static let addIngredient = ""
         static let arrowLeft = "arrowLeft"
         static let arrowRight = "arrowRight"
         static let bookmark = "bookmark"
@@ -74,6 +75,7 @@ struct Constants {
         static let profileActive = "profileActive"
         static let profileInactive = "profileInactive"
         static let recipe = "recipe"
+        static let removeIngredient = "removeIngredient"
         static let search = "search"
         static let star = "star"
         static let tickCircleInactive = "tickCircleInactive"
