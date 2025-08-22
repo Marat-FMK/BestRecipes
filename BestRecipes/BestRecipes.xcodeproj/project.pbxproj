@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6EA3CBCF2E524545002E1895 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA3CBCE2E524545002E1895 /* Poppins-SemiBold.ttf */; };
 		6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */; };
 		6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */; };
 		87E0D8772E5242B80065EC61 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 87E0D8762E5242B80065EC61 /* SDWebImage */; };
@@ -14,9 +15,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6C6F13B02E4A806400D6875D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EA3CBCE2E524545002E1895 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		87A359F52E58E83E000F4E5D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -68,9 +70,9 @@
 			children = (
 				6C6F13362E4A708B00D6875D /* BestRecipes */,
 				6EDE8E6D2E4A714900BBA031 /* Fonts */,
-				6C6F13B02E4A806400D6875D /* BestRecipes.app */,
 				1BE9123F2E4B658100BD4502 /* Extensions */,
 				1BE912402E4B658E00BD4502 /* TabBar */,
+				87A359F52E58E83E000F4E5D /* BestRecipes.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,7 +111,7 @@
 				87E0D8782E5242B80065EC61 /* SDWebImageMapKit */,
 			);
 			productName = BestRecipes;
-			productReference = 6C6F13B02E4A806400D6875D /* BestRecipes.app */;
+			productReference = 87A359F52E58E83E000F4E5D /* BestRecipes.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
