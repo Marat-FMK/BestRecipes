@@ -9,17 +9,8 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    private var recipes: [RecipeDis] = [
-        RecipeDis(title: "How to make yam & vegetable sauce at home", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        RecipeDis(title: "Spaghetti Bolognese", ingredients: "8 Ingredients", time: "30 min", imageName: "shawarma_image", rating: "4.8"),
-        RecipeDis(title: "Chicken Curry", ingredients: "12 Ingredients", time: "45 min", imageName: "shawarma_image", rating: "4.9"),
-        RecipeDis(title: "Pancakes", ingredients: "5 Ingredients", time: "15 min", imageName: "shawarma_image", rating: "4.7"),
-        RecipeDis(title: "Fruit Salad", ingredients: "6 Ingredients", time: "10 min", imageName: "shawarma_image", rating: "4.6"),
-        RecipeDis(title: "Test", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        RecipeDis(title: "Low", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-        RecipeDis(title: "Lower", ingredients: "9 Ingredients", time: "25 min", imageName: "shawarma_image", rating: "5.0"),
-    ]
-    private var filteredRecipes: [RecipeDis] = []
+    private let storageManager = StorageManager()
+    private var recipes: [RecipeDetail] = []
     
     private let searchController = UISearchController(searchResultsController: nil)
     
@@ -33,13 +24,13 @@ class SearchViewController: UIViewController {
     
     // MARK: - Setup
     private func setupSearchController() {
-        searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
         
         let searchBar = searchController.searchBar
         searchBar.placeholder = "How to make"
         searchBar.showsCancelButton = false
+        searchBar.delegate = self
         
         let textField = searchBar.searchTextField
         textField.textColor = .black
@@ -60,19 +51,10 @@ class SearchViewController: UIViewController {
             clearButton.tintColor = .black
         }
         
-        let toolbar = UIToolbar()
-           toolbar.sizeToFit()
-           let doneButton = UIBarButtonItem(title: "Close", style: .done, target: self, action: #selector(dismissKeyboard))
-           let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-           toolbar.items = [flexSpace, doneButton]
-           
-           searchBar.searchTextField.inputAccessoryView = toolbar
-        
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.hidesBackButton = true
     }
-    
     
     private func setupTableView() {
         view.addSubview(tableView)
@@ -81,9 +63,7 @@ class SearchViewController: UIViewController {
         tableView.register(RecipeDiscover.self, forCellReuseIdentifier: "1")
     }
     
-    private func setupUI() {
-        filteredRecipes = recipes
-        
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -99,7 +79,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        definesPresentationContext = true // <- важно для активации поиска
+        definesPresentationContext = true
         
         navigationController?.setNavigationBarHidden(false, animated: true)
         title = "Search recipes"
@@ -111,8 +91,7 @@ class SearchViewController: UIViewController {
         
         setupTableView()
         setupSearchController()
-        setupUI()
-        setupKeyboardDismiss()
+        setupConstraints()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -120,7 +99,7 @@ class SearchViewController: UIViewController {
         activateSearch()
     }
     
-    func activateSearch() {
+    private func activateSearch() {
         DispatchQueue.main.async {
             self.searchController.searchBar.becomeFirstResponder()
         }
@@ -131,14 +110,15 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredRecipes.count
+        return recipes.count
+
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "1", for: indexPath) as? RecipeDiscover else {
             return UITableViewCell()
         }
-        cell.configure(with: filteredRecipes[indexPath.row])
+        cell.configure(with: recipes[indexPath.row])
         return cell
     }
     
@@ -147,30 +127,20 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-// MARK: - UISearchResultsUpdating
-extension SearchViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        let searchText = searchController.searchBar.text?.lowercased() ?? ""
-        
-        if searchText.isEmpty {
-            filteredRecipes = recipes
-        } else {
-            filteredRecipes = recipes.filter { $0.title.lowercased().contains(searchText) }
+// MARK: - UISearchBarDelegate
+extension SearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+
+        storageManager.searchText = searchText
+        storageManager.setSearchRecipes {
+            DispatchQueue.main.async {
+                self.recipes = self.storageManager.searchedRecipes
+                self.tableView.reloadData()
+            }
         }
-        
-        tableView.reloadData()
+        searchBar.resignFirstResponder()
     }
 }
 
-//MARK: - keyBoard
-extension SearchViewController {
-    func setupKeyboardDismiss() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
 
-    @objc private func dismissKeyboard() {
-        searchController.searchBar.resignFirstResponder()
-    }
-}
