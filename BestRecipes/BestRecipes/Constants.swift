@@ -172,5 +172,6 @@ struct Constants {
         static let savedRecentRecipes = "savedRecentRecipes"
         static let savedFavoriteRecipes = "savedFavoriteRecipes"
         static let onboardingViewed = "onboardingViewed"
+        static let myRecipes = "myRecipes"
     }
 }
