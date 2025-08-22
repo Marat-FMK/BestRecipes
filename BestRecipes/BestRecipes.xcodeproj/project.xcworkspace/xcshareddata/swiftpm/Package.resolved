@@ -1,4 +1,5 @@
 {
+
   "originHash" : "1549e9d10e90ecad8c53008cd966fa6fd6e14bb567905f9d6de646288480a79c",
   "pins" : [
     {
@@ -73,6 +74,9 @@
         "version" : "1.0.5"
       }
     },
+    {
+  "originHash" : "990602f943d142d26b1a5421abe2a243e2e1077d090e31e151c33e3ec768723e",
+  "pins" : [
     {
       "identity" : "sdwebimage",
       "kind" : "remoteSourceControl",
