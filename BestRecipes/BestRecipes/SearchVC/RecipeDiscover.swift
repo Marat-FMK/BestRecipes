@@ -101,12 +101,23 @@ class RecipeDiscover: UITableViewCell {
     }
     
     // MARK: - Configure
-    func configure(with recipe: RecipeDis) {
-        recipeImageView.image = UIImage(named: recipe.imageName)
+    func configure(with recipe: RecipeDetail) {
+        if let url = URL(string: recipe.image) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url),
+                   let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.recipeImageView.image = image
+                    }
+                }
+            }
+        } else {
+            recipeImageView.image = UIImage(named: "placeholder")
+        }
         titleLabel.text = recipe.title
-        subtitleLabel.text = "\(recipe.ingredients) | \(recipe.time)"
+        subtitleLabel.text = "\(recipe.extendedIngredients.count) ingredients | \(recipe.readyInMinutes) min"
+        ratingView.setRating(rating: recipe.spoonacularScore)
     }
-    
     
 }
 
