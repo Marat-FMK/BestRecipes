@@ -12,8 +12,12 @@
 //
 
 import UIKit
+import SwiftUI
 
 class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
+    
+    private var shimmerHostingController: UIHostingController<TrendingShimmerView>?
+    private var categoryShimmerHostingController: UIHostingController<CategoryShimmerView>?
     
     var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
     
@@ -201,11 +205,32 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         // MArat --->>>
         UserDefaults.standard.set(sender.titleLabel?.text, forKey: Constants.UDConstants.currentCategory) // MARAT
         storageManager.categoryRecipesAll = []
-        storageManager.setCategotyRecipes {
+        
+        popularCategoryCollectionView.reloadData()
+        
+        // Создаём SwiftUI shimmer
+        let shimmerVC = UIHostingController(rootView: CategoryShimmerView())
+        shimmerVC.view.backgroundColor = .clear
+        popularCategoryCollectionView.addSubview(shimmerVC.view)
+        
+        shimmerVC.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            shimmerVC.view.leadingAnchor.constraint(equalTo: popularCategoryCollectionView.leadingAnchor),
+            shimmerVC.view.trailingAnchor.constraint(equalTo: popularCategoryCollectionView.trailingAnchor),
+            shimmerVC.view.topAnchor.constraint(equalTo: popularCategoryCollectionView.topAnchor),
+            shimmerVC.view.bottomAnchor.constraint(equalTo: popularCategoryCollectionView.bottomAnchor),
+        ])
+        
+        categoryShimmerHostingController = shimmerVC
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            self.storageManager.setCategotyRecipes {
             DispatchQueue.main.async {
+                self.categoryShimmerHostingController?.view.removeFromSuperview()
+                self.categoryShimmerHostingController = nil
                 self.popularCategoryCollectionView.reloadData()
             }
         }
+    }
     }
     
     @objc private func trendingSeeAllButtontapped(sender : UIButton) {
@@ -223,23 +248,54 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }
     
+//    func trendsDownload() {
+//        let loader = UIActivityIndicatorView(style: .large)
+//        loader.startAnimating()
+//        trendingCollectionView.addSubview(loader)
+//        loader.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//        loader.leadingAnchor.constraint(equalTo: trendingCollectionView.leadingAnchor, constant: 25),
+//        loader.topAnchor.constraint(equalTo: trendingCollectionView.topAnchor, constant: 10),
+//        ])
+//        storageManager.setTrendingRecipes {
+//            DispatchQueue.main.async {
+//                loader.removeFromSuperview()
+//                self.trendingCollectionView.reloadData()
+//            }
+//        }
+//    }
     func trendsDownload() {
-        let loader = UIActivityIndicatorView(style: .large)
-        loader.startAnimating()
-        trendingCollectionView.addSubview(loader)
-        loader.translatesAutoresizingMaskIntoConstraints = false
+        // Показываем shimmer
+        let shimmerVC = UIHostingController(rootView: TrendingShimmerView())
+        shimmerVC.view.backgroundColor = .clear
+        trendingCollectionView.addSubview(shimmerVC.view)
+        shimmerVC.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        loader.leadingAnchor.constraint(equalTo: trendingCollectionView.leadingAnchor, constant: 25),
-        loader.topAnchor.constraint(equalTo: trendingCollectionView.topAnchor, constant: 10),
+            shimmerVC.view.leadingAnchor.constraint(equalTo: trendingCollectionView.leadingAnchor),
+            shimmerVC.view.trailingAnchor.constraint(equalTo: trendingCollectionView.trailingAnchor),
+            shimmerVC.view.topAnchor.constraint(equalTo: trendingCollectionView.topAnchor),
+            shimmerVC.view.bottomAnchor.constraint(equalTo: trendingCollectionView.bottomAnchor),
         ])
-        storageManager.setTrendingRecipes {
-            DispatchQueue.main.async {
-                loader.removeFromSuperview()
-                self.trendingCollectionView.reloadData()
+        self.shimmerHostingController = shimmerVC
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            
+            // Загружаем рецепты
+            self.storageManager.setTrendingRecipes {
+                DispatchQueue.main.async {
+                    // Убираем shimmer
+                    self.shimmerHostingController?.view.removeFromSuperview()
+                    self.shimmerHostingController = nil
+                    
+                    // Перезагружаем коллекцию
+                    self.trendingCollectionView.reloadData()
+                }
             }
-        }
+        } // // //
     }
     
+    
+    // Рабочий -- >>>
     func categoryDownload() {
         let loader = UIActivityIndicatorView(style: .large)
         loader.startAnimating()
@@ -256,7 +312,39 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
                 }
             }
         }
+    
+    // -->>  with 2 seconds plug shimmer
+    //    func categoryDownload() {
+    //        // Показываем shimmer для категорий
+    //        let shimmerVC = UIHostingController(rootView: CategoryShimmerView())
+    //        shimmerVC.view.backgroundColor = .clear
+    //        popularCategoryCollectionView.addSubview(shimmerVC.view)
+    //        shimmerVC.view.translatesAutoresizingMaskIntoConstraints = false
+    //        NSLayoutConstraint.activate([
+    //            shimmerVC.view.leadingAnchor.constraint(equalTo: popularCategoryCollectionView.leadingAnchor),
+    //            shimmerVC.view.trailingAnchor.constraint(equalTo: popularCategoryCollectionView.trailingAnchor),
+    //            shimmerVC.view.topAnchor.constraint(equalTo: popularCategoryCollectionView.topAnchor),
+    //            shimmerVC.view.bottomAnchor.constraint(equalTo: popularCategoryCollectionView.bottomAnchor),
+    //        ])
+    //        self.categoryShimmerHostingController = shimmerVC
+    //
+    //        // Загружаем данные
+    //        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+    //            self.storageManager.setCategotyRecipes {
+    //            DispatchQueue.main.async {
+    //                // Убираем shimmer
+    //                self.categoryShimmerHostingController?.view.removeFromSuperview()
+    //                self.categoryShimmerHostingController = nil
+    //
+    //                // Перезагружаем коллекцию
+    //                self.popularCategoryCollectionView.reloadData()
+    //            }
+    //        }
+    //    } /// /// //
+    //    }
         
+    
+    // Был закоментен -- >>
 //        func categoriesDownload() {
 //            storageManager.setCategotyRecipes()
 //            let loader = UIActivityIndicatorView(style: .large)
