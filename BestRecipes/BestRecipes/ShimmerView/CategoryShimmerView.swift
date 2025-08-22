@@ -26,7 +26,7 @@ struct CategoryShimmerView: View {
                         
                         ZStack {
                             RoundedRectangle(cornerRadius: 16)
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(.neutral20)
                                 .frame(width: 150, height: 176)
                             
                             Text("LOADING. . .")
@@ -48,34 +48,3 @@ struct CategoryShimmerView: View {
 #Preview {
     CategoryShimmerView()
 }
-
-//struct CategoryShimmerView: View {
-//    var body: some View {
-//        ZStack(alignment: .top) {
-//            
-//            Circle()
-//                .foregroundStyle(.primary50)
-//                .frame(width: 110, height: 110)
-//                .zIndex(1)
-//                .offset(y: -55)
-//            
-//            ZStack {
-//                RoundedRectangle(cornerRadius: 16)
-//                    .frame(width: 150, height: 176)
-//                    .shimmering()
-//                Text("      ")
-//                    .font(.system(size: 25))
-//                    .redacted(reason: .placeholder)
-//                    .shimmering()
-//                
-//            }
-//            .foregroundStyle(.gray)
-//            
-//        }
-//        .frame(width: 150, height: 231)
-//    }
-//}
-//
-//#Preview {
-//    CategoryShimmerView()
-//}
