@@ -8,6 +8,7 @@ import UIKit
 
 class TrendingCell: UICollectionViewCell {
     
+    var storageManager = StorageManager()
     
     let backgroundImageView : UIImageView = {
         let view = UIImageView()
@@ -58,9 +59,15 @@ class TrendingCell: UICollectionViewCell {
     }()
     
     //MARK: - Save Func
-
-    @objc func saveButtonTapped(sender : UIButton) {
+    
+    @objc func saveButtonTapped(sender: UIButton) {
         sender.buttonTappedAnimate()
+//        let recepie = RecipeDetail?.self
+//            if recepie.isFavorite == true {
+//                storageManager.deleteFavoriteRecipe(recipe: recepie)
+//            } else {
+//                storageManager.saveFavoriteRecipe(recipe: recepie)
+//            }
     }
     
     //MARK: - Setup
@@ -137,30 +144,30 @@ class TrendingCell: UICollectionViewCell {
     
     // Marat
     func configure(with recipe: RecipeDetail) {
-            titleLabel.text = recipe.title
-            creatorLabel.text = "By \(recipe.sourceName)"
-            
-            if let url = URL(string: recipe.image) {
-                DispatchQueue.global().async {
-                    if let data = try? Data(contentsOf: url),
-                       let image = UIImage(data: data) {
-                        DispatchQueue.main.async {
-                            self.backgroundImageView.image = image
-                        }
+        titleLabel.text = recipe.title
+        creatorLabel.text = "By \(recipe.sourceName)"
+        
+        if let url = URL(string: recipe.image) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url),
+                   let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.backgroundImageView.image = image
                     }
                 }
-            } else {
-                backgroundImageView.image = UIImage(named: "placeholder")
             }
-            
-            ratingView.setRating(rating: recipe.spoonacularScore)
-            
-            let imageName = recipe.isFavorite ? Constants.Images.bookmarkButtonImageActive : Constants.Images.bookmarkButtonImageInactive
-            saveButton.setImage(UIImage(named: imageName), for: .normal)
+        } else {
+            backgroundImageView.image = UIImage(named: "placeholder")
         }
+        
+        ratingView.setRating(rating: recipe.spoonacularScore)
+        
+        let imageName = recipe.isFavorite ? Constants.Images.bookmarkButtonImageActive : Constants.Images.bookmarkButtonImageInactive
+        saveButton.setImage(UIImage(named: imageName), for: .normal)
+    }
     
-
-
+    
+    
     
 }
 

@@ -61,7 +61,10 @@ enum MealType: String, CaseIterable {
 }
 
 
-class StorageManager {
+final class StorageManager {
+    
+    static let shared = StorageManager()
+    
     private let networkManager = NetworkManager()
     
     let cuisineNames = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
@@ -94,7 +97,7 @@ class StorageManager {
     var choosedCuisine = WorldCuisines.american // выбранная страна
     var currentCuisineRecipes: [RecipeDetail] = [] // массив наполняется после вызова ф-ии setCurrentCuisineRecipes
     
-    var favoriteRecipes: [RecipeDetail] {
+    var favoriteRecipes: [RecipeDetail] { 
         if let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedFavoriteRecipes) {
             if let recipes = try? JSONDecoder().decode([RecipeDetail].self, from: data) {
                 return recipes

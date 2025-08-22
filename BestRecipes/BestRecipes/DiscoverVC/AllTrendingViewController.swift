@@ -1,18 +1,30 @@
+//
+//  AllTrendingVC.swift
+//  BestRecipes
+//
+//  Created by Евгений Васильев on 22.08.2025.
+//
 
 import UIKit
 
-class DiscoverViewController: UIViewController {
-    
-    let storageManager = StorageManager()
-    
+class AllTrendingViewController: UIViewController {
+        
     //MARK: - Create UI
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Saved recipes"
+        label.text = "Trending Now"
         label.textColor = .label
         label.font = .systemFont(ofSize: 24, weight: .semibold)
         return label
+    }()
+    
+    
+    let backButton : UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "arrowLeft"), for: .normal)
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        return button
     }()
     
     let collectionView: UICollectionView = {
@@ -23,6 +35,13 @@ class DiscoverViewController: UIViewController {
         return collectionView
     }()
     
+    
+    //MARK: - Action func
+    
+    @objc func backButtonTapped() {
+        let vc = HomeViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 
     //MARK: - Lifecycle
 
@@ -31,16 +50,24 @@ class DiscoverViewController: UIViewController {
         setupViews()
         setConstraints()
         SetDelegatas()
+        loadTrendingData()
     }
     
-    
-
     private func setupViews() {
         view.backgroundColor = .white
         view.addSubview(titleLabel)
         view.addSubview(collectionView)
-
     }
+    
+    private func loadTrendingData() {
+            print("🔄 Loading trending data...")
+            StorageManager.shared.setTrendingRecipes { [weak self] in
+                DispatchQueue.main.async {
+                    print("✅ Data loaded: \(StorageManager.shared.trendingRecipesAll.count) items")
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
 
     // MARK: Set Delegatas
     
@@ -73,9 +100,10 @@ class DiscoverViewController: UIViewController {
 
 // MARK: Extension ViewDelegate
 
-extension DiscoverViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension AllTrendingViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        print("Количество элементов: \(StorageManager.shared.trendingRecipesAll.count)")
+        return StorageManager.shared.trendingRecipesAll.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -84,7 +112,7 @@ extension DiscoverViewController: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
-        let recepie = storageManager.favoriteRecipes[indexPath.item]
+        let recepie = StorageManager.shared.trendingRecipesAll[indexPath.item]
         cell.configure(with: recepie)
         return cell
     }
@@ -94,3 +122,4 @@ extension DiscoverViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 
 }
+

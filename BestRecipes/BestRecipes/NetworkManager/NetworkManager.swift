@@ -19,14 +19,14 @@ class NetworkManager {
     private let scheme = "https"
     private let host = "api.spoonacular.com"
     private let pathComponent = "/recipes/complexSearch"
-    private let apiKey = ""
+    private let apiKey = "e02c1511c6214d72a3700c5e8d208717"
     
 #warning("max recipe count / ApiKey")
     func fetchRecipes(searchedText: String? = nil,
                       trend: Bool = false,
                       cuisine: WorldCuisines? = nil,
                       mealType: MealType? = nil,
-                      maxRecipeCount: String = "1",
+                      maxRecipeCount: String = "6",
                       completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
