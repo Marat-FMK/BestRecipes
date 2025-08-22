@@ -60,7 +60,7 @@ class SearchViewController: UIViewController {
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(RecipeDiscover.self, forCellReuseIdentifier: "1")
+        tableView.register(RecipeDiscover.self, forCellReuseIdentifier: RecipeDiscover.identifier)
     }
     
     private func setupConstraints() {
