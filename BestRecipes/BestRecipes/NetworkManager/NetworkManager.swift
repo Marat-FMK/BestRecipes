@@ -19,7 +19,7 @@ class NetworkManager {
     private let scheme = "https"
     private let host = "api.spoonacular.com"
     private let pathComponent = "/recipes/complexSearch"
-    private let apiKey = "1155fe422d6d4070b4efd10d4d3a8bff"
+    private let apiKey = ""
     
 #warning("max recipe count / ApiKey")
     func fetchRecipes(searchedText: String? = nil,
@@ -72,7 +72,8 @@ class NetworkManager {
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else { completion(.failure(.sessionError)); return}
             guard let data = data else { completion(.failure(.data)); return}
-            
+            print("👀 Response Search array -->>", response)
+
             do {
                 let recipes = try JSONDecoder().decode(SearchedData.self, from: data)
                 print("✅ SearchedRecipes \(direction.rawValue) --- >>", recipes.results)
@@ -107,7 +108,7 @@ class NetworkManager {
         URLSession.shared.dataTask(with: request) { data,response, error in
             guard error == nil else { completion(.failure(.sessionError)); return}
             guard let data = data else { completion(.failure(.data)); return}
-            
+            print("👀 Response Detail -->>", response)
             do {
                 let recipes = try JSONDecoder().decode([RecipeDetail].self, from: data)
                 //                print("✅ IDs: \(stringIDs), recipe detail -->>", recipes)

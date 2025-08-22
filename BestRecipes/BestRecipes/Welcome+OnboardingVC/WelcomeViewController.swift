@@ -95,6 +95,8 @@ class WelcomeViewController: UIViewController {
         let vc = OnboarbingViewController()
         navigationController?.navigationBar.isHidden = true
         navigationController?.pushViewController(vc, animated: true)
+        
+        UserDefaults.standard.set(true, forKey: Constants.UDConstants.onboardingViewed) // -->> Save to UD
     }
     
     //MARK: - setConstraints
