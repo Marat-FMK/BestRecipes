@@ -19,7 +19,7 @@ class NetworkManager {
     private let scheme = "https"
     private let host = "api.spoonacular.com"
     private let pathComponent = "/recipes/complexSearch"
-    private let apiKey = "" 
+    private let apiKey = ""
     
 #warning("max recipe count / ApiKey")
     func fetchRecipes(searchedText: String? = nil,
