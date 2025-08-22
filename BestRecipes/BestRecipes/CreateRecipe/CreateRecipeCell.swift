@@ -308,7 +308,8 @@ extension CreateRecipeViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     @objc private func createButtonDidTapped() {
-        if let title = nameRecipeTextField.text {
+        if let title = nameRecipeTextField.text,
+           title != "" {
             let servings = Int(infoArray[0].value) ?? 0
             let cookingMinutes = Int(infoArray[1].value.filter { $0.isNumber }) ?? 0
             var extendedIngredients: [ExtendedIngredient] = []
@@ -319,9 +320,11 @@ extension CreateRecipeViewController: UITableViewDelegate, UITableViewDataSource
                    let quantityField = cell.quantityField.text,
                    quantityField != ""
                 {
+                    let amount = Double(quantityField.prefix { $0.isNumber } ) ?? 0.0
+                    let unit = quantityField.drop { $0.isNumber }.trimmingCharacters(in: .whitespaces)
                     extendedIngredients.append(ExtendedIngredient(name: nameIngredient,
-                                                                  amount: 0.0,
-                                                                  unit: quantityField,
+                                                                  amount: amount,
+                                                                  unit: unit,
                                                                   consistency: "TEST",
                                                                   image: "TEST"))
                 }
@@ -330,22 +333,22 @@ extension CreateRecipeViewController: UITableViewDelegate, UITableViewDataSource
             var newRecipe = RecipeDetail(id: 9999999,
                                          title: title,
                                          image: "TEST",
-                                         spoonacularScore: 0.0,
-                                         instructions: "",
+                                         spoonacularScore: 5.0,
+                                         instructions: "TEST instructions",
                                          preparationMinutes: 0,
                                          cookingMinutes: 0,
                                          readyInMinutes: cookingMinutes,
                                          extendedIngredients: extendedIngredients,
-                                         sourceName: "TEST",
-                                         sourceUrl: "TEST",
+                                         sourceName: "Your Recipe",
+                                         sourceUrl: "Your account",
                                          vegetarian: false,
                                          glutenFree: false,
                                          servings: servings)
             print(newRecipe)
         }
     }
-
-
+    
+    
 }
 
 //MARK: UIImagePickerControllerDelegate
