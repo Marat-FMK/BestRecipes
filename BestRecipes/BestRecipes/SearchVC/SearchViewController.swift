@@ -9,7 +9,7 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    private let storageManager = StorageManager()
+    private let storageManager = StorageManager.shared
     private var recipes: [RecipeDetail] = []
     
     private let searchController = UISearchController(searchResultsController: nil)
