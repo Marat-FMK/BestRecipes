@@ -12,6 +12,7 @@ class RecentRecepieCell: UICollectionViewCell {
         let view = UIImageView()
         view.layer.cornerRadius = 12
         view.image = UIImage(named: "recentRecepieImage")
+        view.clipsToBounds = true 
         return view
     }()
     
@@ -22,6 +23,7 @@ class RecentRecepieCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         label.textAlignment = .left
         label.textColor = .black
+        label.lineBreakMode = .byWordWrapping
         return label
     }()
     
@@ -61,11 +63,14 @@ class RecentRecepieCell: UICollectionViewCell {
                    let image = UIImage(data: data) {
                     DispatchQueue.main.async {
                         self.backgroundImageView.image = image
+                        self.backgroundImageView.layer.cornerRadius = 12
                     }
                 }
             }
         } else {
             backgroundImageView.image = UIImage(named: "placeholder")
+            backgroundImageView.layer.cornerRadius = 12
+
         }
         titleLabel.text = recipe.title
         creatorLabel.text = recipe.sourceName
@@ -83,6 +88,7 @@ class RecentRecepieCell: UICollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -5),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
         ])
         

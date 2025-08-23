@@ -39,7 +39,6 @@ class TrendingCell: UICollectionViewCell {
         button.backgroundColor = .white0
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -58,17 +57,12 @@ class TrendingCell: UICollectionViewCell {
         return label
     }()
     
-    //MARK: - Save Func
+    //MARK: - Save Button Update
     
-    @objc func saveButtonTapped(sender: UIButton) {
-        sender.buttonTappedAnimate()
-//        let recepie = RecipeDetail?.self
-//            if recepie.isFavorite == true {
-//                storageManager.deleteFavoriteRecipe(recipe: recepie)
-//            } else {
-//                storageManager.saveFavoriteRecipe(recipe: recepie)
-//            }
-    }
+    func updateSaveButton(isFavorite: Bool) {
+            let imageName = isFavorite ? Constants.Images.bookmarkButtonImageActive : Constants.Images.bookmarkButtonImageInactive
+            saveButton.setImage(UIImage(named: imageName), for: .normal)
+        }
     
     //MARK: - Setup
     
@@ -166,7 +160,25 @@ class TrendingCell: UICollectionViewCell {
         saveButton.setImage(UIImage(named: imageName), for: .normal)
     }
     
-    
+    func configureForSavedVC(with recipe: RecipeDetail) {
+        titleLabel.text = recipe.title
+        creatorLabel.text = "By \(recipe.sourceName)"
+        if let url = URL(string: recipe.image) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url),
+                   let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        self.backgroundImageView.image = image
+                    }
+                }
+            }
+        } else {
+            backgroundImageView.image = UIImage(named: "placeholder")
+        }
+        ratingView.setRating(rating: recipe.spoonacularScore)
+        let imageName =  Constants.Images.bookmarkButtonImageActive
+        saveButton.setImage(UIImage(named: imageName), for: .normal)
+    }
     
     
 }

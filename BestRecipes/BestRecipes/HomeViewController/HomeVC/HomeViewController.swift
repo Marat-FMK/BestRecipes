@@ -20,10 +20,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     private var categoryShimmerHostingController: UIHostingController<CategoryShimmerView>?
     
     var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
-    
-    //    var networkManager = NetworkManager()
-    var storageManager = StorageManager()
-    
+        
     var trendingRecipes: [RecipeDetail] = []
     
     
@@ -104,7 +101,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     lazy var categoryButtonsStackView : UIStackView = {
         let view = UIStackView()
-        for category in storageManager.categories {
+        for category in StorageManager.shared.categories {
             let button = UIButton()
             button.setTitle(category, for: .normal)
             button.clipsToBounds = true
@@ -204,7 +201,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         }
         // MArat --->>>
         UserDefaults.standard.set(sender.titleLabel?.text, forKey: Constants.UDConstants.currentCategory) // MARAT
-        storageManager.categoryRecipesAll = []
+        StorageManager.shared.categoryRecipesAll = []
         
         popularCategoryCollectionView.reloadData()
         
@@ -223,7 +220,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         
         categoryShimmerHostingController = shimmerVC
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            self.storageManager.setCategotyRecipes {
+            StorageManager.shared.setCategotyRecipes {
                 DispatchQueue.main.async {
                     self.categoryShimmerHostingController?.view.removeFromSuperview()
                     self.categoryShimmerHostingController = nil
@@ -268,7 +265,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             
             // Загружаем рецепты
-            self.storageManager.setTrendingRecipes {
+            StorageManager.shared.setTrendingRecipes {
                 DispatchQueue.main.async {
                     // Убираем shimmer
                     self.shimmerHostingController?.view.removeFromSuperview()
@@ -297,7 +294,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         
         // Загружаем данные
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            self.storageManager.setCategotyRecipes {
+            StorageManager.shared.setCategotyRecipes {
                 DispatchQueue.main.async {
                     // Убираем shimmer
                     self.categoryShimmerHostingController?.view.removeFromSuperview()
@@ -310,6 +307,36 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         }
     }
     
+    //Функция для кнопки сохранить в ячейке
+    @objc func saveButtonTapped(sender: UIButton) {
+        sender.buttonTappedAnimate()
+        let index = sender.tag
+        guard index < StorageManager.shared.trendingRecipes.count else {
+                print("❌ Index out of bounds")
+                return
+            }
+        let recipe = StorageManager.shared.trendingRecipes[index]
+        let isCurrentlyFavorite = StorageManager.shared.favoriteRecipes.contains { $0.id == recipe.id }
+        if isCurrentlyFavorite {
+            StorageManager.shared.deleteFavoriteRecipe(recipe: recipe)
+            DispatchQueue.main.async {
+                sender.setImage(UIImage(named: Constants.Images.bookmarkButtonImageInactive), for: .normal)
+            }
+        } else {
+            StorageManager.shared.saveFavoriteRecipe(recipe: recipe)
+            DispatchQueue.main.async {
+                sender.setImage(UIImage(named: Constants.Images.bookmarkButtonImageActive), for: .normal)
+            }
+        }
+        if let cell = sender.superview?.superview as? UICollectionViewCell,
+              let collectionView = cell.superview as? UICollectionView {
+            DispatchQueue.main.async {
+               collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+           }
+        }
+    }
+    
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -320,6 +347,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         setupSearchField()
         trendsDownload()
         categoryDownload()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        trendingCollectionView.reloadData()
+        popularCategoryCollectionView.reloadData()
         recentRecepieCollectionView.reloadData()
     }
     
@@ -492,13 +525,13 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         
         switch collectionView {
         case popularCategoryCollectionView:
-            return storageManager.categoryRecipes.count
+            return StorageManager.shared.categoryRecipes.count
         case trendingCollectionView:
-            return storageManager.trendingRecipes.count
+            return StorageManager.shared.trendingRecipes.count
         case recentRecepieCollectionView:
-            return storageManager.recentRecipes.count
+            return StorageManager.shared.recentRecipes.count
         case popularCreatorCollectionView:
-            return storageManager.cuisineNames.count
+            return StorageManager.shared.cuisineNames.count
         default:
             return 0
         }
@@ -535,25 +568,32 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
         case _ where collectionView == trendingCollectionView:
+            guard indexPath.item < StorageManager.shared.trendingRecipes.count else {
+                        return collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath)
+                    }
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
-            let recepie = storageManager.trendingRecipes[indexPath.item]
+            let recepie = StorageManager.shared.trendingRecipes[indexPath.item]
             cell.configure(with: recepie)
+            let isFavorite = StorageManager.shared.favoriteRecipes.contains { $0.id == recepie.id }
+            cell.updateSaveButton(isFavorite: isFavorite)
+            cell.saveButton.addTarget(self, action: #selector(saveButtonTapped(sender:)), for: .touchUpInside)
+            cell.saveButton.tag = indexPath.item
             return cell
             
         case _ where collectionView == popularCategoryCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularCategoryCell", for: indexPath) as! PopularRecepieCell
-            let recipe = storageManager.categoryRecipes[indexPath.item]
+            let recipe = StorageManager.shared.categoryRecipes[indexPath.item]
             cell.configure(with: recipe)
             return cell
             
         case _ where collectionView == recentRecepieCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecentPecepieCell", for: indexPath) as! RecentRecepieCell
-            let recepie = storageManager.recentRecipes[indexPath.item]
+            let recepie = StorageManager.shared.recentRecipes[indexPath.item]
             cell.configure(with: recepie)
             return cell
         case _ where collectionView == popularCreatorCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CreatorCell", for: indexPath) as! CreatorCell
-            cell.creatorLabel.text = storageManager.cuisineNames[indexPath.item]
+            cell.creatorLabel.text = StorageManager.shared.cuisineNames[indexPath.item]
             cell.backgroundImageView.image = UIImage(named: Constants.Cuisines[indexPath.item])
             return cell
         default:
@@ -564,13 +604,13 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == trendingCollectionView {
             let vc = RecipeDetailViewController()
-            storageManager.saveRecentRecepie(recipe: storageManager.trendingRecipes[indexPath.item])
-            vc.recipe = storageManager.trendingRecipes[indexPath.item]
+            StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.trendingRecipes[indexPath.item])
+            vc.recipe = StorageManager.shared.trendingRecipes[indexPath.item]
             navigationController?.pushViewController(vc, animated: true)
         } else {
             let vc = RecipeDetailViewController()
-            storageManager.saveRecentRecepie(recipe: storageManager.categoryRecipes[indexPath.item])
-            vc.recipe = storageManager.categoryRecipes[indexPath.item]
+            StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.categoryRecipes[indexPath.item])
+            vc.recipe = StorageManager.shared.categoryRecipes[indexPath.item]
             navigationController?.pushViewController(vc, animated: true)
         }
     }
