@@ -1,10 +1,5 @@
 {
-<<<<<<< HEAD
-  "originHash" : "990602f943d142d26b1a5421abe2a243e2e1077d090e31e151c33e3ec768723e",
-  "pins" : [
-    {
-=======
-  "originHash" : "1549e9d10e90ecad8c53008cd966fa6fd6e14bb567905f9d6de646288480a79c",
+  "originHash" : "0c089ca4d3bfbe00a323c22080626bfb8bf72e271760e85ce0f7abe69422da17",
   "pins" : [
     {
       "identity" : "iqkeyboardcore",
@@ -79,10 +74,9 @@
       }
     },
     {
->>>>>>> develop
       "identity" : "sdwebimage",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SDWebImage/SDWebImage",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
       "state" : {
         "revision" : "b62cb63bf4ed1f04c961a56c9c6c9d5ab8524ec6",
         "version" : "5.21.1"
