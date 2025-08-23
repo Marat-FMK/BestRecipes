@@ -3,6 +3,8 @@ import UIKit
 
 class DiscoverViewController: UIViewController {
     
+
+    let storageManager = StorageManager.shared
     
     //MARK: - Create UI
     

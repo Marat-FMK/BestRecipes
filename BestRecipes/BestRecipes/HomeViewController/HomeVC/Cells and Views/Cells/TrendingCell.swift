@@ -8,7 +8,7 @@ import UIKit
 
 class TrendingCell: UICollectionViewCell {
     
-    var storageManager = StorageManager()
+//    var storageManager = StorageManager()
     
     let backgroundImageView : UIImageView = {
         let view = UIImageView()

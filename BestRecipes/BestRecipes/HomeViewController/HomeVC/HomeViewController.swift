@@ -20,7 +20,11 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     private var categoryShimmerHostingController: UIHostingController<CategoryShimmerView>?
     
     var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
-        
+
+    //    var networkManager = NetworkManager()
+    let storageManager = StorageManager.shared
+    
+
     var trendingRecipes: [RecipeDetail] = []
     
     

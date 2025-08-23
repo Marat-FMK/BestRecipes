@@ -67,8 +67,17 @@ final class StorageManager {
     
     private let networkManager = NetworkManager()
     
-    let cuisineNames = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
     let categories = MealType.allCases.map{ String($0.rawValue) } // массив категорий для главного экрана
+    let cuisineNamesAll = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
+    var cuisineNames: [String] {
+        var randomCuisines = [String]()
+        for _ in 1...5 {
+            guard let cuisine = cuisineNamesAll.randomElement() else { return ["American", "Mexican", "European", "British"] }
+            randomCuisines.append(cuisine)
+        }
+        return randomCuisines
+    }
+    
     
     var currentCategory: MealType {
         let uDCategory = UserDefaults.standard.string(forKey: Constants.UDConstants.currentCategory) ?? "dessert" // сюда сохраняем выбранную на HomeView категорию в UD
@@ -97,7 +106,16 @@ final class StorageManager {
     var choosedCuisine = WorldCuisines.american // выбранная страна
     var currentCuisineRecipes: [RecipeDetail] = [] // массив наполняется после вызова ф-ии setCurrentCuisineRecipes
     
-    var favoriteRecipes: [RecipeDetail] { 
+    var myRecipes: [RecipeDetail] {
+        if let data = UserDefaults.standard.data(forKey: Constants.UDConstants.myRecipes) {
+            if let recipes = try? JSONDecoder().decode([RecipeDetail].self, from: data) {
+                return recipes
+            }
+        }
+        return []
+    }
+    
+    var favoriteRecipes: [RecipeDetail] {
         if let data = UserDefaults.standard.data(forKey: Constants.UDConstants.savedFavoriteRecipes) {
             if let recipes = try? JSONDecoder().decode([RecipeDetail].self, from: data) {
                 return recipes
@@ -159,6 +177,8 @@ final class StorageManager {
         return intermediate
     }
     
+    
+    private init() {}
     
     // Метод собирает массив из 5 или менее элементов для HomeView
     private func setArrayForHomeView(allRecipes: [RecipeDetail]) -> [RecipeDetail] {
@@ -269,12 +289,6 @@ final class StorageManager {
         }
     }
     
-    //    func saveRecentRecepie(recipe: RecipeDetail) { // вызвать при каждом открытии окна детального просмотра
-    //        if !recentRecipesIDs.contains(recipe.id){
-    //            recentRecipes.insert(recipe, at: 0)
-    //            saveToUD(recipes: recentRecipes, constantUD: Constants.UDConstants.savedRecentRecipes)
-    //        }
-    //    }
     
     func saveRecentRecepie(recipe: RecipeDetail) {
         var recipes = recentRecipes
@@ -285,7 +299,21 @@ final class StorageManager {
             let data = try encoder.encode(recipes)
             UserDefaults.standard.set(data, forKey: Constants.UDConstants.savedRecentRecipes)
         } catch {
-            print("Save error: \(error)")
+            print("Error save recent to UD / encode : \(error)")
+        }
+    }
+    
+    func saveMyRecipe(recipe: RecipeDetail) {
+        var recipes = myRecipes
+        recipes.append(recipe)
+        
+        let encoder = JSONEncoder()
+        do {
+            let data = try encoder.encode(recipes)
+            UserDefaults.standard.set(data, forKey: Constants.UDConstants.myRecipes)
+            print("💼✅ my recipes --- >> ", recipes)
+        } catch {
+            print("Error save myRecept to UD / encode : \(error)")
         }
     }
     
