@@ -7,14 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6EA3CBCF2E524545002E1895 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA3CBCE2E524545002E1895 /* Poppins-SemiBold.ttf */; };
 		6EDE8E6E2E4A714900BBA031 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */; };
 		6EDE8E6F2E4A714900BBA031 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */; };
-		87A35B212E590880000F4E5D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 87A35B202E590880000F4E5D /* IQKeyboardManagerSwift */; };
 		87E0D8772E5242B80065EC61 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 87E0D8762E5242B80065EC61 /* SDWebImage */; };
 		87E0D8792E5242B80065EC61 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 87E0D8782E5242B80065EC61 /* SDWebImageMapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6EA3CBCE2E524545002E1895 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6B2E4A714900BBA031 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		6EDE8E6C2E4A714900BBA031 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		87A359F52E58E83E000F4E5D /* BestRecipes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestRecipes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,7 +59,6 @@
 			files = (
 				87E0D8792E5242B80065EC61 /* SDWebImageMapKit in Frameworks */,
 				87E0D8772E5242B80065EC61 /* SDWebImage in Frameworks */,
-				87A35B212E590880000F4E5D /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +109,6 @@
 			packageProductDependencies = (
 				87E0D8762E5242B80065EC61 /* SDWebImage */,
 				87E0D8782E5242B80065EC61 /* SDWebImageMapKit */,
-				87A35B202E590880000F4E5D /* IQKeyboardManagerSwift */,
 			);
 			productName = BestRecipes;
 			productReference = 87A359F52E58E83E000F4E5D /* BestRecipes.app */;
@@ -141,7 +140,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				87E0D8752E5242B80065EC61 /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				87A35B1F2E590880000F4E5D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6C6F132B2E4A708B00D6875D;
@@ -383,14 +381,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		87A35B1F2E590880000F4E5D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.0.1;
-			};
-		};
 		87E0D8752E5242B80065EC61 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage.git";
@@ -402,11 +392,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		87A35B202E590880000F4E5D /* IQKeyboardManagerSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 87A35B1F2E590880000F4E5D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
-			productName = IQKeyboardManagerSwift;
-		};
 		87E0D8762E5242B80065EC61 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 87E0D8752E5242B80065EC61 /* XCRemoteSwiftPackageReference "SDWebImage" */;
