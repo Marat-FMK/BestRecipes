@@ -9,8 +9,8 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    private let storageManager = StorageManager()
-    private var recipes: [RecipeDetail] = []
+    private let storageManager = StorageManager.shared
+//    private var recipes: [RecipeDetail] = []
     
     private let searchController = UISearchController(searchResultsController: nil)
     
@@ -110,7 +110,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recipes.count
+        return storageManager.searchedRecipes.count
 
     }
     
@@ -118,12 +118,12 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: RecipeDiscover.identifier, for: indexPath) as? RecipeDiscover else {
             return UITableViewCell()
         }
-        cell.configure(with: recipes[indexPath.row])
+        cell.configure(with: storageManager.searchedRecipes[indexPath.row])
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let recipe = recipes[indexPath.row]
+        let recipe = storageManager.searchedRecipes[indexPath.row]
         let detailVC = RecipeDetailViewController()
         detailVC.recipe = recipe
         navigationController?.pushViewController(detailVC, animated: true)
@@ -139,7 +139,8 @@ extension SearchViewController: UISearchBarDelegate {
         storageManager.searchText = searchText
         storageManager.setSearchRecipes {
             DispatchQueue.main.async {
-                self.recipes = self.storageManager.searchedRecipes
+//                self.recipes = self.storageManager.searchedRecipes
+//                storageManager.searchedRecipes
                 self.tableView.reloadData()
             }
         }

@@ -67,8 +67,17 @@ final class StorageManager {
     
     private let networkManager = NetworkManager()
     
-    let cuisineNames = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
     let categories = MealType.allCases.map{ String($0.rawValue) } // массив категорий для главного экрана
+    let cuisineNamesAll = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
+    var cuisineNames: [String] {
+        var randomCuisines = [String]()
+        for _ in 1...5 {
+            guard let cuisine = cuisineNamesAll.randomElement() else { return ["American", "Mexican", "European", "British"] }
+            randomCuisines.append(cuisine)
+        }
+        return randomCuisines
+    }
+    
     
     var currentCategory: MealType {
         let uDCategory = UserDefaults.standard.string(forKey: Constants.UDConstants.currentCategory) ?? "dessert" // сюда сохраняем выбранную на HomeView категорию в UD
@@ -168,6 +177,8 @@ final class StorageManager {
         return intermediate
     }
     
+    
+    private init() {}
     
     // Метод собирает массив из 5 или менее элементов для HomeView
     private func setArrayForHomeView(allRecipes: [RecipeDetail]) -> [RecipeDetail] {

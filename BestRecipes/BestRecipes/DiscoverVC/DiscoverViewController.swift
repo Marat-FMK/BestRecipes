@@ -3,7 +3,7 @@ import UIKit
 
 class DiscoverViewController: UIViewController {
     
-    let storageManager = StorageManager()
+    let storageManager = StorageManager.shared
     
     //MARK: - Create UI
     
@@ -84,9 +84,13 @@ extension DiscoverViewController: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
-        let recepie = storageManager.favoriteRecipes[indexPath.item]
-        cell.configure(with: recepie)
-        return cell
+        if storageManager.favoriteRecipes.isEmpty {
+            return cell
+        } else {
+            let recepie = storageManager.favoriteRecipes[indexPath.item]
+            cell.configure(with: recepie)
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
