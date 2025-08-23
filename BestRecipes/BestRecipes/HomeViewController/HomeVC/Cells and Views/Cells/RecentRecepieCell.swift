@@ -18,8 +18,8 @@ class RecentRecepieCell: UICollectionViewCell {
     let titleLabel : UILabel = {
         let label = UILabel()
         label.text = "Kelewele\nGhanian Recipe"
-        label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        label.numberOfLines = 1
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 14)
         label.textAlignment = .left
         label.textColor = .black
         return label
@@ -29,7 +29,7 @@ class RecentRecepieCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "by Zeelicious Food"
         label.numberOfLines = 1
-        label.font = UIFont.systemFont(ofSize: 10, weight: .regular)
+        label.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 10)
         label.textAlignment = .left
         label.textColor = .neutral40
         return label
@@ -83,7 +83,8 @@ class RecentRecepieCell: UICollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8)
         ])
         
         creatorLabel.translatesAutoresizingMaskIntoConstraints = false
