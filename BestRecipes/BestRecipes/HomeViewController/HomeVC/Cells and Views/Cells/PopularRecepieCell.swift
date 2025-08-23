@@ -28,7 +28,7 @@ class PopularRecepieCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Chicken and\nVegetable wrap"
         label.numberOfLines = 2
-        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 14)
         label.textAlignment = .center
         label.textColor = .black
         return label
@@ -47,7 +47,7 @@ class PopularRecepieCell: UICollectionViewCell {
     let timeLabel : UILabel = {
         let label = UILabel()
         label.text = "Time"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 12)
         label.textAlignment = .left
         label.textColor = .neutral60
         return label
@@ -56,7 +56,7 @@ class PopularRecepieCell: UICollectionViewCell {
     let durationLabel : UILabel = {
         let label = UILabel()
         label.text = "5 mins"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 12)
         label.textAlignment = .left
         label.textColor = .black
         return label
@@ -140,7 +140,6 @@ class PopularRecepieCell: UICollectionViewCell {
         titleLabel.text = recipe.title
         timeLabel.text = "Time"
         durationLabel.text = String(recipe.readyInMinutes)
-        
         roundImageView.image = UIImage(named: "placeholder")
         
         guard let imageURL = URL(string: recipe.image) else { return }
