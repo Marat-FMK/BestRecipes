@@ -88,13 +88,8 @@ class RecentRecepieCell: UICollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: backgroundImageView.bottomAnchor, constant: 8),
-<<<<<<< HEAD
-            titleLabel.trailingAnchor.constraint(equalTo: backgroundImageView.trailingAnchor, constant: -5),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor)
-=======
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8)
->>>>>>> develop
         ])
         
         creatorLabel.translatesAutoresizingMaskIntoConstraints = false

@@ -3,10 +3,6 @@ import UIKit
 
 class DiscoverViewController: UIViewController {
     
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
     let storageManager = StorageManager.shared
     
     //MARK: - Create UI
@@ -119,21 +115,11 @@ extension DiscoverViewController: UICollectionViewDataSource, UICollectionViewDe
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
-<<<<<<< HEAD
         let recepie = StorageManager.shared.favoriteRecipes[indexPath.item]
         cell.configureForSavedVC(with: recepie)
         cell.saveButton.addTarget(self, action: #selector(saveButtonTapped(sender:)), for: .touchUpInside)
 
         return cell
-=======
-        if storageManager.favoriteRecipes.isEmpty {
-            return cell
-        } else {
-            let recepie = storageManager.favoriteRecipes[indexPath.item]
-            cell.configure(with: recepie)
-            return cell
-        }
->>>>>>> develop
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
