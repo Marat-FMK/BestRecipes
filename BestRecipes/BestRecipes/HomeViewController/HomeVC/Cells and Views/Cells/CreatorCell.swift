@@ -19,7 +19,7 @@ class CreatorCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "Ify's Kitchen"
         label.numberOfLines = 1
-        label.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 12)
         label.textAlignment = .left
         label.textColor = .black
         return label

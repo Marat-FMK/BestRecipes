@@ -41,7 +41,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     let topLabel : UILabel = {
         let label = UILabel()
         label.text = "Get amazing recipes\nfor cooking"
-        label.font = UIFont(name: "Poppins", size: 24)
+        label.font = UIFont(name: Constants.Fonts.poppinsBold, size: 24)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -66,7 +66,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     let trendingLabel : UILabel = {
         let label = UILabel()
         label.text = "Trending now 🔥"
-        label.font = UIFont(name: "Poppins", size: 20)
+        label.font = UIFont(name: Constants.Fonts.poppinsBold, size: 20)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -89,7 +89,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     let popularLabel : UILabel = {
         let label = UILabel()
         label.text = "Popular category"
-        label.font = UIFont(name: "Poppins", size: 20)
+        label.font = UIFont(name: Constants.Fonts.poppinsBold, size: 20)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -116,7 +116,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             button.setBackgroundImage(nil, for: .normal)
             button.setBackgroundImage(UIImage(named: "buttonBackgroundImage"), for: .selected)
             button.layer.cornerRadius = 12
-            button.titleLabel?.font = UIFont(name: "Poppins", size: 12)
+            button.titleLabel?.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 12)
             button.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
             view.addArrangedSubview(button)
         }
@@ -147,8 +147,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     let recentRecepieLabel : UILabel = {
         let label = UILabel()
-        label.text = "Recent recepie"
-        label.font = UIFont(name: "Poppins", size: 20)
+        label.text = "Recent recipe"
+        label.font = UIFont(name: Constants.Fonts.poppinsBold, size: 20)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -171,8 +171,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     let popularCreatorsLabel : UILabel = {
         let label = UILabel()
-        label.text = "Popular creators"
-        label.font = UIFont(name: "Poppins", size: 20)
+        label.text = "Popular cuisines"
+        label.font = UIFont(name: Constants.Fonts.poppinsBold, size: 20)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label

@@ -46,7 +46,6 @@ class RecipeDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tabBarController?.tabBar.isHidden = true
         setupUI()
         self.recipeDetailTable.delegate = self
         self.recipeDetailTable.dataSource = self
@@ -77,7 +76,6 @@ class RecipeDetailViewController: UIViewController {
 //MARK: - BackButton Func
     @objc func backButtonTapped(sender: UIButton) {
         sender.buttonTappedAnimate()
-        print("pressed")
         navigationController?.popViewController(animated: true)
     }
 }

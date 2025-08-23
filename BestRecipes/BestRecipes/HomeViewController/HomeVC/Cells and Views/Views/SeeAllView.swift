@@ -11,7 +11,7 @@ class SeeAllView : UIView {
     let seeAllButton : UIButton = {
         let button = UIButton()
         button.setTitle("See all", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Poppins", size: 14)
+        button.titleLabel?.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 14)
         button.setTitleColor(UIColor.primary50, for: .normal)
         return button
     }()
