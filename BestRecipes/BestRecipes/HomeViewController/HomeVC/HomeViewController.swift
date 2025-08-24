@@ -311,7 +311,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         }
     }
     
-    //Функция для кнопки сохранить в ячейке
+    //Функция для кнопки сохранить в ячейке trend
     @objc func saveButtonTapped(sender: UIButton) {
         sender.buttonTappedAnimate()
         let index = sender.tag
@@ -338,6 +338,32 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
                collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
            }
         }
+    }
+    
+    //Функция для кнопки сохранить в ячейке категорий
+    @objc func saveButtonCategoryTapped(sender: UIButton) {
+        sender.buttonTappedAnimate()
+        let index = sender.tag
+        guard index < StorageManager.shared.categoryRecipes.count else {
+            print("❌ Index out of bounds in category")
+            return
+        }
+        
+        let recipe = StorageManager.shared.categoryRecipes[index]
+        let isCurrentlyFavorite = StorageManager.shared.favoriteRecipes.contains { $0.id == recipe.id }
+        
+        if isCurrentlyFavorite {
+            StorageManager.shared.deleteFavoriteRecipe(recipe: recipe)
+            DispatchQueue.main.async {
+                sender.setImage(UIImage(named: Constants.Images.bookmarkButtonImageInactive), for: .normal)
+            }
+        } else {
+            StorageManager.shared.saveFavoriteRecipe(recipe: recipe)
+            DispatchQueue.main.async {
+                sender.setImage(UIImage(named: Constants.Images.bookmarkButtonImageActive), for: .normal)
+            }
+        }
+        popularCategoryCollectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
     }
     
     
@@ -588,6 +614,10 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PopularCategoryCell", for: indexPath) as! PopularRecepieCell
             let recipe = StorageManager.shared.categoryRecipes[indexPath.item]
             cell.configure(with: recipe)
+            let isFavorite = StorageManager.shared.favoriteRecipes.contains { $0.id == recipe.id }
+            cell.updateSaveButton(isFavorite: isFavorite)
+            cell.saveButton.addTarget(self, action: #selector(saveButtonCategoryTapped(sender:)), for: .touchUpInside)
+            cell.saveButton.tag = indexPath.item
             return cell
             
         case _ where collectionView == recentRecepieCollectionView:
