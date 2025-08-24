@@ -1,15 +1,13 @@
 //
-//  RecentRecipesViewController.swift
+//  CountryRecipesAll.swift
 //  BestRecipes
 //
 //  Created by Marat Fakhrizhanov on 24.08.2025.
 //
 
-
-
 import UIKit
 
-class RecentRecipesViewController: UIViewController {
+class CountryRecipesAllViewController: UIViewController {
     private let storageManager = StorageManager.shared
     private var recipes: [RecipeDetail] = []
     
@@ -100,15 +98,14 @@ class RecentRecipesViewController: UIViewController {
     }
 
     private func loadRecentRecipes() {
-        recipes = storageManager.recentRecipes
+        recipes = storageManager.currentCuisineRecipes
         tableView.reloadData()
         placeholderLabel.isHidden = !recipes.isEmpty
     }
 }
 
-// // // ЩОставляем -->>
 // MARK: - UITableViewDataSource & UITableViewDelegate
-extension RecentRecipesViewController: UITableViewDataSource, UITableViewDelegate {
+extension CountryRecipesAllViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes.count
@@ -130,6 +127,7 @@ extension RecentRecipesViewController: UITableViewDataSource, UITableViewDelegat
         let recipe = recipes[indexPath.row]
         StorageManager.shared.saveRecentRecepie(recipe: recipe)
         let detailVC = RecipeDetailViewController()
+        
         detailVC.recipe = recipe
         navigationController?.pushViewController(detailVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
