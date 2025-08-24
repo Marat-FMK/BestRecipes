@@ -291,15 +291,17 @@ final class StorageManager {
     
     
     func saveRecentRecepie(recipe: RecipeDetail) {
-        var recipes = recentRecipes
-        recipes.insert(recipe, at: 0)
-        
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(recipes)
-            UserDefaults.standard.set(data, forKey: Constants.UDConstants.savedRecentRecipes)
-        } catch {
-            print("Error save recent to UD / encode : \(error)")
+        if !recentRecipesIDs.contains(recipe.id) {
+            var recipes = recentRecipes
+            recipes.insert(recipe, at: 0)
+            
+            let encoder = JSONEncoder()
+            do {
+                let data = try encoder.encode(recipes)
+                UserDefaults.standard.set(data, forKey: Constants.UDConstants.savedRecentRecipes)
+            } catch {
+                print("Error save recent to UD / encode : \(error)")
+            }
         }
     }
     
