@@ -36,6 +36,19 @@ class ProfileVC: UIViewController {
         return collectionView
     }()
     
+    private var favoriteRecipes: [RecipeDetail] = []
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadFavorites()
+        collectionView.reloadData()
+    }
+
+    private func loadFavorites() {
+        favoriteRecipes = StorageManager.shared.favoriteRecipes
+    }
+    
+    
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,7 +112,7 @@ extension ProfileVC: ProfileHeaderViewDelegate {
 // MARK: - Collection
 extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return favoriteRecipes.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -108,6 +121,8 @@ extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
+        let recipe = favoriteRecipes[indexPath.item]
+        cell.configure(with: recipe) 
         return cell
     }
     
