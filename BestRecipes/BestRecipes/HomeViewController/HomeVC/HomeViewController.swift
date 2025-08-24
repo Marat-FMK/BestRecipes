@@ -4,12 +4,7 @@
 //
 //  Created by Marat Fakhrizhanov on 11.08.2025.
 //
-//
-//  ViewController.swift
-//  BestRecipes
-//
-//  Created by Marat Fakhrizhanov on 11.08.2025.
-//
+
 
 import UIKit
 import SwiftUI
@@ -242,6 +237,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     @objc private func recentSeeAllButtonTapped(sender : UIButton) {
         sender.buttonTappedAnimate()
+        let vc = RecentRecipesViewController()
+        vc.hidesBottomBarWhenPushed = true
+        self.tabBarController?.isTabBarHidden = true
+        navigationController?.pushViewController(vc, animated: true)
         //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }
     
