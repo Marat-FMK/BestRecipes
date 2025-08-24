@@ -42,7 +42,7 @@ class RecipeDetailTableViewCell: UITableViewCell {
         ingredientWeightLabel.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 14)
         ingredientWeightLabel.textColor = Constants.Colors.Neutral.neutral50
         ingredientWeightLabel.text = "200g"
-        ingredientWeightLabel.textAlignment = .center
+        ingredientWeightLabel.textAlignment = .right
         ingredientWeightLabel.lineBreakMode = .byWordWrapping
         ingredientWeightLabel.translatesAutoresizingMaskIntoConstraints = false
         ingredientWeightLabel.numberOfLines = 0

@@ -237,8 +237,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     @objc private func trendingSeeAllButtontapped(sender : UIButton) {
         sender.buttonTappedAnimate()
         let vc = AllTrendingViewController()
-        vc.hidesBottomBarWhenPushed = true
-        self.tabBarController?.isTabBarHidden = true
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -381,6 +379,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        (tabBarController as? TabBarViewController)?.customTabBar.isHidden = false
         trendingCollectionView.reloadData()
         popularCategoryCollectionView.reloadData()
         recentRecepieCollectionView.reloadData()
