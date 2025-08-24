@@ -246,6 +246,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     @objc private func popularCreatorSeeAllButtonTapped(sender : UIButton) {
         sender.buttonTappedAnimate()
+        let vc = CountriesViewController()
+        navigationController?.pushViewController(vc, animated: true)
         //ПОСМОТРЕТЬ ВСЕ КУХНИ
     }
     
