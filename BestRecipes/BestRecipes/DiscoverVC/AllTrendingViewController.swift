@@ -39,8 +39,9 @@ class AllTrendingViewController: UIViewController {
     //MARK: - Action func
     
     @objc func backButtonTapped() {
-        let vc = HomeViewController()
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = HomeViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.popViewController(animated: true)
     }
 
     //MARK: - Lifecycle
@@ -51,6 +52,9 @@ class AllTrendingViewController: UIViewController {
         setConstraints()
         SetDelegatas()
         loadTrendingData()
+        
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
     }
     
     private func setupViews() {
