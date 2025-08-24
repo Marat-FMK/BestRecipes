@@ -1,6 +1,6 @@
 # BestRecipes
 <p align="center">
-  <img src="https://github.com/Marat-FMK/BestRecipes/develop/Recipes.png" alt="Shoppe App" width="1000"/>
+  <img src="https://github.com/Marat-FMK/BestRecipes/blob/develop/Recipes.png" alt="Shoppe App" width="1000"/>
 </p>
 
 <p align="left"> 
