@@ -51,7 +51,6 @@ class RecentRecipesViewController: UIViewController {
         setupConstraints()
         loadRecentRecipes()
 
-        // ✅ нормальный back item без customView
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "chevron.left"),
             style: .plain,
@@ -63,7 +62,6 @@ class RecentRecipesViewController: UIViewController {
         
     }
 
-    // ✅ Универсальный «назад»: если push — pop; если present — dismiss
     @objc private func backButtonTapped() {
         if let nav = navigationController, nav.viewControllers.first !== self {
             nav.popViewController(animated: true)
