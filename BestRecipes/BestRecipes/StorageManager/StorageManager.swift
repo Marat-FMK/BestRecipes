@@ -356,4 +356,71 @@ final class StorageManager {
         }
     }
     
+    //MARK: TRANSLATER METHODS
+       
+       func translateRecipe(recipe: RecipeDetail, completion: @escaping (RecipeDetail) -> Void) {
+//           let udLanguage = UserDefaults.standard.string(forKey: Constants.UDConstants.language) ?? "ru"
+//           
+//           guard udLanguage == "ru" else {
+//               completion(recipe)
+//               return
+//           }
+           
+           let translater = TranslaterManager()
+           
+           let title = recipe.title
+           let instruction = recipe.instructions
+           let originalExtendedIngredients = recipe.extendedIngredients
+           
+           let stringIngredientsArray = originalExtendedIngredients.map { $0.name }
+           
+           translater.translateText(text: [title, instruction] + stringIngredientsArray) { result in
+               switch result {
+               case .success(let translated):
+                   guard translated.count >= 2 + stringIngredientsArray.count else {
+                       completion(recipe)
+                       return
+                   }
+                   
+                   let translatedTitle = translated[0].text
+                   let translatedInstruction = translated[1].text
+                   
+                   var translatedIngredients: [ExtendedIngredient] = []
+                   for (index, orig) in originalExtendedIngredients.enumerated() {
+                       let translatedName = translated[index + 2].text
+                       let newIngredient = ExtendedIngredient(
+                           name: translatedName,
+                           amount: orig.amount,
+                           unit: orig.unit,
+                           consistency: orig.consistency,
+                           image: orig.image
+                       )
+                       translatedIngredients.append(newIngredient)
+                   }
+                   
+                   let newRecipe = RecipeDetail(
+                       id: recipe.id,
+                       title: translatedTitle,
+                       image: recipe.image,
+                       spoonacularScore: recipe.spoonacularScore,
+                       instructions: translatedInstruction,
+                       preparationMinutes: recipe.preparationMinutes,
+                       cookingMinutes: recipe.cookingMinutes,
+                       readyInMinutes: recipe.readyInMinutes,
+                       extendedIngredients: translatedIngredients,
+                       sourceName: recipe.sourceName,
+                       sourceUrl: recipe.sourceUrl,
+                       vegetarian: recipe.vegetarian,
+                       glutenFree: recipe.glutenFree,
+                       servings: recipe.servings
+                   )
+                   
+                   completion(newRecipe)
+                   
+               case .failure(let error):
+                   print("❌ Translate error", error)
+                   completion(recipe)
+               }
+           }
+       }
 }
