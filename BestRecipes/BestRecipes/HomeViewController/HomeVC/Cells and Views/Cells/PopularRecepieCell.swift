@@ -40,7 +40,6 @@ class PopularRecepieCell: UICollectionViewCell {
         button.backgroundColor = .white0
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -62,10 +61,12 @@ class PopularRecepieCell: UICollectionViewCell {
         return label
     }()
     
-    //MARK: - Save Func
-    @objc func saveButtonTapped(sender : UIButton) {
-        sender.buttonTappedAnimate()
-    }
+    //MARK: - Save Button Update
+    
+    func updateSaveButton(isFavorite: Bool) {
+            let imageName = isFavorite ? Constants.Images.bookmarkButtonImageActive : Constants.Images.bookmarkButtonImageInactive
+            saveButton.setImage(UIImage(named: imageName), for: .normal)
+        }
     
     //MARK: - Setup
     
@@ -152,6 +153,8 @@ class PopularRecepieCell: UICollectionViewCell {
             }
         }.resume()
     }
+    
+    
     
 }
 

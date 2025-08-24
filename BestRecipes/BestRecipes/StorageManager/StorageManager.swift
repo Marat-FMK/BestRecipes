@@ -319,9 +319,14 @@ final class StorageManager {
     
     func saveFavoriteRecipe(recipe: RecipeDetail) {
         var favorites = favoriteRecipes
-        favorites.append(recipe)
-        saveToUD(recipes: favorites, constantUD: Constants.UDConstants.savedFavoriteRecipes)
-    }
+        if !favorites.contains(where: { $0.id == recipe.id }) {
+                favorites.append(recipe)
+                saveToUD(recipes: favorites, constantUD: Constants.UDConstants.savedFavoriteRecipes)
+                print("✅ Recipe saved to favorites")
+            } else {
+                print("⚠️ Recipe already in favorites")
+            }
+        }
     
     func deleteFavoriteRecipe(recipe: RecipeDetail) {
         var favorites = favoriteRecipes
@@ -330,6 +335,23 @@ final class StorageManager {
             favorites.remove(at: index)
         }
         saveToUD(recipes: favorites, constantUD: Constants.UDConstants.savedFavoriteRecipes)
+    }
+    
+    func removeDuplicateFavorites() {
+        var uniqueRecipes: [RecipeDetail] = []
+        var seenIDs: Set<Int> = []
+        
+        for recipe in favoriteRecipes {
+            if !seenIDs.contains(recipe.id) {
+                uniqueRecipes.append(recipe)
+                seenIDs.insert(recipe.id)
+            }
+        }
+        
+        if uniqueRecipes.count != favoriteRecipes.count {
+            saveToUD(recipes: uniqueRecipes, constantUD: Constants.UDConstants.savedFavoriteRecipes)
+            print("✅ Removed \(favoriteRecipes.count - uniqueRecipes.count) duplicates")
+        }
     }
     
 }
