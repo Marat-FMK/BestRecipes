@@ -627,8 +627,9 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             return cell
         case _ where collectionView == popularCreatorCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CreatorCell", for: indexPath) as! CreatorCell
-            cell.creatorLabel.text = StorageManager.shared.cuisineNames[indexPath.item]
-            cell.backgroundImageView.image = UIImage(named: Constants.Cuisines[indexPath.item])
+//            cell.creatorLabel.text = StorageManager.shared.cuisineNames[indexPath.item]
+//            cell.backgroundImageView.image = UIImage(named: Constants.Cuisines[indexPath.item])
+            cell.configure(country: StorageManager.shared.cuisineNames[indexPath.item])
             return cell
         default:
             fatalError("Unknown collection view")
@@ -641,12 +642,64 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.trendingRecipes[indexPath.item])
             vc.recipe = StorageManager.shared.trendingRecipes[indexPath.item]
             navigationController?.pushViewController(vc, animated: true)
-        } else {
+        } else if collectionView == recentRecepieCollectionView {
+            let vc = RecipeDetailViewController()
+            StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.recentRecipes[indexPath.item]) // ???
+            vc.recipe = StorageManager.shared.recentRecipes[indexPath.item]
+            navigationController?.pushViewController(vc, animated: true)
+        } else if collectionView == popularCategoryCollectionView {
             let vc = RecipeDetailViewController()
             StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.categoryRecipes[indexPath.item])
             vc.recipe = StorageManager.shared.categoryRecipes[indexPath.item]
             navigationController?.pushViewController(vc, animated: true)
+        } else {
+//            let vc = RecipeDetailViewController()
+//            StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.cuisineNames[indexPath.item]) // Recent/ category ??
+//            vc.recipe = StorageManager.shared.categoryRecipes[indexPath.item] // category
+            let selectedCountry = StorageManager.shared.cuisineNames[indexPath.item]
+            var selectedCountryCuisineType = WorldCuisines.american
+            
+            switch selectedCountry {
+            case "African": selectedCountryCuisineType = WorldCuisines.african
+    //        case "Asian": selectedCountryCuisineType = WorldCuisines.asian
+            case "American": selectedCountryCuisineType = WorldCuisines.american
+            case "British": selectedCountryCuisineType = WorldCuisines.british
+    //        case "Cajun": selectedCountryCuisineType = WorldCuisines.cajun
+    //        case "Caribbean": selectedCountryCuisineType = WorldCuisines.caribbean
+            case "Chinese": selectedCountryCuisineType = WorldCuisines.chinese
+    //        case "EasternEuropean": selectedCountryCuisineType = WorldCuisines.easternEuropean
+            case "European": selectedCountryCuisineType = WorldCuisines.european
+            case "French": selectedCountryCuisineType = WorldCuisines.french
+            case "German": selectedCountryCuisineType = WorldCuisines.german
+            case "Greek": selectedCountryCuisineType = WorldCuisines.greek
+            case "Indian": selectedCountryCuisineType = WorldCuisines.indian
+            case "Irish": selectedCountryCuisineType = WorldCuisines.irish
+            case "Italian": selectedCountryCuisineType = WorldCuisines.italian
+            case "Japanese": selectedCountryCuisineType = WorldCuisines.japanese
+    //        case "Jewish": selectedCountryCuisineType = WorldCuisines.jewish
+            case "Korean": selectedCountryCuisineType = WorldCuisines.korean
+    //        case "LatinAmerican": selectedCountryCuisineType = WorldCuisines.latinAmerican
+    //        case "Mediterranean": selectedCountryCuisineType = WorldCuisines.mediterranean
+            case "Mexican": selectedCountryCuisineType = WorldCuisines.mexican
+    //        case "MiddleEastern": selectedCountryCuisineType = WorldCuisines.middleEastern
+    //        case "Nordic": selectedCountryCuisineType = WorldCuisines.nordic
+    //        case "Southern": selectedCountryCuisineType = WorldCuisines.southern
+            case "Spanish": selectedCountryCuisineType = WorldCuisines.spanish
+            case "Thai": selectedCountryCuisineType = WorldCuisines.thai
+            case "Vietnamese": selectedCountryCuisineType = WorldCuisines.vietnamese
+            default:
+                selectedCountryCuisineType = WorldCuisines.thai
+            }
+            
+            StorageManager.shared.choosedCuisine = selectedCountryCuisineType
+            StorageManager.shared.setCurrentCuisineRecipes {
+                DispatchQueue.main.async {
+                    let vc = CountryRecipesAllViewController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
         }
+        
     }
 }
 
