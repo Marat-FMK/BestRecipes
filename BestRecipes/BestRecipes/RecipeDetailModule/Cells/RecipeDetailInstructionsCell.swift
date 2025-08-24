@@ -121,24 +121,65 @@ class RecipeDetailInstructionsCell: UITableViewCell {
     }
     
     func configure(with recipe: RecipeDetail) {
-
-        let instrFont = UIFont(name: Constants.Fonts.poppinsRegular, size: 16)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 4
-        paragraphStyle.firstLineHeadIndent = 0
-        paragraphStyle.headIndent = 14
-        paragraphStyle.alignment = .left
-        
-        let text = "You can find following instructions at the link: \(recipe.sourceUrl)"
-        
-        if recipe.instructions.isEmpty {
-            
-            self.instructionsText.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: instrFont!])
-        } else {
-            self.instructionsText.attributedText = NSMutableAttributedString(string: recipe.instructions, attributes: [NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: instrFont!])
-        }
-        
-        self.countOfItems.text = "\(recipe.extendedIngredients.count) items"
-        
+        let text = recipe.instructions.isEmpty
+                ? "You can find following instructions at the link: \(recipe.sourceUrl)"
+                : recipe.instructions
+            self.instructionsText.attributedText = formatNumberedParagraphs(text)
+            self.countOfItems.text = "\(recipe.extendedIngredients.count) items"
     }
+}
+
+extension String {
+    // Removes all <tags> and their contents
+    func removeTags() -> String {
+        let pattern = #"<[^>]*>"#
+        return self.replacingOccurrences(of: pattern, with: "", options: .regularExpression)
+    }
+
+    // Splits text into paragraphs at [. ! ? : ; - —] followed by a capital letter
+    func splitIntoParagraphs() -> [String] {
+        let cleanText = self.removeTags()
+        let pattern = #"(?<=[\.\!\?\:\;\-\—])\s*(?=[A-Z])"#
+        let regex = try? NSRegularExpression(pattern: pattern, options: [])
+        let range = NSRange(cleanText.startIndex..., in: cleanText)
+        let matches = regex?.matches(in: cleanText, options: [], range: range) ?? []
+
+        var lastIndex = cleanText.startIndex
+        var paragraphs: [String] = []
+
+        for match in matches {
+            let matchRange = Range(match.range, in: cleanText)!
+            let paragraph = String(cleanText[lastIndex..<matchRange.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+            if !paragraph.isEmpty {
+                paragraphs.append(paragraph)
+            }
+            lastIndex = matchRange.lowerBound
+        }
+        let lastParagraph = String(cleanText[lastIndex...]).trimmingCharacters(in: .whitespacesAndNewlines)
+        if !lastParagraph.isEmpty {
+            paragraphs.append(lastParagraph)
+        }
+        return paragraphs
+    }
+}
+
+// Formats numbered paragraphs with a single newline
+func formatNumberedParagraphs(_ text: String) -> NSAttributedString {
+    let paragraphs = text.splitIntoParagraphs()
+    let instrFont = UIFont(name: Constants.Fonts.poppinsRegular, size: 16)!
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.lineSpacing = 4
+    paragraphStyle.headIndent = 14
+    paragraphStyle.alignment = .left
+
+    let result = NSMutableAttributedString()
+    for (index, paragraph) in paragraphs.enumerated() {
+        let numbered = "\(index + 1). \(paragraph)\n"
+        let attr = NSAttributedString(string: numbered, attributes: [
+            .font: instrFont,
+            .paragraphStyle: paragraphStyle
+        ])
+        result.append(attr)
+    }
+    return result
 }

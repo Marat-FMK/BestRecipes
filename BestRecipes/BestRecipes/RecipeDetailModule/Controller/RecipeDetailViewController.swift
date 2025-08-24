@@ -53,6 +53,8 @@ class RecipeDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool)  {
         super.viewWillAppear(animated)
+        self.tabBarController?.setTabBarHidden(true, animated: false)
+        (tabBarController as? TabBarViewController)?.customTabBar.isHidden = true
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     

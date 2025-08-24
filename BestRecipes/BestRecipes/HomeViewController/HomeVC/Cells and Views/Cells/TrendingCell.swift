@@ -176,7 +176,7 @@ class TrendingCell: UICollectionViewCell {
             backgroundImageView.image = UIImage(named: "placeholder")
         }
         ratingView.setRating(rating: recipe.spoonacularScore)
-        let imageName =  Constants.Images.bookmarkButtonImageActive
+        let imageName = Constants.Images.bookmarkButtonImageActive
         saveButton.setImage(UIImage(named: imageName), for: .normal)
     }
     

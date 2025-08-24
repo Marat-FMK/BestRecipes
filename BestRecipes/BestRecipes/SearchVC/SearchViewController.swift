@@ -94,6 +94,12 @@ class SearchViewController: UIViewController {
         setupConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool)  {
+        super.viewWillAppear(animated)
+        self.tabBarController?.setTabBarHidden(true, animated: false)
+        (tabBarController as? TabBarViewController)?.customTabBar.isHidden = true
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         activateSearch()
