@@ -1,15 +1,13 @@
 //
-//  RecentRecipesViewController.swift
+//  CountryRecipesAll.swift
 //  BestRecipes
 //
 //  Created by Marat Fakhrizhanov on 24.08.2025.
 //
 
-
-
 import UIKit
 
-class RecentRecipesViewController: UIViewController {
+class CountryRecipesAllViewController: UIViewController {
     private let storageManager = StorageManager.shared
     private var recipes: [RecipeDetail] = []
     
@@ -22,11 +20,8 @@ class RecentRecipesViewController: UIViewController {
     }()
     
     private lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "arrowLeft"), for: .normal)
-//        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-//        button.setImage(UIImage(systemName: "chevron.left", withConfiguration: config), for: .normal)
-        button.tintColor = .black
+        let button = UIButton()
+        button.setImage(UIImage(named: Constants.Icons.arrowLeft), for: .normal)
         return button
     }()
 
@@ -34,7 +29,7 @@ class RecentRecipesViewController: UIViewController {
         let label = UILabel()
         label.text = "No recent recipes"
         label.textColor = .gray
-        label.font = .systemFont(ofSize: 18, weight: .medium)
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 18)
         label.textAlignment = .center
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -44,24 +39,25 @@ class RecentRecipesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Recent Recipes"
+        title = "All Cuisines"
 
         setupTableView()
         setupPlaceholder()
         setupConstraints()
         loadRecentRecipes()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "chevron.left"),
-            style: .plain,
-            target: self,
-            action: #selector(backButtonTapped)
-        )
+        // ✅ нормальный back item без customView
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(
+//            image: UIImage(systemName: "chevron.left"),
+//            style: .plain,
+//            target: self,
+//            action: #selector(backButtonTapped)
+//        )
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-        
     }
 
+    // ✅ Универсальный «назад»: если push — pop; если present — dismiss
     @objc private func backButtonTapped() {
         if let nav = navigationController, nav.viewControllers.first !== self {
             nav.popViewController(animated: true)
@@ -98,15 +94,14 @@ class RecentRecipesViewController: UIViewController {
     }
 
     private func loadRecentRecipes() {
-        recipes = storageManager.recentRecipes
+        recipes = storageManager.currentCuisineRecipes
         tableView.reloadData()
         placeholderLabel.isHidden = !recipes.isEmpty
     }
 }
 
-// // // ЩОставляем -->>
 // MARK: - UITableViewDataSource & UITableViewDelegate
-extension RecentRecipesViewController: UITableViewDataSource, UITableViewDelegate {
+extension CountryRecipesAllViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recipes.count
@@ -128,6 +123,7 @@ extension RecentRecipesViewController: UITableViewDataSource, UITableViewDelegat
         let recipe = recipes[indexPath.row]
         StorageManager.shared.saveRecentRecepie(recipe: recipe)
         let detailVC = RecipeDetailViewController()
+        
         detailVC.recipe = recipe
         navigationController?.pushViewController(detailVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)

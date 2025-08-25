@@ -22,9 +22,9 @@ class TrendingCell: UICollectionViewCell {
     let titleLabel : UILabel = {
         let label = UILabel()
         label.text = "How to shawarma at home"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 16)
         label.textAlignment = .left
-        label.textColor = .black
+        label.textColor = Constants.Colors.Neutral.neutral100
         return label
     }()
     
@@ -36,7 +36,7 @@ class TrendingCell: UICollectionViewCell {
     let saveButton : UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: Constants.Images.bookmarkButtonImageInactive), for: .normal)
-        button.backgroundColor = .white0
+        button.backgroundColor = Constants.Colors.Neutral.white0
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
         return button
@@ -51,7 +51,7 @@ class TrendingCell: UICollectionViewCell {
     let creatorLabel : UILabel = {
         let label = UILabel()
         label.text = "By Zeelicious foods"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 12)
         label.textAlignment = .left
         label.textColor = .neutral50
         return label

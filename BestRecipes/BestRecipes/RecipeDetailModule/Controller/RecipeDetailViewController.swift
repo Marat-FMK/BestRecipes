@@ -82,14 +82,14 @@ class RecipeDetailViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    func setupUI() {
+    private func setupUI() {
         view.backgroundColor = Constants.Colors.Neutral.white0
         
         //MARK: NavigationBar UI
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.titleView = navigationBarTitle
         
-        // Добавляем кнопку перевода в navigation bar
+        // Добавляем кнопку translate в navigation bar
         let translateBarButton = UIBarButtonItem(customView: translateButton)
         navigationItem.rightBarButtonItem = translateBarButton
         

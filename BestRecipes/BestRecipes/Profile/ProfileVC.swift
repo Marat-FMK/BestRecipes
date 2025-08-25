@@ -13,8 +13,8 @@ class ProfileVC: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "My profile"
-        label.textColor = .label
-        label.font = .systemFont(ofSize: 24, weight: .semibold)
+        label.textColor = Constants.Colors.Neutral.neutral100
+        label.font = UIFont(name: Constants.Fonts.poppinsBold, size: 24)
         return label
     }()
     
@@ -24,7 +24,8 @@ class ProfileVC: UIViewController {
         let label = UILabel()
         label.text = "My recipes"
         label.textColor = .darkGray
-        label.font = .systemFont(ofSize: 24, weight: .semibold)
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 24)
+
         return label
     }()
     
@@ -36,17 +37,11 @@ class ProfileVC: UIViewController {
         return collectionView
     }()
     
-    private var favoriteRecipes: [RecipeDetail] = []
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadFavorites()
-        collectionView.reloadData()
-    }
-
-    private func loadFavorites() {
-        favoriteRecipes = StorageManager.shared.favoriteRecipes
-    }
+    private let myRecipes = StorageManager.shared.myRecipes
+//
+//    private func loadFavorites() {
+//        myRecipes = StorageManager.shared.favoriteRecipes
+//    }
     
     
     //MARK: - Lifecycle
@@ -54,10 +49,16 @@ class ProfileVC: UIViewController {
         super.viewDidLoad()
         headerView = ProfileHeaderView(parentVC: self)
         headerView.delegate = self
-        
         setupViews()
         setConstraints()
         setDelegates()
+        print(myRecipes.count)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        (tabBarController as? TabBarViewController)?.customTabBar.isHidden = false
+        collectionView.reloadData()
     }
     
     private func setupViews() {
@@ -112,7 +113,7 @@ extension ProfileVC: ProfileHeaderViewDelegate {
 // MARK: - Collection
 extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return favoriteRecipes.count
+        return myRecipes.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -121,7 +122,7 @@ extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrendingCell", for: indexPath) as! TrendingCell
-        let recipe = favoriteRecipes[indexPath.item]
+        let recipe = myRecipes[indexPath.item]
         cell.configure(with: recipe) 
         return cell
     }
@@ -130,5 +131,12 @@ extension ProfileVC: UICollectionViewDataSource, UICollectionViewDelegate, UICol
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 258)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailVC = RecipeDetailViewController()
+        let recipe = myRecipes[indexPath.item]
+        detailVC.recipe = recipe
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

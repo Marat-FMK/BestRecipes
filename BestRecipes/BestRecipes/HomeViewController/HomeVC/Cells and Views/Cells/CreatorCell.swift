@@ -17,7 +17,7 @@ class CreatorCell: UICollectionViewCell {
     
     private let backgroundImageView: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 90)
+        label.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 90)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

@@ -93,7 +93,6 @@ class RecipeDetailAboutCell: UITableViewCell {
             dishImage.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor),
             dishImage.heightAnchor.constraint(equalToConstant: 200)
         ])
-//        dishImage.backgroundColor = .red
         dishImage.sd_setImage(
             with: URL(string: "https://img.spoonacular.com/recipes/716429-556x370.jpg"),
             placeholderImage: UIImage(named: "placeholder"),
