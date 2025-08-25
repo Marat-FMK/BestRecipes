@@ -15,7 +15,17 @@ class TabBarViewController : UITabBarController {
         super.viewDidLoad()
         setupViewControllers()
         setupCustomTabBar()
+        hideSystemTabBar()
     }
+    
+    private func hideSystemTabBar() {
+            // Скрываем стандартный таббар
+            self.tabBar.isHidden = true
+            // Или делаем его полностью прозрачным
+            self.tabBar.backgroundImage = UIImage()
+            self.tabBar.shadowImage = UIImage()
+            self.tabBar.isTranslucent = true
+        }
     
     func setupCustomTabBar() {
         self.customTabBar.isHidden = false
@@ -42,14 +52,8 @@ class TabBarViewController : UITabBarController {
         let homeVC = HomeViewController()
         let bookmarksVC = DiscoverViewController()
         let notificationsVC = UIViewController()
-<<<<<<< HEAD
-        let profileVC = UIViewController()
-        
-=======
         let profileVC = ProfileVC()
 
->>>>>>> 47ce75a (My profile)
-        
         viewControllers = [
             UINavigationController(rootViewController: homeVC),
             UINavigationController(rootViewController: bookmarksVC),
