@@ -12,7 +12,10 @@ import UIKit
 class RecipeDetailViewController: UIViewController {
     
     var recipe: RecipeDetail?
-    var translatedRecipe = RecipeDetail(id: 0000, title: "", image: "", spoonacularScore: 0.0, instructions: "", preparationMinutes: nil, cookingMinutes: nil, readyInMinutes: 1, extendedIngredients: [ExtendedIngredient(name: "", amount: 0.0, unit: "", consistency: "", image: "")], sourceName: "", sourceUrl: "", vegetarian: false, glutenFree: false, servings: 0)
+    
+    var enRecipe = RecipeDetail(id: 0000, title: "", image: "", spoonacularScore: 0.0, instructions: "", preparationMinutes: nil, cookingMinutes: nil, readyInMinutes: 1, extendedIngredients: [ExtendedIngredient(name: "", amount: 0.0, unit: "", consistency: "", image: "")], sourceName: "", sourceUrl: "", vegetarian: false, glutenFree: false, servings: 0)
+    
+    var ruRecipe = RecipeDetail(id: 0000, title: "", image: "", spoonacularScore: 0.0, instructions: "", preparationMinutes: nil, cookingMinutes: nil, readyInMinutes: 1, extendedIngredients: [ExtendedIngredient(name: "", amount: 0.0, unit: "", consistency: "", image: "")], sourceName: "", sourceUrl: "", vegetarian: false, glutenFree: false, servings: 0)
     
     private var isTranslated = false // Флаг для отслеживания состояния перевода
     
@@ -69,6 +72,7 @@ class RecipeDetailViewController: UIViewController {
         setupUI()
         self.recipeDetailTable.delegate = self
         self.recipeDetailTable.dataSource = self
+        self.enRecipe = self.recipe!
     }
     
     override func viewWillAppear(_ animated: Bool)  {
@@ -118,21 +122,33 @@ class RecipeDetailViewController: UIViewController {
     private func translateRecipeText() {
         // Здесь вы можете реализовать логику перевода
         // Например, используя API переводчика или локальный перевод
+//        enRecipe = recipe! // ❌🔥!!??!?!?!?!?!?!
         
-        isTranslated.toggle()
         
-        if isTranslated {
-            // Вызов функции перевода (замените на вашу реализацию)
-            performTranslation()
-            translateButton.setTitle("Original", for: .normal)
-        } else {
+        
+        if self.isTranslated {
+            isTranslated.toggle()
+            self.recipe = self.enRecipe
             // Возврат к оригинальному тексту
-            revertToOriginal()
-            translateButton.setTitle("Translate", for: .normal)
+            self.revertToOriginal()
+            DispatchQueue.main.async {
+                self.translateButton.setTitle("Translate", for: .normal)
+                self.reloadData()
+            }
+        } else {
+            StorageManager.shared.translateRecipe(recipe: enRecipe) { resultTranslatedRecipe in
+                self.isTranslated.toggle()
+                self.ruRecipe = resultTranslatedRecipe
+                // Вызов функции перевода (замените на вашу реализацию)
+                self.performTranslation()
+                DispatchQueue.main.async {
+                    self.recipe = self.ruRecipe
+                    self.translateButton.setTitle("Original", for: .normal)
+                    self.reloadData()
+                }
+            }
         }
-        
-        // Обновляем таблицу
-        reloadData()
+            
     }
     
     private func performTranslation() {
@@ -159,6 +175,15 @@ class RecipeDetailViewController: UIViewController {
 }
 
 
+
+
+
+
+
+
+
+
+// V1 -->>
 
 //class RecipeDetailViewController: UIViewController {
 //    
