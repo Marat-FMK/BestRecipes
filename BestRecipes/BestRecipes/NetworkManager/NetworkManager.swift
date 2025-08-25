@@ -26,7 +26,7 @@ class NetworkManager {
                       trend: Bool = false,
                       cuisine: WorldCuisines? = nil,
                       mealType: MealType? = nil,
-                      maxRecipeCount: String = "1",
+                      maxRecipeCount: String = "6",
                       completion: @escaping(Result<[SearchedRecipe],NetworkError>) -> Void) {
         
         var urlComponents = URLComponents()
