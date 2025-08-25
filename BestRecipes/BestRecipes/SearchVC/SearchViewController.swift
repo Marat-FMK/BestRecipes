@@ -34,21 +34,21 @@ class SearchViewController: UIViewController {
         
         let textField = searchBar.searchTextField
         textField.textColor = .black
-        textField.font = UIFont(name: "Poppins-Regular", size: 14)
-        textField.backgroundColor = .white
+        textField.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 14)
+        textField.backgroundColor = Constants.Colors.Neutral.white0
         textField.layer.cornerRadius = 10
         textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor(named: "Primary 50")?.cgColor
+        textField.layer.borderColor = Constants.Colors.Primary.primary50?.cgColor
         textField.layer.masksToBounds = true
         
         if let leftIconView = textField.leftView as? UIImageView {
             leftIconView.image = UIImage(systemName: "magnifyingglass")
-            leftIconView.tintColor = .black
+            leftIconView.tintColor = Constants.Colors.Neutral.neutral100
         }
         
         if let clearButton = textField.value(forKey: "_clearButton") as? UIButton {
             clearButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-            clearButton.tintColor = .black
+            clearButton.tintColor = Constants.Colors.Neutral.neutral100
         }
         
         navigationItem.searchController = searchController
@@ -130,6 +130,8 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let recipe = storageManager.searchedRecipes[indexPath.row]
+        
+        StorageManager.shared.saveRecentRecepie(recipe: recipe)
         let detailVC = RecipeDetailViewController()
         detailVC.recipe = recipe
         navigationController?.pushViewController(detailVC, animated: true)

@@ -8,11 +8,19 @@ import UIKit
 
 class CreatorCell: UICollectionViewCell {
     
-    let backgroundImageView : UIImageView = {
-        let view = UIImageView()
-        view.layer.cornerRadius = 55
-        view.image = UIImage(named: "creatorAvatarImage")
-        return view
+//    let backgroundImageView : UIImageView = {
+//        let view = UIImageView()
+//        view.layer.cornerRadius = 55
+//        view.image = UIImage(named: "creatorAvatarImage")
+//        return view
+//    }()
+    
+    private let backgroundImageView: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 90)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     let creatorLabel : UILabel = {
@@ -58,6 +66,44 @@ class CreatorCell: UICollectionViewCell {
             creatorLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])
         
+    }
+    
+    func configure(country: String) {
+        creatorLabel.text = country
+        var imageString = ""
+        
+        switch country {
+        case "African": imageString = "🇿🇦"
+        case "Asian": imageString = ""
+        case "American": imageString = "🇺🇸"
+        case "British": imageString = "🇬🇧"
+        case "Cajun": imageString = "🇺🇸"
+        case "Caribbean": imageString = "🏝️"
+        case "Chinese": imageString = "🇨🇳"
+        case "EasternEuropean": imageString = "🇵🇱"
+        case "European": imageString = "🇪🇺"
+        case "French": imageString = "🇫🇷"
+        case "German": imageString = "🇩🇪"
+        case "Greek": imageString = "🇬🇷"
+        case "Indian": imageString = "🇮🇳"
+        case "Irish": imageString = "🇮🇪"
+        case "Italian": imageString = "🇮🇹"
+        case "Japanese": imageString = "🇯🇵"
+        case "Jewish": imageString = "✡️"
+        case "Korean": imageString = "🇰🇷"
+        case "LatinAmerican": imageString = "🌎"
+        case "Mediterranean": imageString = "🌊"
+        case "Mexican": imageString = "🇲🇽"
+        case "MiddleEastern": imageString = "🕌"
+        case "Nordic": imageString = "❄️"
+        case "Southern": imageString = "🍗"
+        case "Spanish": imageString = "🇪🇸"
+        case "Thai": imageString = "🇹🇭"
+        case "Vietnamese": imageString = "🇻🇳"
+        default: imageString = "🌐"
+        }
+        
+        backgroundImageView.text = imageString
     }
 }
 

@@ -77,19 +77,7 @@ class RatingView : UIView {
     
     //Marat
     func setRating(rating: Double) {
-        var modifiedRating = rating / 20
-//        switch rating {
-//        case 0...10: modifiedRating = 0.5
-//        case 10...20: modifiedRating = 1.0
-//        case 20...30: modifiedRating = 1.5
-//        case 30...40: modifiedRating = 2.0
-//        case 40...50: modifiedRating = 2.5
-//        case 50...60: modifiedRating = 3.5
-//        case 60...70: modifiedRating = 4.0
-//        case 70...80: modifiedRating = 4.5
-//        case 80...100: modifiedRating = 5.0
-//        default: modifiedRating = 0.0
-//        }
+        let modifiedRating = rating / 20
         ratingLabel.text = String(format: "%.2f", modifiedRating)
     }
     

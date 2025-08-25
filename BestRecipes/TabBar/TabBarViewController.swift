@@ -42,8 +42,8 @@ class TabBarViewController : UITabBarController {
         let homeVC = HomeViewController()
         let bookmarksVC = DiscoverViewController()
         let notificationsVC = UIViewController()
-        let profileVC = UIViewController()
-        
+        let profileVC = ProfileVC()
+
         
         viewControllers = [
             UINavigationController(rootViewController: homeVC),

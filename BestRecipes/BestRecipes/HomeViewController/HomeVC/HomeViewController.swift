@@ -4,12 +4,7 @@
 //
 //  Created by Marat Fakhrizhanov on 11.08.2025.
 //
-//
-//  ViewController.swift
-//  BestRecipes
-//
-//  Created by Marat Fakhrizhanov on 11.08.2025.
-//
+
 
 import UIKit
 import SwiftUI
@@ -21,12 +16,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
 
-    //    var networkManager = NetworkManager()
     let storageManager = StorageManager.shared
-    
-
     var trendingRecipes: [RecipeDetail] = []
-    
     
     //MARK: - Create UI
     
@@ -54,7 +45,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         field.layer.cornerRadius = 12
         field.leftViewMode = .always
         let magnifyingGlass = UIImageView(image: UIImage(systemName: "magnifyingglass"))
-        magnifyingGlass.tintColor = .black
+        magnifyingGlass.tintColor = Constants.Colors.Neutral.neutral100
         magnifyingGlass.contentMode = .scaleAspectFit
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 20))
         magnifyingGlass.frame = CGRect(x: 10, y: 0, width: 20, height: 20)
@@ -111,8 +102,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             button.clipsToBounds = true
             button.imageView?.contentMode = .scaleAspectFill
             button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-            button.setTitleColor(UIColor.primary20, for: .normal)
-            button.setTitleColor(.white0, for: .selected)
+            button.setTitleColor(Constants.Colors.Primary.primary20, for: .normal)
+            button.setTitleColor(Constants.Colors.Neutral.white0, for: .selected)
             button.setBackgroundImage(nil, for: .normal)
             button.setBackgroundImage(UIImage(named: "buttonBackgroundImage"), for: .selected)
             button.layer.cornerRadius = 12
@@ -242,13 +233,18 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     @objc private func recentSeeAllButtonTapped(sender : UIButton) {
         sender.buttonTappedAnimate()
+        let vc = RecentRecipesViewController()
+        vc.hidesBottomBarWhenPushed = true
+        self.tabBarController?.isTabBarHidden = true
+        navigationController?.pushViewController(vc, animated: true)
         //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }
     
     @objc private func popularCreatorSeeAllButtonTapped(sender : UIButton) {
         sender.buttonTappedAnimate()
-        let vc = CuisinesViewController()
+        let vc = CountriesViewController()
         navigationController?.pushViewController(vc, animated: true)
+        //ПОСМОТРЕТЬ ВСЕ КУХНИ
     }
     
     func trendsDownload() {
@@ -627,8 +623,9 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             return cell
         case _ where collectionView == popularCreatorCollectionView:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CreatorCell", for: indexPath) as! CreatorCell
-            cell.creatorLabel.text = StorageManager.shared.cuisineNames[indexPath.item]
-            cell.backgroundImageView.image = UIImage(named: Constants.Cuisines[indexPath.item])
+//            cell.creatorLabel.text = StorageManager.shared.cuisineNames[indexPath.item]
+//            cell.backgroundImageView.image = UIImage(named: Constants.Cuisines[indexPath.item])
+            cell.configure(country: StorageManager.shared.cuisineNames[indexPath.item])
             return cell
         default:
             fatalError("Unknown collection view")
@@ -641,12 +638,64 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.trendingRecipes[indexPath.item])
             vc.recipe = StorageManager.shared.trendingRecipes[indexPath.item]
             navigationController?.pushViewController(vc, animated: true)
-        } else {
+        } else if collectionView == recentRecepieCollectionView {
+            let vc = RecipeDetailViewController()
+            StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.recentRecipes[indexPath.item]) // ???
+            vc.recipe = StorageManager.shared.recentRecipes[indexPath.item]
+            navigationController?.pushViewController(vc, animated: true)
+        } else if collectionView == popularCategoryCollectionView {
             let vc = RecipeDetailViewController()
             StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.categoryRecipes[indexPath.item])
             vc.recipe = StorageManager.shared.categoryRecipes[indexPath.item]
             navigationController?.pushViewController(vc, animated: true)
+        } else {
+//            let vc = RecipeDetailViewController()
+//            StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.cuisineNames[indexPath.item]) // Recent/ category ??
+//            vc.recipe = StorageManager.shared.categoryRecipes[indexPath.item] // category
+            let selectedCountry = StorageManager.shared.cuisineNames[indexPath.item]
+            var selectedCountryCuisineType = WorldCuisines.american
+            
+            switch selectedCountry {
+            case "African": selectedCountryCuisineType = WorldCuisines.african
+    //        case "Asian": selectedCountryCuisineType = WorldCuisines.asian
+            case "American": selectedCountryCuisineType = WorldCuisines.american
+            case "British": selectedCountryCuisineType = WorldCuisines.british
+    //        case "Cajun": selectedCountryCuisineType = WorldCuisines.cajun
+    //        case "Caribbean": selectedCountryCuisineType = WorldCuisines.caribbean
+            case "Chinese": selectedCountryCuisineType = WorldCuisines.chinese
+    //        case "EasternEuropean": selectedCountryCuisineType = WorldCuisines.easternEuropean
+            case "European": selectedCountryCuisineType = WorldCuisines.european
+            case "French": selectedCountryCuisineType = WorldCuisines.french
+            case "German": selectedCountryCuisineType = WorldCuisines.german
+            case "Greek": selectedCountryCuisineType = WorldCuisines.greek
+            case "Indian": selectedCountryCuisineType = WorldCuisines.indian
+            case "Irish": selectedCountryCuisineType = WorldCuisines.irish
+            case "Italian": selectedCountryCuisineType = WorldCuisines.italian
+            case "Japanese": selectedCountryCuisineType = WorldCuisines.japanese
+    //        case "Jewish": selectedCountryCuisineType = WorldCuisines.jewish
+            case "Korean": selectedCountryCuisineType = WorldCuisines.korean
+    //        case "LatinAmerican": selectedCountryCuisineType = WorldCuisines.latinAmerican
+    //        case "Mediterranean": selectedCountryCuisineType = WorldCuisines.mediterranean
+            case "Mexican": selectedCountryCuisineType = WorldCuisines.mexican
+    //        case "MiddleEastern": selectedCountryCuisineType = WorldCuisines.middleEastern
+    //        case "Nordic": selectedCountryCuisineType = WorldCuisines.nordic
+    //        case "Southern": selectedCountryCuisineType = WorldCuisines.southern
+            case "Spanish": selectedCountryCuisineType = WorldCuisines.spanish
+            case "Thai": selectedCountryCuisineType = WorldCuisines.thai
+            case "Vietnamese": selectedCountryCuisineType = WorldCuisines.vietnamese
+            default:
+                selectedCountryCuisineType = WorldCuisines.thai
+            }
+            
+            StorageManager.shared.choosedCuisine = selectedCountryCuisineType
+            StorageManager.shared.setCurrentCuisineRecipes {
+                DispatchQueue.main.async {
+                    let vc = CountryRecipesAllViewController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
         }
+        
     }
 }
 
