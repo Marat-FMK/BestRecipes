@@ -58,7 +58,7 @@ class RecipeDetailViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    func setupUI() {
+    private func setupUI() {
         view.backgroundColor = Constants.Colors.Neutral.white0
         
         //MARK: NavigationBar UI
