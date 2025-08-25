@@ -89,7 +89,7 @@ class RecipeDetailViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         navigationItem.titleView = navigationBarTitle
         
-        // Добавляем кнопку перевода в navigation bar
+        // Добавляем кнопку translate в navigation bar
         let translateBarButton = UIBarButtonItem(customView: translateButton)
         navigationItem.rightBarButtonItem = translateBarButton
         

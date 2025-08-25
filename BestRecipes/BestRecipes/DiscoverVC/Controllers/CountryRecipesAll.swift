@@ -20,9 +20,8 @@ class CountryRecipesAllViewController: UIViewController {
     }()
     
     private lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
+        let button = UIButton()
         button.setImage(UIImage(named: Constants.Icons.arrowLeft), for: .normal)
-//        button.tintColor = .black
         return button
     }()
 
@@ -56,7 +55,6 @@ class CountryRecipesAllViewController: UIViewController {
 //        )
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
             navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-        
     }
 
     // ✅ Универсальный «назад»: если push — pop; если present — dismiss

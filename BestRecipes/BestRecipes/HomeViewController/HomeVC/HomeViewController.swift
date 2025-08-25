@@ -234,8 +234,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     @objc private func recentSeeAllButtonTapped(sender : UIButton) {
         sender.buttonTappedAnimate()
         let vc = RecentRecipesViewController()
-        vc.hidesBottomBarWhenPushed = true
-        self.tabBarController?.isTabBarHidden = true
+//        vc.hidesBottomBarWhenPushed = true
+//        self.tabBarController?.isTabBarHidden = true
         navigationController?.pushViewController(vc, animated: true)
         //ПОСМОТРЕТЬ ВСЕ НЕДАВНИЕ РЕЦЕПТЫ
     }

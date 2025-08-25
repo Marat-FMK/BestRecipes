@@ -94,9 +94,7 @@ class AllTrendingViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -200)
-        ])
-        
-        
+        ])   
     }
 }
 

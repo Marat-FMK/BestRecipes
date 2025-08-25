@@ -26,7 +26,7 @@ class RecentRecipesViewController: UIViewController {
         button.setImage(UIImage(named: Constants.Icons.arrowLeft), for: .normal)
         //        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         //        button.setImage(UIImage(systemName: "chevron.left", withConfiguration: config), for: .normal)
-        button.tintColor = .black
+        button.tintColor = Constants.Colors.Neutral.neutral100
         return button
     }()
     
@@ -60,6 +60,13 @@ class RecentRecipesViewController: UIViewController {
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool)  {
+        super.viewWillAppear(animated)
+        self.tabBarController?.setTabBarHidden(true, animated: false)
+        (tabBarController as? TabBarViewController)?.customTabBar.isHidden = true
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     @objc private func backButtonTapped() {
@@ -104,7 +111,7 @@ class RecentRecipesViewController: UIViewController {
     }
 }
 
-// // // ЩОставляем -->>
+// // // Оставляем -->>
 // MARK: - UITableViewDataSource & UITableViewDelegate
 extension RecentRecipesViewController: UITableViewDataSource, UITableViewDelegate {
     
