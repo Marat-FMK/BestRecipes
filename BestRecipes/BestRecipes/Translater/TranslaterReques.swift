@@ -12,6 +12,6 @@ struct TranslaterRequest: Encodable {
     let targetLanguageCode: String = "ru"
     let format: String = "PLAIN_TEXT"
     let texts: [String]
-    let folderId: String = "b1gtben7nisn71ek59d9"
+    let folderId: String = ""
     let speller: Bool = true
 }
