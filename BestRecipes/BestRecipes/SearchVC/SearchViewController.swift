@@ -130,6 +130,8 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let recipe = storageManager.searchedRecipes[indexPath.row]
+        
+        StorageManager.shared.saveRecentRecepie(recipe: recipe)
         let detailVC = RecipeDetailViewController()
         detailVC.recipe = recipe
         navigationController?.pushViewController(detailVC, animated: true)
