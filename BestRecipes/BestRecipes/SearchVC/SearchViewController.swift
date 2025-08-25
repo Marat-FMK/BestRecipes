@@ -94,6 +94,12 @@ class SearchViewController: UIViewController {
         setupConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool)  {
+        super.viewWillAppear(animated)
+        self.tabBarController?.setTabBarHidden(true, animated: false)
+        (tabBarController as? TabBarViewController)?.customTabBar.isHidden = true
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         activateSearch()
@@ -124,6 +130,8 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let recipe = storageManager.searchedRecipes[indexPath.row]
+        
+        StorageManager.shared.saveRecentRecepie(recipe: recipe)
         let detailVC = RecipeDetailViewController()
         detailVC.recipe = recipe
         navigationController?.pushViewController(detailVC, animated: true)

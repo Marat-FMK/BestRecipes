@@ -9,7 +9,7 @@ import Foundation
 
 class TabBarViewController : UITabBarController {
     
-    private let customTabBar = TabBarView()
+    let customTabBar = TabBarView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +18,7 @@ class TabBarViewController : UITabBarController {
     }
     
     func setupCustomTabBar() {
-        tabBar.isHidden = true
+        self.customTabBar.isHidden = false
         customTabBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(customTabBar)
         
@@ -42,8 +42,13 @@ class TabBarViewController : UITabBarController {
         let homeVC = HomeViewController()
         let bookmarksVC = DiscoverViewController()
         let notificationsVC = UIViewController()
+<<<<<<< HEAD
         let profileVC = UIViewController()
+        
+=======
+        let profileVC = ProfileVC()
 
+>>>>>>> 47ce75a (My profile)
         
         viewControllers = [
             UINavigationController(rootViewController: homeVC),
@@ -81,7 +86,7 @@ class TabBarViewController : UITabBarController {
         sender.buttonTappedAnimate()
         let createRecipe = CreateRecipeViewController()
         navigationController?.pushViewController(createRecipe, animated: true)
-
+        
     }
     
     private func updateButtonSelection() {

@@ -17,13 +17,13 @@ enum Direction: String {
 
 enum WorldCuisines: String, CaseIterable {
     case african = "African"
-    case asian = "Asian"
+//    case asian = "Asian"
     case american = "American"
     case british = "British"
-    case cajun = "Cajun"
-    case caribbean = "Caribbean"
+//    case cajun = "Cajun"
+//    case caribbean = "Caribbean"
     case chinese = "Chinese"
-    case easternEuropean = "Eastern European"
+//    case easternEuropean = "Eastern European"
     case european = "European"
     case french = "French"
     case german = "German"
@@ -32,14 +32,14 @@ enum WorldCuisines: String, CaseIterable {
     case irish = "Irish"
     case italian = "Italian"
     case japanese = "Japanese"
-    case jewish = "Jewish"
+//    case jewish = "Jewish"
     case korean = "Korean"
-    case latinAmerican = "Latin American"
-    case mediterranean = "Mediterranean"
+//    case latinAmerican = "Latin American"
+//    case mediterranean = "Mediterranean"
     case mexican = "Mexican"
-    case middleEastern = "Middle Eastern"
-    case nordic = "Nordic"
-    case southern = "Southern"
+//    case middleEastern = "Middle Eastern"
+//    case nordic = "Nordic"
+//    case southern = "Southern"
     case spanish = "Spanish"
     case thai = "Thai"
     case vietnamese = "Vietnamese"
@@ -70,12 +70,12 @@ final class StorageManager {
     let categories = MealType.allCases.map{ String($0.rawValue) } // массив категорий для главного экрана
     let cuisineNamesAll = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
     var cuisineNames: [String] {
-        var randomCuisines = [String]()
-        for _ in 1...5 {
-            guard let cuisine = cuisineNamesAll.randomElement() else { return ["American", "Mexican", "European", "British"] }
-            randomCuisines.append(cuisine)
+        var homeCuisines: [String] = []
+        for index in 4..<9 {
+            homeCuisines.append(cuisineNamesAll[index])
         }
-        return randomCuisines
+        
+        return homeCuisines
     }
     
     
@@ -291,15 +291,17 @@ final class StorageManager {
     
     
     func saveRecentRecepie(recipe: RecipeDetail) {
-        var recipes = recentRecipes
-        recipes.insert(recipe, at: 0)
-        
-        let encoder = JSONEncoder()
-        do {
-            let data = try encoder.encode(recipes)
-            UserDefaults.standard.set(data, forKey: Constants.UDConstants.savedRecentRecipes)
-        } catch {
-            print("Error save recent to UD / encode : \(error)")
+        if !recentRecipesIDs.contains(recipe.id) {
+            var recipes = recentRecipes
+            recipes.insert(recipe, at: 0)
+            
+            let encoder = JSONEncoder()
+            do {
+                let data = try encoder.encode(recipes)
+                UserDefaults.standard.set(data, forKey: Constants.UDConstants.savedRecentRecipes)
+            } catch {
+                print("Error save recent to UD / encode : \(error)")
+            }
         }
     }
     
@@ -354,4 +356,71 @@ final class StorageManager {
         }
     }
     
+    //MARK: TRANSLATER METHODS
+       
+       func translateRecipe(recipe: RecipeDetail, completion: @escaping (RecipeDetail) -> Void) {
+//           let udLanguage = UserDefaults.standard.string(forKey: Constants.UDConstants.language) ?? "ru"
+//           
+//           guard udLanguage == "ru" else {
+//               completion(recipe)
+//               return
+//           }
+           
+           let translater = TranslaterManager()
+           
+           let title = recipe.title
+           let instruction = recipe.instructions
+           let originalExtendedIngredients = recipe.extendedIngredients
+           
+           let stringIngredientsArray = originalExtendedIngredients.map { $0.name }
+           
+           translater.translateText(text: [title, instruction] + stringIngredientsArray) { result in
+               switch result {
+               case .success(let translated):
+                   guard translated.count >= 2 + stringIngredientsArray.count else {
+                       completion(recipe)
+                       return
+                   }
+                   
+                   let translatedTitle = translated[0].text
+                   let translatedInstruction = translated[1].text
+                   
+                   var translatedIngredients: [ExtendedIngredient] = []
+                   for (index, orig) in originalExtendedIngredients.enumerated() {
+                       let translatedName = translated[index + 2].text
+                       let newIngredient = ExtendedIngredient(
+                           name: translatedName,
+                           amount: orig.amount,
+                           unit: orig.unit,
+                           consistency: orig.consistency,
+                           image: orig.image
+                       )
+                       translatedIngredients.append(newIngredient)
+                   }
+                   
+                   let newRecipe = RecipeDetail(
+                       id: recipe.id,
+                       title: translatedTitle,
+                       image: recipe.image,
+                       spoonacularScore: recipe.spoonacularScore,
+                       instructions: translatedInstruction,
+                       preparationMinutes: recipe.preparationMinutes,
+                       cookingMinutes: recipe.cookingMinutes,
+                       readyInMinutes: recipe.readyInMinutes,
+                       extendedIngredients: translatedIngredients,
+                       sourceName: recipe.sourceName,
+                       sourceUrl: recipe.sourceUrl,
+                       vegetarian: recipe.vegetarian,
+                       glutenFree: recipe.glutenFree,
+                       servings: recipe.servings
+                   )
+                   
+                   completion(newRecipe)
+                   
+               case .failure(let error):
+                   print("❌ Translate error", error)
+                   completion(recipe)
+               }
+           }
+       }
 }

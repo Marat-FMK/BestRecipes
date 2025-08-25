@@ -1,7 +1,7 @@
 # BestRecipes
-<!--<p align="center">-->
-<!--  <img src="https://github.com/Marat-FMK/Shoppe/blob/develop/Shop.png" alt="Shoppe App" width="1000"/>-->
-<!--</p>-->
+<p align="center">
+  <img src="https://github.com/Marat-FMK/BestRecipes/blob/develop/Recipes.png" alt="Shoppe App" width="1000"/>
+</p>
 
 <p align="left"> 
   <a href="https://swift.org"> <img src="https://img.shields.io/badge/Swift-5.9-mediumslateblue" alt="Swift Version 5.9" /></a> 

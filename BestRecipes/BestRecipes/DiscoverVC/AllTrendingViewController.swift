@@ -39,8 +39,9 @@ class AllTrendingViewController: UIViewController {
     //MARK: - Action func
     
     @objc func backButtonTapped() {
-        let vc = HomeViewController()
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = HomeViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.popViewController(animated: true)
     }
 
     //MARK: - Lifecycle
@@ -51,6 +52,9 @@ class AllTrendingViewController: UIViewController {
         setConstraints()
         SetDelegatas()
         loadTrendingData()
+        
+        backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
     }
     
     private func setupViews() {
@@ -117,6 +121,12 @@ extension AllTrendingViewController: UICollectionViewDataSource, UICollectionVie
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = RecipeDetailViewController()
+        StorageManager.shared.saveRecentRecepie(recipe: StorageManager.shared.trendingRecipesAll[indexPath.item])
+        vc.recipe = StorageManager.shared.trendingRecipesAll[indexPath.item]
+        navigationController?.pushViewController(vc, animated: true)
+    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 258)
     }

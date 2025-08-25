@@ -92,7 +92,7 @@ class WelcomeViewController: UIViewController {
     
     @objc func getStartButtonTapped(sender: UIButton) {
         sender.buttonTappedAnimate()
-        let vc = OnboarbingViewController()
+        let vc = OnboardingViewController()
         navigationController?.navigationBar.isHidden = true
         navigationController?.pushViewController(vc, animated: true)
         
