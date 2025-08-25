@@ -126,4 +126,10 @@ extension DiscoverViewController: UICollectionViewDataSource, UICollectionViewDe
         return CGSize(width: collectionView.frame.width, height: 258)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            let vc = RecipeDetailViewController()
+            vc.recipe = StorageManager.shared.favoriteRecipes[indexPath.item]
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    
 }
