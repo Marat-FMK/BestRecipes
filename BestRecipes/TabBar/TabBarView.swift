@@ -62,6 +62,7 @@ class TabBarView : UIView {
     }
     
     private func setupViews() {
+        backgroundColor = .clear
         addSubview(backgroundImage)
         addSubview(homeButton)
         addSubview(bookmarkButton)
