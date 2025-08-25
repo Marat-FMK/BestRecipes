@@ -37,7 +37,11 @@ class ProfileVC: UIViewController {
         return collectionView
     }()
     
-    private let myRecipes = StorageManager.shared.myRecipes
+//    private let myRecipes = StorageManager.shared.myRecipes
+    
+    private var myRecipes: [RecipeDetail] {
+        return StorageManager.shared.myRecipes
+    }
 //
 //    private func loadFavorites() {
 //        myRecipes = StorageManager.shared.favoriteRecipes
@@ -58,7 +62,8 @@ class ProfileVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         (tabBarController as? TabBarViewController)?.customTabBar.isHidden = false
-        collectionView.reloadData()
+            self.collectionView.reloadData()
+        
     }
     
     private func setupViews() {
