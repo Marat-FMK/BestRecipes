@@ -236,8 +236,8 @@ extension CreateRecipeViewController: UITableViewDelegate, UITableViewDataSource
                 }
 
             } else {
-                cell.nameField.isUserInteractionEnabled = false
-                cell.quantityField.isUserInteractionEnabled = false
+//                cell.nameField.isUserInteractionEnabled = false
+//                cell.quantityField.isUserInteractionEnabled = false
                 cell.actionButton.setImage(UIImage(systemName: "plus.square"), for: .normal)
 
                 cell.actionHandler = { [weak self, weak tableView] in
