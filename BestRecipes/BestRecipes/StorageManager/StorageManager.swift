@@ -70,12 +70,12 @@ final class StorageManager {
     let categories = MealType.allCases.map{ String($0.rawValue) } // массив категорий для главного экрана
     let cuisineNamesAll = WorldCuisines.allCases.map{ String($0.rawValue) } // массив кухонь мира для главного экрана
     var cuisineNames: [String] {
-        var randomCuisines = [String]()
-        for _ in 1...5 {
-            guard let cuisine = cuisineNamesAll.randomElement() else { return ["American", "Mexican", "European", "British"] }
-            randomCuisines.append(cuisine)
+        var homeCuisines: [String] = []
+        for index in 4..<9 {
+            homeCuisines.append(cuisineNamesAll[index])
         }
-        return randomCuisines
+        
+        return homeCuisines
     }
     
     
