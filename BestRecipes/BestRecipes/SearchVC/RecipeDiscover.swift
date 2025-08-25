@@ -33,8 +33,8 @@ class RecipeDiscover: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.textColor = .white
-        lbl.font = UIFont(name: "Poppins-Bold", size: 16)
+        lbl.textColor = Constants.Colors.Neutral.white0
+        lbl.font = UIFont(name: Constants.Fonts.poppinsBold, size: 16)
         lbl.numberOfLines = 2
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -42,8 +42,8 @@ class RecipeDiscover: UITableViewCell {
     
     private let subtitleLabel: UILabel = {
         let lbl = UILabel()
-        lbl.textColor = .white
-        lbl.font = UIFont(name: "Poppins-Regular", size: 12)
+        lbl.textColor = Constants.Colors.Neutral.white0
+        lbl.font = UIFont(name: Constants.Fonts.poppinsRegular, size: 12)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()

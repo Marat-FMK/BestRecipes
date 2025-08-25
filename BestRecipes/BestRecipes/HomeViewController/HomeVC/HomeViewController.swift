@@ -16,12 +16,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
     
     var categoriesArray : [String] = ["main course","side dish","dessert", "appetizer", "salad","bread","breakfast","soup","beverage","sauce","marinade","fingerfood","snack","drink"]
 
-    //    var networkManager = NetworkManager()
     let storageManager = StorageManager.shared
-    
-
     var trendingRecipes: [RecipeDetail] = []
-    
     
     //MARK: - Create UI
     
@@ -49,7 +45,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
         field.layer.cornerRadius = 12
         field.leftViewMode = .always
         let magnifyingGlass = UIImageView(image: UIImage(systemName: "magnifyingglass"))
-        magnifyingGlass.tintColor = .black
+        magnifyingGlass.tintColor = Constants.Colors.Neutral.neutral100
         magnifyingGlass.contentMode = .scaleAspectFit
         let container = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 20))
         magnifyingGlass.frame = CGRect(x: 10, y: 0, width: 20, height: 20)
@@ -106,8 +102,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate, UITextFieldDel
             button.clipsToBounds = true
             button.imageView?.contentMode = .scaleAspectFill
             button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-            button.setTitleColor(UIColor.primary20, for: .normal)
-            button.setTitleColor(.white0, for: .selected)
+            button.setTitleColor(Constants.Colors.Primary.primary20, for: .normal)
+            button.setTitleColor(Constants.Colors.Neutral.white0, for: .selected)
             button.setBackgroundImage(nil, for: .normal)
             button.setBackgroundImage(UIImage(named: "buttonBackgroundImage"), for: .selected)
             button.layer.cornerRadius = 12

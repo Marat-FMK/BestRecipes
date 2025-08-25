@@ -32,8 +32,8 @@ class CountryCell: UITableViewCell {
     
     private let countryLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        label.textColor = .black
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 18)
+        label.textColor = Constants.Colors.Neutral.neutral100
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

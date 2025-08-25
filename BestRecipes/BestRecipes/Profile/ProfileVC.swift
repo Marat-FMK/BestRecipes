@@ -13,8 +13,8 @@ class ProfileVC: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "My profile"
-        label.textColor = .label
-        label.font = .systemFont(ofSize: 24, weight: .semibold)
+        label.textColor = Constants.Colors.Neutral.neutral100
+        label.font = UIFont(name: Constants.Fonts.poppinsBold, size: 24)
         return label
     }()
     
@@ -24,7 +24,8 @@ class ProfileVC: UIViewController {
         let label = UILabel()
         label.text = "My recipes"
         label.textColor = .darkGray
-        label.font = .systemFont(ofSize: 24, weight: .semibold)
+        label.font = UIFont(name: Constants.Fonts.poppinsSemiBold, size: 24)
+
         return label
     }()
     

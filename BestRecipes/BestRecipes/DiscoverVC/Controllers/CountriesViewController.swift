@@ -14,8 +14,8 @@ class CountriesViewController: UIViewController {
     
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(named: "arrowLeft"), for: .normal)
-        button.tintColor = .black
+        button.setImage(UIImage(named: Constants.Icons.arrowLeft), for: .normal)
+//        button.tintColor = .black
         return button
     }()
     
